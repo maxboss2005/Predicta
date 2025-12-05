@@ -1,0 +1,437 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>PredictAI</title>
+
+  <!-- TensorFlow.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.14.0/dist/tf.min.js"></script>
+
+  <!-- MobileNet for image recognition -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.2.1/dist/mobilenet.min.js"></script>
+
+  <!-- Chart.js for plotting loss -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    body { font-family: Arial, sans-serif; padding: 18px; background:#fafafa; color:#111 }
+    h1 { margin-bottom:6px }
+    .card { background:#fff; padding:14px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.06); margin-bottom:12px; max-width:980px }
+    label { display:block; margin-top:8px; font-weight:600 }
+    input[type=number] { width:120px; padding:8px; margin-right:8px }
+    button { padding:8px 12px; margin:6px 6px 6px 0; border-radius:6px; border:0; cursor:pointer }
+    .btn-primary { background:#111; color:#fff }
+    .btn-ghost { background:#eee }
+    #controls { display:flex; gap:12px; flex-wrap:wrap; align-items:center }
+    .flex-row { display:flex; gap:12px; align-items:center; flex-wrap:wrap }
+    canvas { max-width:100% }
+    #video { width:320px; height:240px; background:#000; border-radius:8px; }
+    #imgPreview { max-width:320px; border-radius:8px; display:block }
+    footer { margin-top:12px; color:#666; font-size:13px }
+  </style>
+</head>
+<body>
+
+  <h1>PredictAI</h1>
+  <div class="card">
+    <strong>Model</strong>: regression → predicts exam score from 3 inputs: <em>hours studied</em>, <em>hours sleep</em>, <em>revision time (hrs)</em>.
+    <div style="margin-top:10px" id="status">Status: <em>idle</em></div>
+    <div style="margin-top:10px" id="controls">
+      <div>
+        <label>Hours studied</label>
+        <input type="number" id="hours" value="4" step="0.1">
+      </div>
+      <div>
+        <label>Hours sleep</label>
+        <input type="number" id="sleep" value="7" step="0.1">
+      </div>
+      <div>
+        <label>Revision time (hrs)</label>
+        <input type="number" id="revision" value="2" step="0.1">
+      </div>
+
+      <div style="margin-left:10px">
+        <button class="btn-primary" id="btnPredict">Predict</button>
+        <button class="btn-ghost" id="btnRetrain">Retrain (with sample data)</button>
+        <button class="btn-ghost" id="btnAddSample">Add sample</button>
+      </div>
+
+      <div style="margin-left:auto">
+        <button id="btnSave" class="btn-ghost">Save Model</button>
+        <button id="btnLoad" class="btn-ghost">Load Model</button>
+        <button id="btnClear" class="btn-ghost">Clear Saved</button>
+      </div>
+    </div>
+
+    <div style="margin-top:10px" id="predictionArea">
+      <strong>Prediction:</strong>
+      <div id="prediction" style="font-size:20px; margin-top:6px; font-weight:700">—</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <strong>Training Loss (live)</strong>
+    <canvas id="lossChart" height="120"></canvas>
+  </div>
+
+  <div class="card">
+    <strong>Samples / Dataset (you can add custom samples)</strong>
+    <div style="margin-top:8px">
+      <small>Format: [hours, sleep, revision] → score</small>
+      <div id="samplesList" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <strong>Image recognition (camera)</strong>
+    <div class="flex-row" style="margin-top:8px">
+      <video id="video" autoplay playsinline></video>
+      <div>
+        <button id="btnStartCam" class="btn-primary">Start Camera</button>
+        <button id="btnSnap" class="btn-ghost">Snap & Classify</button>
+        <div style="margin-top:8px"><img id="imgPreview" alt=""></div>
+        <div id="imgResult" style="margin-top:8px; font-weight:600">Result: —</div>
+      </div>
+    </div>
+    <div style="margin-top:10px; color:#666">Uses MobileNet model from TensorFlow.js</div>
+  </div>
+
+  <div class="card">
+    <strong>Speech recognition & spoken response</strong>
+    <div style="margin-top:8px">
+      <div>
+        <button id="btnStartSpeech" class="btn-primary">Start Listening</button>
+        <button id="btnStopSpeech" class="btn-ghost">Stop</button>
+      </div>
+      <div style="margin-top:8px">
+        <small>Say values: e.g. <em>"hours 4 sleep 7 revision 2"</em> or ask <em>"predict"</em>.</small>
+      </div>
+      <div style="margin-top:8px">Heard: <span id="transcript">—</span></div>
+    </div>
+  </div>
+
+  <footer>Notes: This is the online version (CDN). Use Chrome/Edge/Firefox for best results. Speech uses the browser Web Speech API (may vary by browser).</footer>
+
+<script>
+/* ===========================
+   Globals & initial dataset
+   =========================== */
+let model;
+let mobilenetModel;
+let videoStream;
+let samples = [
+  // [hours, sleep, revision] -> score
+  {x:[1, 20, 0.5], y: 6},
+  {x:[3, 15, 1], y: 20},
+  {x:[5, 10, 2], y: 45},
+  {x:[7, 5, 3], y: 70},
+  {x:[2, 3, 0.5], y: 85},
+  {x:[4,1,1.5], y: 100}
+];
+
+const statusEl = document.getElementById('status');
+const predEl = document.getElementById('prediction');
+const samplesListEl = document.getElementById('samplesList');
+
+/* ===========================
+   Chart.js loss chart setup
+   =========================== */
+const ctx = document.getElementById('lossChart').getContext('2d');
+const lossData = { labels: [], datasets: [{ label: 'loss', data: [], tension:0.2 }]};
+const lossChart = new Chart(ctx, {
+  type: 'line',
+  data: lossData,
+  options: {
+    responsive:true,
+    scales: { x: { title: { display:true, text:'Epoch' } }, y: { title:{display:true,text:'Loss'} } }
+  }
+});
+
+/* ===========================
+   Helper: render samples list
+   =========================== */
+function renderSamples(){
+  samplesListEl.innerHTML = samples.map((s,i) =>
+    `<div>#${i+1}: [${s.x.map(n=>n.toFixed(2)).join(', ')}] → ${s.y.toFixed(2)}</div>`
+  ).join('');
+}
+renderSamples();
+
+/* ===========================
+   Build a larger neural network
+   =========================== */
+function buildModel(){
+  const m = tf.sequential();
+  // input 3 features
+  m.add(tf.layers.dense({units: 64, inputShape: [3], activation: 'relu'}));
+  m.add(tf.layers.dense({units: 32, activation: 'relu'}));
+  m.add(tf.layers.dense({units: 16, activation: 'relu'}));
+  m.add(tf.layers.dense({units: 1, activation: 'linear'}));
+  m.compile({loss: tf.losses.meanSquaredError, optimizer: tf.train.adam(0.01)});
+  return m;
+}
+
+/* ===========================
+   Prepare tensors from samples
+   =========================== */
+function getDatasetTensors(){
+  const xs = samples.map(s => s.x);
+  const ys = samples.map(s => s.y);
+  const xsTensor = tf.tensor2d(xs);
+  const ysTensor = tf.tensor2d(ys, [ys.length, 1]);
+  return {xs: xsTensor, ys: ysTensor};
+}
+
+/* ===========================
+   Train function with live callbacks
+   =========================== */
+async function trainModel(epochs = 200){
+  if(!model) model = buildModel();
+  const {xs, ys} = getDatasetTensors();
+
+  lossChart.data.labels = []; lossChart.data.datasets[0].data = [];
+  lossChart.update();
+
+  statusEl.innerText = 'Status: training...';
+  await model.fit(xs, ys, {
+    epochs,
+    batchSize: Math.min(16, samples.length),
+    callbacks: {
+      onEpochEnd: (epoch, logs) => {
+        // update chart
+        lossChart.data.labels.push(epoch+1);
+        lossChart.data.datasets[0].data.push(logs.loss);
+        lossChart.update('none');
+        statusEl.innerText = `Status: training... epoch ${epoch+1}/${epochs}  loss: ${logs.loss.toFixed(4)}`;
+      }
+    }
+  });
+
+  xs.dispose(); ys.dispose();
+  statusEl.innerText = 'Status: training complete';
+}
+
+/* ===========================
+   Predict
+   =========================== */
+function predictFromInputs(){
+  const h = parseFloat(document.getElementById('hours').value) || 0;
+  const s = parseFloat(document.getElementById('sleep').value) || 0;
+  const r = parseFloat(document.getElementById('revision').value) || 0;
+  if(!model){ predEl.innerText = 'Model not trained yet — please retrain or load a model.'; return; }
+  tf.tidy(()=>{
+    const input = tf.tensor2d([[h,s,r]]);
+    const out = model.predict(input);
+    const val = out.dataSync()[0];
+    predEl.innerText = `${val.toFixed(2)} (score)`;
+  });
+}
+
+/* ===========================
+   Add sample from UI
+   =========================== */
+document.getElementById('btnAddSample').addEventListener('click', ()=>{
+  const h = parseFloat(document.getElementById('hours').value) || 0;
+  const s = parseFloat(document.getElementById('sleep').value) || 0;
+  const r = parseFloat(document.getElementById('revision').value) || 0;
+  const y = prompt('Enter the actual score for this sample (e.g. 75):');
+  const ynum = parseFloat(y);
+  if(isNaN(ynum)){ alert('Invalid score'); return; }
+  samples.push({x:[h,s,r], y: ynum});
+  renderSamples();
+  statusEl.innerText = 'Status: sample added';
+});
+
+/* ===========================
+   Buttons: retrain / predict
+   =========================== */
+document.getElementById('btnRetrain').addEventListener('click', async ()=>{
+  await trainModel(150);
+});
+document.getElementById('btnPredict').addEventListener('click', ()=>{
+  predictFromInputs();
+});
+
+/* ===========================
+   Save / Load model to localStorage
+   =========================== */
+document.getElementById('btnSave').addEventListener('click', async ()=>{
+  if(!model){ alert('No model to save. Train first.'); return; }
+  statusEl.innerText = 'Status: saving model to localStorage...';
+  await model.save('localstorage://my-browser-ai-model');
+  statusEl.innerText = 'Status: model saved to localStorage://my-browser-ai-model';
+});
+
+document.getElementById('btnLoad').addEventListener('click', async ()=>{
+  try{
+    statusEl.innerText = 'Status: loading model from localStorage...';
+    model = await tf.loadLayersModel('localstorage://my-browser-ai-model');
+    statusEl.innerText = 'Status: model loaded from localStorage';
+  }catch(e){
+    console.error(e);
+    alert('No saved model found in localStorage.');
+    statusEl.innerText = 'Status: load failed';
+  }
+});
+
+document.getElementById('btnClear').addEventListener('click', async ()=>{
+  try{
+    // Remove keys saved by tfjs
+    localStorage.removeItem('tensorflowjs_models/my-browser-ai-model/info');
+    localStorage.removeItem('tensorflowjs_models/my-browser-ai-model/model_topology');
+    // also try clearing all models if needed (not recommended in prod)
+    // localStorage.clear();
+    statusEl.innerText = 'Status: cleared saved model keys (if found)';
+    alert('Cleared saved model key(s).');
+  }catch(e){
+    console.error(e);
+    alert('Error clearing.');
+  }
+});
+
+/* ===========================
+   Image recognition (MobileNet)
+   =========================== */
+const video = document.getElementById('video');
+const btnStartCam = document.getElementById('btnStartCam');
+const btnSnap = document.getElementById('btnSnap');
+const imgPreview = document.getElementById('imgPreview');
+const imgResult = document.getElementById('imgResult');
+
+btnStartCam.addEventListener('click', async ()=>{
+  if(videoStream){ // already running
+    return;
+  }
+  try{
+    videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false});
+    video.srcObject = videoStream;
+    statusEl.innerText = 'Status: camera started';
+    if(!mobilenetModel){
+      statusEl.innerText = 'Status: loading MobileNet...';
+      mobilenetModel = await mobilenet.load();
+      statusEl.innerText = 'Status: MobileNet loaded';
+    }
+  }catch(e){
+    console.error(e); alert('Camera permission denied or not available.');
+  }
+});
+
+btnSnap.addEventListener('click', async ()=>{
+  if(!videoStream) { alert('Start the camera first'); return; }
+  // draw frame to canvas
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth || 320;
+  canvas.height = video.videoHeight || 240;
+  const ctx2 = canvas.getContext('2d');
+  ctx2.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const dataUrl = canvas.toDataURL();
+  imgPreview.src = dataUrl;
+  imgResult.innerText = 'Classifying...';
+  if(!mobilenetModel) mobilenetModel = await mobilenet.load();
+  const imgEl = new Image();
+  imgEl.src = dataUrl;
+  imgEl.onload = async ()=>{
+    const predictions = await mobilenetModel.classify(imgEl);
+    if(predictions && predictions.length){
+      imgResult.innerText = `Result: ${predictions[0].className} (prob ${(predictions[0].probability*100).toFixed(1)}%)`;
+    } else {
+      imgResult.innerText = 'Result: no predictions';
+    }
+  };
+});
+
+/* ===========================
+   Speech recognition + response
+   =========================== */
+let recognition;
+const transcriptEl = document.getElementById('transcript');
+const btnStartSpeech = document.getElementById('btnStartSpeech');
+const btnStopSpeech = document.getElementById('btnStopSpeech');
+
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 1;
+  window.speechSynthesis.speak(u);
+}
+
+if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.continuous = true;
+  recognition.interimResults = false;
+  recognition.lang = 'en-GB';
+
+  recognition.onresult = (event) => {
+    const last = event.results[event.results.length-1];
+    const text = last[0].transcript.trim();
+    transcriptEl.innerText = text;
+    // Try parse "hours X sleep Y revision Z" patterns
+    const re = /hours?\s*([0-9]+(?:\.[0-9]+)?)|sleep\s*([0-9]+(?:\.[0-9]+)?)|revision\s*([0-9]+(?:\.[0-9]+)?)/ig;
+    let match;
+    const parsed = {hours:null, sleep:null, revision:null};
+    while((match = re.exec(text)) !== null){
+      if(match[1]) parsed.hours = parseFloat(match[1]);
+      if(match[2]) parsed.sleep = parseFloat(match[2]);
+      if(match[3]) parsed.revision = parseFloat(match[3]);
+    }
+
+    // If numbers parsed, set UI fields
+    if(parsed.hours !== null) document.getElementById('hours').value = parsed.hours;
+    if(parsed.sleep !== null) document.getElementById('sleep').value = parsed.sleep;
+    if(parsed.revision !== null) document.getElementById('revision').value = parsed.revision;
+
+    // If user said "predict" or we have all numbers -> predict and speak
+    if(/predict/i.test(text) || (parsed.hours !== null && parsed.sleep !== null && parsed.revision !== null)){
+      // ensure model exists
+      if(!model){
+        speak('Model not trained. Please retrain the model first.');
+        return;
+      }
+      // make prediction
+      tf.tidy(()=>{
+        const h = parseFloat(document.getElementById('hours').value) || 0;
+        const s = parseFloat(document.getElementById('sleep').value) || 0;
+        const r = parseFloat(document.getElementById('revision').value) || 0;
+        const input = tf.tensor2d([[h,s,r]]);
+        const out = model.predict(input);
+        const val = out.dataSync()[0];
+        const msg = `Predicted score is ${val.toFixed(1)} percent`;
+        predEl.innerText = `${val.toFixed(2)} (score)`;
+        speak(msg);
+      });
+    }
+  };
+
+  recognition.onerror = (ev) => { console.error('Speech error', ev); };
+
+  btnStartSpeech.addEventListener('click', ()=> {
+    if(recognition) {
+      recognition.start();
+      statusEl.innerText = 'Status: listening...';
+    } else alert('Speech recognition not supported in this browser.');
+  });
+  btnStopSpeech.addEventListener('click', ()=> {
+    if(recognition) recognition.stop();
+    statusEl.innerText = 'Status: idle';
+  });
+} else {
+  btnStartSpeech.disabled = true;
+  btnStopSpeech.disabled = true;
+  transcriptEl.innerText = 'Speech API not supported';
+}
+
+/* ===========================
+   Initialize: build and pre-train small model
+   =========================== */
+(async function init(){
+  statusEl.innerText = 'Status: building model';
+  model = buildModel();
+  // quick pre-train so UI is responsive
+  await trainModel(80);
+  predEl.innerText = 'Model ready — try predict!';
+})();
+
+</script>
+</body>
+</html>
