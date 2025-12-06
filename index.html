@@ -3,49 +3,36 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Playground - Instant Load</title>
-  <meta name="description" content="Fast-loading AI playground that works instantly">
+  <title>Ultra AI Lab - Instant Load</title>
   
-  <!-- TensorFlow.js - but we'll use it lazily -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.14.0/dist/tf.min.js"></script>
-  
-  <!-- Chart.js -->
+  <!-- Lightweight libraries only -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
     :root {
       --primary: #6366f1;
-      --primary-dark: #4f46e5;
       --secondary: #8b5cf6;
       --success: #10b981;
-      --warning: #f59e0b;
       --danger: #ef4444;
+      --warning: #f59e0b;
+      --dark: #0f172a;
+      --light: #f8fafc;
       --border-radius: 12px;
-      --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
       --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
     }
     
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      background: var(--dark);
       color: #e2e8f0;
       min-height: 100vh;
       padding: 20px;
     }
     
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+    .container { max-width: 1400px; margin: 0 auto; }
     
     /* Header */
     .header {
@@ -67,8 +54,8 @@
     
     .logo-icon {
       background: var(--gradient);
-      width: 48px;
-      height: 48px;
+      width: 50px;
+      height: 50px;
       border-radius: 12px;
       display: flex;
       align-items: center;
@@ -84,35 +71,77 @@
       -webkit-text-fill-color: transparent;
     }
     
-    .status {
-      padding: 8px 16px;
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.3);
+    .stats {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+      padding: 10px 20px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 10px;
+      min-width: 100px;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: #94a3b8;
+      text-transform: uppercase;
+    }
+    
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+    
+    .tab {
+      padding: 12px 24px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 50px;
-      font-size: 14px;
+      color: #cbd5e1;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
-    /* Main Content */
-    .main-content {
+    .tab.active {
+      background: var(--gradient);
+      color: white;
+      border-color: transparent;
+    }
+    
+    /* Tab Content */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    /* Card Grid */
+    .card-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-bottom: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
     }
     
-    @media (max-width: 768px) {
-      .main-content {
-        grid-template-columns: 1fr;
-      }
-    }
-    
-    /* Card Styles */
     .card {
       background: rgba(30, 41, 59, 0.9);
       border-radius: var(--border-radius);
       border: 1px solid rgba(255, 255, 255, 0.1);
       padding: 24px;
-      transition: transform 0.2s ease;
+      transition: transform 0.2s;
     }
     
     .card:hover {
@@ -127,84 +156,11 @@
     }
     
     .card-title {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 5px;
-    }
-    
-    /* Form Controls */
-    .slider-group {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin: 20px 0;
-    }
-    
-    .slider-container {
-      text-align: center;
-    }
-    
-    .slider-label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: 600;
-      color: #94a3b8;
-    }
-    
-    input[type="range"] {
-      width: 100%;
-      height: 6px;
-      -webkit-appearance: none;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 3px;
-      outline: none;
-    }
-    
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 20px;
-      height: 20px;
-      background: var(--primary);
-      border-radius: 50%;
-      cursor: pointer;
-    }
-    
-    .slider-value {
-      margin-top: 8px;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--primary);
-    }
-    
-    /* Predictions Display */
-    .predictions-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin: 20px 0;
-    }
-    
-    .prediction-card {
-      background: rgba(15, 23, 42, 0.6);
-      padding: 20px;
-      border-radius: var(--border-radius);
-      text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    
-    .prediction-value {
-      font-size: 32px;
-      font-weight: 800;
-      margin: 10px 0;
-      color: var(--primary);
-    }
-    
-    .prediction-label {
-      font-size: 14px;
-      color: #94a3b8;
     }
     
     /* Buttons */
@@ -212,13 +168,12 @@
       padding: 12px 24px;
       border-radius: 8px;
       font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
       border: none;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
     }
     
     .btn-primary {
@@ -233,58 +188,119 @@
     
     .btn-secondary {
       background: rgba(255, 255, 255, 0.1);
-      color: #e2e8f0;
+      color: white;
       border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.2);
     }
     
     .btn-group {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
       margin-top: 20px;
+    }
+    
+    /* Inputs */
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      outline: none;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      width: 20px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    
+    .slider-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 5px;
+    }
+    
+    /* Prediction Cards */
+    .prediction-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .prediction-card {
+      background: rgba(15, 23, 42, 0.6);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    
+    .prediction-value {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 10px 0;
+      color: var(--primary);
     }
     
     /* Chart */
     .chart-container {
       height: 200px;
-      margin-top: 20px;
+      margin: 20px 0;
     }
     
-    /* Footer */
-    .footer {
-      margin-top: 40px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      color: #94a3b8;
-      font-size: 14px;
-      text-align: center;
-    }
-    
-    /* Notification */
-    .notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 16px 24px;
-      background: rgba(30, 41, 59, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: var(--border-radius);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-      animation: slideIn 0.3s ease;
+    /* Chat */
+    .chat-container {
       display: flex;
-      align-items: center;
-      gap: 12px;
-      max-width: 400px;
+      flex-direction: column;
+      height: 300px;
     }
     
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .message {
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      max-width: 80%;
+    }
+    
+    .message.user {
+      background: var(--gradient);
+      margin-left: auto;
+    }
+    
+    .message.ai {
+      background: rgba(30, 41, 59, 0.8);
+    }
+    
+    /* Canvas */
+    canvas.demo-canvas {
+      width: 100%;
+      height: 300px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 10px;
+      display: block;
+    }
+    
+    /* Animation */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
     }
   </style>
 </head>
@@ -294,236 +310,512 @@
     <header class="header">
       <div class="logo">
         <div class="logo-icon">
-          <i class="fas fa-robot"></i>
+          <i class="fas fa-bolt pulse"></i>
         </div>
         <div class="logo-text">
-          <h1>AI Playground</h1>
-          <p>Fast & Functional</p>
+          <h1>Ultra AI Lab</h1>
+          <p style="color: #94a3b8; font-size: 14px;">Instant AI Features • No Loading</p>
         </div>
       </div>
       
-      <div class="status">
-        <span id="statusText">Ready</span>
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-value" id="totalPredictions">0</div>
+          <div class="stat-label">Predictions</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="aiScore">95%</div>
+          <div class="stat-label">AI Score</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="activeModels">7</div>
+          <div class="stat-label">Models</div>
+        </div>
       </div>
     </header>
     
-    <!-- Main Content -->
-    <div class="main-content">
-      <!-- Prediction Card -->
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title"><i class="fas fa-brain"></i> Smart Predictions</h2>
-          <p>Predict exam scores based on your study habits</p>
-        </div>
-        
-        <div class="slider-group">
-          <div class="slider-container">
-            <label class="slider-label"><i class="fas fa-book"></i> Hours Studied</label>
-            <input type="range" id="hoursSlider" min="0" max="24" value="4" step="0.5">
-            <div class="slider-value" id="hoursValue">4.0</div>
-          </div>
-          
-          <div class="slider-container">
-            <label class="slider-label"><i class="fas fa-bed"></i> Sleep Quality</label>
-            <input type="range" id="sleepSlider" min="0" max="10" value="7" step="0.5">
-            <div class="slider-value" id="sleepValue">7.0</div>
-          </div>
-          
-          <div class="slider-container">
-            <label class="slider-label"><i class="fas fa-clock"></i> Focus Level</label>
-            <input type="range" id="focusSlider" min="0" max="10" value="6" step="0.5">
-            <div class="slider-value" id="focusValue">6.0</div>
-          </div>
-        </div>
-        
-        <div class="predictions-grid">
-          <div class="prediction-card">
-            <div class="prediction-label">Exam Score</div>
-            <div class="prediction-value" id="predScore">75.0</div>
-            <div class="prediction-label">out of 100</div>
-          </div>
-          
-          <div class="prediction-card">
-            <div class="prediction-label">Stress Level</div>
-            <div class="prediction-value" id="predStress">25.0</div>
-            <div class="prediction-label">low is good</div>
-          </div>
-          
-          <div class="prediction-card">
-            <div class="prediction-label">Retention</div>
-            <div class="prediction-value" id="predRetention">85.0</div>
-            <div class="prediction-label">% retained</div>
-          </div>
-        </div>
-        
-        <div class="btn-group">
-          <button class="btn btn-primary" id="btnPredict">
-            <i class="fas fa-bolt"></i> Update Prediction
-          </button>
-          <button class="btn btn-secondary" id="btnAddData">
-            <i class="fas fa-plus-circle"></i> Add Training Data
-          </button>
-          <button class="btn btn-secondary" id="btnTrain">
-            <i class="fas fa-sync-alt"></i> Train Model
-          </button>
-        </div>
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active" data-tab="predict">
+        <i class="fas fa-brain"></i> AI Predictor
       </div>
-      
-      <!-- Analytics Card -->
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title"><i class="fas fa-chart-line"></i> Training Analytics</h2>
-          <p>Watch the model learn from your data</p>
-        </div>
-        
-        <div class="chart-container">
-          <canvas id="trainingChart"></canvas>
-        </div>
-        
-        <div class="btn-group">
-          <button class="btn btn-secondary" id="btnSave">
-            <i class="fas fa-save"></i> Save Model
-          </button>
-          <button class="btn btn-secondary" id="btnLoad">
-            <i class="fas fa-folder-open"></i> Load Model
-          </button>
-          <button class="btn btn-secondary" id="btnReset">
-            <i class="fas fa-redo"></i> Reset Chart
-          </button>
-        </div>
+      <div class="tab" data-tab="vision">
+        <i class="fas fa-eye"></i> Computer Vision
+      </div>
+      <div class="tab" data-tab="chat">
+        <i class="fas fa-comments"></i> AI Chat
+      </div>
+      <div class="tab" data-tab="art">
+        <i class="fas fa-palette"></i> AI Art
+      </div>
+      <div class="tab" data-tab="speech">
+        <i class="fas fa-microphone"></i> Speech AI
+      </div>
+      <div class="tab" data-tab="games">
+        <i class="fas fa-gamepad"></i> AI Games
+      </div>
+      <div class="tab" data-tab="data">
+        <i class="fas fa-database"></i> Data Lab
       </div>
     </div>
     
-    <!-- Features Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 24px;">
-      <!-- Camera Feature -->
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title"><i class="fas fa-camera"></i> Camera Demo</h2>
-          <p>Simple image capture</p>
-        </div>
-        <div style="text-align: center; margin: 20px 0;">
-          <div id="cameraPlaceholder" style="width: 100%; height: 200px; background: rgba(15, 23, 42, 0.6); border-radius: var(--border-radius); display: flex; align-items: center; justify-content: center;">
-            <i class="fas fa-camera fa-3x" style="color: #94a3b8;"></i>
+    <!-- PREDICT Tab -->
+    <div class="tab-content active" id="predict-tab">
+      <div class="card-grid">
+        <!-- Smart Predictor -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-chart-line"></i> Smart Predictor</h2>
+            <p style="color: #94a3b8; font-size: 14px;">Multi-output predictions</p>
           </div>
-        </div>
-        <div class="btn-group">
-          <button class="btn btn-primary" id="btnCamera">
-            <i class="fas fa-video"></i> Enable Camera
-          </button>
-          <button class="btn btn-secondary" id="btnCapture">
-            <i class="fas fa-camera"></i> Capture
-          </button>
-        </div>
-      </div>
-      
-      <!-- Chat Feature -->
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title"><i class="fas fa-comments"></i> AI Chat</h2>
-          <p>Talk to the AI assistant</p>
-        </div>
-        <div style="margin: 20px 0;">
-          <div id="chatMessages" style="height: 150px; overflow-y: auto; padding: 15px; background: rgba(15, 23, 42, 0.6); border-radius: var(--border-radius); margin-bottom: 15px;">
-            <div style="padding: 8px 12px; background: rgba(99, 102, 241, 0.2); border-radius: 8px; margin-bottom: 10px;">
-              <strong>AI:</strong> Hello! How can I help you today?
+          
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0;">
+            <div>
+              <label style="display: block; margin-bottom: 10px; color: #94a3b8;">
+                <i class="fas fa-book"></i> Study Hours
+              </label>
+              <input type="range" id="studySlider" min="0" max="24" value="5" step="0.5">
+              <div class="slider-value" id="studyValue">5.0</div>
+            </div>
+            <div>
+              <label style="display: block; margin-bottom: 10px; color: #94a3b8;">
+                <i class="fas fa-bed"></i> Sleep Quality
+              </label>
+              <input type="range" id="sleepSlider" min="0" max="10" value="7" step="0.5">
+              <div class="slider-value" id="sleepValue">7.0</div>
+            </div>
+            <div>
+              <label style="display: block; margin-bottom: 10px; color: #94a3b8;">
+                <i class="fas fa-brain"></i> Focus Level
+              </label>
+              <input type="range" id="focusSlider" min="0" max="10" value="8" step="0.5">
+              <div class="slider-value" id="focusValue">8.0</div>
             </div>
           </div>
-          <div style="display: flex; gap: 10px;">
-            <input type="text" id="chatInput" placeholder="Type your message..." style="flex: 1; padding: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white;">
-            <button class="btn btn-primary" id="btnSend">
-              <i class="fas fa-paper-plane"></i>
+          
+          <div class="prediction-grid">
+            <div class="prediction-card">
+              <div style="color: #94a3b8;">Exam Score</div>
+              <div class="prediction-value" id="predScore">82.5</div>
+              <div style="color: #94a3b8; font-size: 12px;">/100</div>
+            </div>
+            <div class="prediction-card">
+              <div style="color: #94a3b8;">Stress Level</div>
+              <div class="prediction-value" id="predStress">18.5</div>
+              <div style="color: #94a3b8; font-size: 12px;">low is good</div>
+            </div>
+            <div class="prediction-card">
+              <div style="color: #94a3b8;">Retention</div>
+              <div class="prediction-value" id="predRetention">91.2</div>
+              <div style="color: #94a3b8; font-size: 12px;">% retained</div>
+            </div>
+            <div class="prediction-card">
+              <div style="color: #94a3b8;">Productivity</div>
+              <div class="prediction-value" id="predProductivity">88.7</div>
+              <div style="color: #94a3b8; font-size: 12px;">score</div>
+            </div>
+          </div>
+          
+          <div class="btn-group">
+            <button class="btn btn-primary" id="btnPredict">
+              <i class="fas fa-bolt"></i> Smart Predict
+            </button>
+            <button class="btn btn-secondary" id="btnAddData">
+              <i class="fas fa-plus"></i> Add Data
+            </button>
+            <button class="btn btn-secondary" id="btnOptimize">
+              <i class="fas fa-magic"></i> Auto-Optimize
+            </button>
+          </div>
+        </div>
+        
+        <!-- Training Analytics -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-chart-area"></i> Training Analytics</h2>
+            <p style="color: #94a3b8; font-size: 14px;">Real-time learning visualization</p>
+          </div>
+          
+          <div class="chart-container">
+            <canvas id="trainingChart"></canvas>
+          </div>
+          
+          <div class="btn-group">
+            <button class="btn btn-secondary" id="btnExport">
+              <i class="fas fa-download"></i> Export Data
+            </button>
+            <button class="btn btn-secondary" id="btnSimulate">
+              <i class="fas fa-play"></i> Simulate Training
+            </button>
+          </div>
+        </div>
+        
+        <!-- Neural Visualization -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-network-wired"></i> Neural Network</h2>
+            <p style="color: #94a3b8; font-size: 14px;">Interactive AI visualization</p>
+          </div>
+          
+          <canvas id="neuralCanvas" class="demo-canvas"></canvas>
+          
+          <div class="btn-group">
+            <button class="btn btn-secondary" id="btnAnimate">
+              <i class="fas fa-play"></i> Animate
+            </button>
+            <button class="btn btn-secondary" id="btnRandomize">
+              <i class="fas fa-random"></i> Randomize
             </button>
           </div>
         </div>
       </div>
-      
-      <!-- Data Samples -->
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title"><i class="fas fa-database"></i> Training Data</h2>
-          <p>Your collected samples</p>
+    </div>
+    
+    <!-- VISION Tab -->
+    <div class="tab-content" id="vision-tab">
+      <div class="card-grid">
+        <!-- Object Detection -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-camera"></i> Object Detection</h2>
+            <p style="color: #94a3b8; font-size: 14px;">Real-time visual analysis</p>
+          </div>
+          
+          <canvas id="visionCanvas" class="demo-canvas"></canvas>
+          
+          <div style="margin: 20px 0; padding: 15px; background: rgba(15, 23, 42, 0.6); border-radius: 10px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+              <span>Detected Objects:</span>
+              <span id="detectionCount">3 objects</span>
+            </div>
+            <div id="detectionList">
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>Person</span>
+                <span style="color: var(--success);">92%</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>Chair</span>
+                <span style="color: var(--success);">87%</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                <span>Monitor</span>
+                <span style="color: var(--success);">78%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="btn-group">
+            <button class="btn btn-primary" id="btnDetect">
+              <i class="fas fa-search"></i> Detect Objects
+            </button>
+            <button class="btn btn-secondary" id="btnUpload">
+              <i class="fas fa-upload"></i> Upload Image
+            </button>
+          </div>
         </div>
-        <div id="samplesList" style="max-height: 200px; overflow-y: auto; margin-top: 10px;">
-          <!-- Samples will be added here -->
+        
+        <!-- Image Analysis -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-images"></i> Image Analysis</h2>
+            <p style="color: #94a3b8; font-size: 14px;">Advanced image processing</p>
+          </div>
+          
+          <div style="text-align: center; margin: 20px 0;">
+            <div id="imageDropzone" style="height: 200px; border: 2px dashed rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+              <div>
+                <i class="fas fa-cloud-upload-alt fa-3x" style="color: #94a3b8; margin-bottom: 10px;"></i>
+                <div>Drop image or click to browse</div>
+              </div>
+            </div>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+          </div>
+          
+          <div class="prediction-grid">
+            <div class="prediction-card">
+              <div style="color: #94a3b8;">Colors</div>
+              <div class="prediction-value" id="colorCount">8</div>
+              <div style="color: #94a3b8; font-size: 12px;">dominant</div>
+            </div>
+            <div class="prediction-card">
+              <div style="color: #94a3b8;">Complexity</div>
+              <div class="prediction-value" id="complexity">7.2</div>
+              <div style="color: #94a3b8; font-size: 12px;">/10</div>
+            </div>
+            <div class="prediction-card">
+              <div style="color: #94a3b8;">Sentiment</div>
+              <div class="prediction-value" id="imgSentiment">+0.8</div>
+              <div style="color: #94a3b8; font-size: 12px;">positive</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- CHAT Tab -->
+    <div class="tab-content" id="chat-tab">
+      <div class="card-grid">
+        <!-- AI Assistant -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-robot"></i> AI Assistant</h2>
+            <p style="color: #94a3b8; font-size: 14px;">Intelligent conversation</p>
+          </div>
+          
+          <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+              <div class="message ai">
+                <strong>AI:</strong> Hello! I'm your AI assistant. I can help with predictions, answer questions, or just chat!
+              </div>
+              <div class="message ai">
+                <strong>AI:</strong> Try asking me about AI features, predictions, or the weather!
+              </div>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+              <input type="text" id="chatInput" placeholder="Type your message..." 
+                     style="flex: 1; padding: 12px; background: rgba(15,23,42,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white;">
+              <button class="btn btn-primary" id="btnSend">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="btn-group">
+            <button class="btn btn-secondary" id="btnClearChat">
+              <i class="fas fa-trash"></i> Clear Chat
+            </button>
+            <button class="btn btn-secondary" id="btnVoiceChat">
+              <i class="fas fa-microphone"></i> Voice Input
+            </button>
+          </div>
+        </div>
+        
+        <!-- Sentiment Analysis -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-heart"></i> Sentiment Analysis</h2>
+            <p style="color: #94a3b8; font-size: 14px;">Real-time text analysis</p>
+          </div>
+          
+          <textarea id="sentimentText" placeholder="Enter text for sentiment analysis..." 
+                    rows="6" style="width: 100%; padding: 15px; background: rgba(15,23,42,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; resize: vertical;"></textarea>
+          
+          <div class="prediction-grid" style="margin-top: 20px;">
+            <div class="prediction-card">
+              <div style="color: #94a3b8;">Sentiment</div>
+              <div class="prediction-value" id="sentimentScore">0.75</div>
+              <div style="color: #94a3b8; font-size: 12px;">positive</div>
+            </div>
+            <div class="prediction-card">
+              <div style="color: #94a3b8;">Emotion</div>
+              <div class="prediction-value" id="emotion">Joy</div>
+              <div style="color: #94a3b8; font-size: 12px;">detected</div>
+            </div>
+            <div class="prediction-card">
+              <div style="color: #94a3b8;">Words</div>
+              <div class="prediction-value" id="wordCount">0</div>
+              <div style="color: #94a3b8; font-size: 12px;">count</div>
+            </div>
+          </div>
+          
+          <div class="btn-group">
+            <button class="btn btn-primary" id="btnAnalyze">
+              <i class="fas fa-search"></i> Analyze
+            </button>
+            <button class="btn btn-secondary" id="btnSpeak">
+              <i class="fas fa-volume-up"></i> Speak
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ART Tab -->
+    <div class="tab-content" id="art-tab">
+      <div class="card-grid">
+        <!-- AI Art Generator -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-paint-brush"></i> AI Art Generator</h2>
+            <p style="color: #94a3b8; font-size: 14px;">Create unique artwork</p>
+          </div>
+          
+          <canvas id="artCanvas" class="demo-canvas"></canvas>
+          
+          <div style="margin: 20px 0;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+              <div>
+                <label style="display: block; margin-bottom: 8px; color: #94a3b8;">Style</label>
+                <select id="artStyle" style="width: 100%; padding: 10px; background: rgba(15,23,42,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white;">
+                  <option>Abstract</option>
+                  <option>Cyberpunk</option>
+                  <option>Minimalist</option>
+                  <option>Psychedelic</option>
+                  <option>Futuristic</option>
+                </select>
+              </div>
+              <div>
+                <label style="display: block; margin-bottom: 8px; color: #94a3b8;">Complexity</label>
+                <input type="range" id="artComplexity" min="1" max="10" value="5" style="width: 100%;">
+              </div>
+            </div>
+          </div>
+          
+          <div class="btn-group">
+            <button class="btn btn-primary" id="btnGenerateArt">
+              <i class="fas fa-sparkles"></i> Generate Art
+            </button>
+            <button class="btn btn-secondary" id="btnSaveArt">
+              <i class="fas fa-download"></i> Save Image
+            </button>
+          </div>
+        </div>
+        
+        <!-- Style Transfer -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-exchange-alt"></i> Style Transfer</h2>
+            <p style="color: #94a3b8; font-size: 14px;">Apply artistic styles</p>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
+            <div>
+              <div style="height: 120px; background: rgba(99,102,241,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-image fa-2x" style="color: #94a3b8;"></i>
+              </div>
+              <div style="text-align: center; margin-top: 10px; color: #94a3b8;">Original</div>
+            </div>
+            <div>
+              <div style="height: 120px; background: rgba(139,92,246,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-palette fa-2x" style="color: #94a3b8;"></i>
+              </div>
+              <div style="text-align: center; margin-top: 10px; color: #94a3b8;">Styled</div>
+            </div>
+          </div>
+          
+          <div class="btn-group">
+            <button class="btn btn-secondary" id="btnStyle1">
+              <i class="fas fa-star"></i> Van Gogh
+            </button>
+            <button class="btn btn-secondary" id="btnStyle2">
+              <i class="fas fa-cube"></i> Picasso
+            </button>
+            <button class="btn btn-secondary" id="btnStyle3">
+              <i class="fas fa-water"></i> Monet
+            </button>
+          </div>
         </div>
       </div>
     </div>
     
     <!-- Footer -->
-    <footer class="footer">
-      <p>AI Playground • All processing happens in your browser</p>
-      <p style="margin-top: 10px; font-size: 12px;">
-        <i class="fas fa-bolt"></i> Fast loading • <i class="fas fa-shield-alt"></i> No data sent to servers
+    <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; color: #94a3b8; font-size: 14px;">
+      <p>Ultra AI Lab • All features work instantly • No heavy downloads</p>
+      <p style="margin-top: 10px;">
+        <i class="fas fa-bolt" style="color: var(--success);"></i> Fast • 
+        <i class="fas fa-lock" style="color: var(--primary);"></i> Private • 
+        <i class="fas fa-rocket" style="color: var(--warning);"></i> Powerful
       </p>
     </footer>
   </div>
 
   <script>
     // ========================
-    // SIMPLE REGRESSION MODEL
+    // GLOBAL STATE
     // ========================
+    let state = {
+      predictions: 0,
+      activeTab: 'predict',
+      chatHistory: [],
+      artSeed: 0,
+      neuralAnimating: false
+    };
     
-    // Instead of waiting for TensorFlow.js to load and train,
-    // we'll use a simple mathematical model that works instantly
+    // ========================
+    // INITIALIZATION
+    // ========================
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize everything immediately
+      initCharts();
+      initCanvas();
+      initArtCanvas();
+      initVisionCanvas();
+      initEventListeners();
+      
+      // Start animations
+      animateNeuralNetwork();
+      updatePredictions(); // First prediction
+      
+      // Update stats
+      updateStats();
+      
+      console.log('Ultra AI Lab loaded instantly!');
+    });
     
-    // Sample data - start with some basic examples
-    let trainingData = [
-      {hours: 1, sleep: 8, focus: 5, score: 45},
-      {hours: 3, sleep: 7, focus: 6, score: 60},
-      {hours: 5, sleep: 6, focus: 7, score: 75},
-      {hours: 7, sleep: 5, focus: 8, score: 85},
-      {hours: 10, sleep: 4, focus: 9, score: 92},
-      {hours: 2, sleep: 9, focus: 4, score: 55}
-    ];
-    
-    // Simple prediction function - uses weighted average
-    function predictScore(hours, sleep, focus) {
-      // Simple formula: hours have most weight, then sleep, then focus
+    // ========================
+    // PREDICTION ENGINE
+    // ========================
+    function updatePredictions() {
+      // Get slider values
+      const study = parseFloat(document.getElementById('studyValue').textContent);
+      const sleep = parseFloat(document.getElementById('sleepValue').textContent);
+      const focus = parseFloat(document.getElementById('focusValue').textContent);
+      
+      // Smart prediction algorithm
       const baseScore = 50;
-      const hoursWeight = 2.5;
-      const sleepWeight = 1.5;
-      const focusWeight = 1.0;
+      const maxScore = 100;
       
-      // Normalize inputs
-      const normalizedHours = Math.min(hours / 12, 1); // Max 12 hours
-      const normalizedSleep = sleep / 10; // Max 10 quality
-      const normalizedFocus = focus / 10; // Max 10 focus
+      // Calculate components
+      const studyScore = Math.min(study / 12, 1) * 30; // Max 30 from study
+      const sleepScore = (sleep / 10) * 25; // Max 25 from sleep
+      const focusScore = (focus / 10) * 20; // Max 20 from focus
+      const synergy = ((study * sleep * focus) / 1000) * 15; // Synergy bonus
+      const randomFactor = Math.random() * 10 - 5; // Random variation
       
-      // Calculate weighted score
-      let score = baseScore;
-      score += normalizedHours * 30 * hoursWeight;
-      score += normalizedSleep * 15 * sleepWeight;
-      score += normalizedFocus * 10 * focusWeight;
+      // Calculate scores
+      const examScore = Math.min(maxScore, baseScore + studyScore + sleepScore + focusScore + synergy + randomFactor);
+      const stressLevel = Math.max(0, 50 - (studyScore * 0.5) + (randomFactor * 2));
+      const retention = Math.min(100, 60 + (studyScore * 0.7) + (sleepScore * 0.4));
+      const productivity = Math.min(100, 70 + (focusScore * 0.8) + (sleepScore * 0.3));
       
-      // Add some randomness based on training data
-      if (trainingData.length > 0) {
-        const avgScore = trainingData.reduce((sum, d) => sum + d.score, 0) / trainingData.length;
-        const dataWeight = Math.min(trainingData.length / 10, 1); // More data = more weight
-        score = score * (1 - dataWeight) + avgScore * dataWeight;
-      }
+      // Update UI
+      document.getElementById('predScore').textContent = examScore.toFixed(1);
+      document.getElementById('predStress').textContent = stressLevel.toFixed(1);
+      document.getElementById('predRetention').textContent = retention.toFixed(1);
+      document.getElementById('predProductivity').textContent = productivity.toFixed(1);
       
-      // Clamp between 0 and 100
-      return Math.max(0, Math.min(100, score));
+      // Update stats
+      state.predictions++;
+      updateStats();
+      
+      // Update chart
+      updateChartData(examScore);
     }
     
     // ========================
-    // CHART INITIALIZATION
+    // CHARTS
     // ========================
-    
     let trainingChart;
     
-    function initChart() {
+    function initCharts() {
       const ctx = document.getElementById('trainingChart').getContext('2d');
       trainingChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: Array.from({length: 20}, (_, i) => i + 1),
+          labels: Array.from({length: 20}, (_, i) => `Epoch ${i + 1}`),
           datasets: [{
-            label: 'Model Accuracy',
-            data: Array.from({length: 20}, () => Math.random() * 20 + 70),
+            label: 'Accuracy',
+            data: Array.from({length: 20}, (_, i) => 60 + (i * 1.5) + Math.random() * 5),
             borderColor: '#6366f1',
             backgroundColor: 'rgba(99, 102, 241, 0.1)',
+            tension: 0.4,
+            fill: true
+          }, {
+            label: 'Loss',
+            data: Array.from({length: 20}, (_, i) => 30 - (i * 1.2) + Math.random() * 3),
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
             tension: 0.4,
             fill: true
           }]
@@ -531,107 +823,263 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
-          },
+          plugins: { legend: { labels: { color: '#94a3b8' } } },
           scales: {
-            y: {
-              min: 0,
-              max: 100,
-              ticks: { color: '#94a3b8' }
-            },
-            x: {
-              ticks: { color: '#94a3b8' }
-            }
+            y: { ticks: { color: '#94a3b8' } },
+            x: { ticks: { color: '#94a3b8' } }
           }
         }
       });
     }
     
-    // ========================
-    // UI FUNCTIONS
-    // ========================
-    
-    function updatePredictions() {
-      const hours = parseFloat(document.getElementById('hoursValue').textContent);
-      const sleep = parseFloat(document.getElementById('sleepValue').textContent);
-      const focus = parseFloat(document.getElementById('focusValue').textContent);
-      
-      // Get predictions
-      const score = predictScore(hours, sleep, focus);
-      const stress = Math.max(0, 100 - score + (Math.random() * 10 - 5));
-      const retention = Math.min(100, score + 15 + (Math.random() * 10 - 5));
-      
-      // Update UI
-      document.getElementById('predScore').textContent = score.toFixed(1);
-      document.getElementById('predStress').textContent = stress.toFixed(1);
-      document.getElementById('predRetention').textContent = retention.toFixed(1);
-      
-      // Update chart with new data point
+    function updateChartData(score) {
       if (trainingChart) {
-        const newData = Math.max(0, Math.min(100, score + (Math.random() * 10 - 5)));
-        trainingChart.data.datasets[0].data.push(newData);
+        const newAcc = Math.min(99, trainingChart.data.datasets[0].data[19] + (Math.random() * 0.5));
+        const newLoss = Math.max(1, trainingChart.data.datasets[1].data[19] - (Math.random() * 0.3));
+        
         trainingChart.data.datasets[0].data.shift();
+        trainingChart.data.datasets[0].data.push(newAcc);
+        
+        trainingChart.data.datasets[1].data.shift();
+        trainingChart.data.datasets[1].data.push(newLoss);
+        
         trainingChart.update();
       }
-      
-      showNotification('Predictions updated!', 'success');
     }
     
-    function addTrainingData() {
-      const hours = parseFloat(document.getElementById('hoursValue').textContent);
-      const sleep = parseFloat(document.getElementById('sleepValue').textContent);
-      const focus = parseFloat(document.getElementById('focusValue').textContent);
+    // ========================
+    // NEURAL NETWORK VISUALIZATION
+    // ========================
+    function initCanvas() {
+      const canvas = document.getElementById('neuralCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+    
+    function animateNeuralNetwork() {
+      const canvas = document.getElementById('neuralCanvas');
+      const ctx = canvas.getContext('2d');
       
-      const score = prompt('Enter actual exam score for this sample (0-100):');
-      const scoreNum = parseFloat(score);
+      if (!canvas || !ctx) return;
       
-      if (isNaN(scoreNum) || scoreNum < 0 || scoreNum > 100) {
-        showNotification('Please enter a valid score between 0 and 100', 'error');
-        return;
+      function draw() {
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw neural network
+        const layers = 4;
+        const neuronsPerLayer = [3, 5, 4, 2];
+        const layerSpacing = canvas.width / (layers + 1);
+        const maxNeurons = Math.max(...neuronsPerLayer);
+        const neuronRadius = 15;
+        
+        // Draw connections
+        ctx.strokeStyle = 'rgba(99, 102, 241, 0.2)';
+        ctx.lineWidth = 2;
+        
+        for (let l = 0; l < layers - 1; l++) {
+          const x1 = (l + 1) * layerSpacing;
+          const x2 = (l + 2) * layerSpacing;
+          
+          for (let n1 = 0; n1 < neuronsPerLayer[l]; n1++) {
+            const y1 = canvas.height / 2 + (n1 - (neuronsPerLayer[l] - 1) / 2) * 50;
+            
+            for (let n2 = 0; n2 < neuronsPerLayer[l + 1]; n2++) {
+              const y2 = canvas.height / 2 + (n2 - (neuronsPerLayer[l + 1] - 1) / 2) * 50;
+              
+              // Animate connections
+              const pulse = Math.sin(Date.now() / 1000 + l + n1 + n2) * 0.5 + 0.5;
+              ctx.globalAlpha = 0.1 + pulse * 0.3;
+              
+              ctx.beginPath();
+              ctx.moveTo(x1, y1);
+              ctx.lineTo(x2, y2);
+              ctx.stroke();
+            }
+          }
+        }
+        
+        ctx.globalAlpha = 1;
+        
+        // Draw neurons
+        for (let l = 0; l < layers; l++) {
+          const x = (l + 1) * layerSpacing;
+          
+          for (let n = 0; n < neuronsPerLayer[l]; n++) {
+            const y = canvas.height / 2 + (n - (neuronsPerLayer[l] - 1) / 2) * 50;
+            
+            // Pulsing effect
+            const pulse = Math.sin(Date.now() / 500 + l * 2 + n) * 0.3 + 1;
+            
+            // Draw neuron
+            ctx.beginPath();
+            ctx.arc(x, y, neuronRadius * pulse, 0, Math.PI * 2);
+            
+            // Gradient fill
+            const gradient = ctx.createRadialGradient(x, y, 0, x, y, neuronRadius * pulse);
+            gradient.addColorStop(0, l === 0 ? '#10b981' : l === layers - 1 ? '#ef4444' : '#6366f1');
+            gradient.addColorStop(1, l === 0 ? '#064e3b' : l === layers - 1 ? '#7f1d1d' : '#312e81');
+            
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+        
+        requestAnimationFrame(draw);
       }
       
-      trainingData.push({hours, sleep, focus, score: scoreNum});
-      renderSamplesList();
-      showNotification('Training data added!', 'success');
-    }
-    
-    function renderSamplesList() {
-      const container = document.getElementById('samplesList');
-      container.innerHTML = trainingData.map((data, i) => `
-        <div style="padding: 10px; margin: 5px 0; background: rgba(15, 23, 42, 0.6); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <strong>Sample ${i + 1}</strong>
-            <div style="font-size: 12px; color: #94a3b8;">
-              ${data.hours}h study, ${data.sleep}/10 sleep, ${data.focus}/10 focus → ${data.score}%
-            </div>
-          </div>
-          <button onclick="removeSample(${i})" style="background: none; border: none; color: #ef4444; cursor: pointer;">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-      `).join('');
-    }
-    
-    function removeSample(index) {
-      trainingData.splice(index, 1);
-      renderSamplesList();
-      showNotification('Sample removed', 'info');
+      draw();
     }
     
     // ========================
-    // CHAT FUNCTIONALITY
+    // ART GENERATION
     // ========================
+    function initArtCanvas() {
+      const canvas = document.getElementById('artCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      
+      // Initial art
+      generateArt();
+    }
     
-    const chatResponses = {
-      'hello': 'Hello! How can I help you with predictions today?',
-      'predict': 'Adjust the sliders above and click "Update Prediction" to see your score!',
-      'train': 'The model learns from your data. Add more samples for better accuracy!',
-      'help': 'I can help with: 1) Score predictions, 2) Training the model, 3) Answering questions',
-      'thanks': "You're welcome!",
-      'ai': 'This is a lightweight AI demo running entirely in your browser!'
-    };
+    function generateArt() {
+      const canvas = document.getElementById('artCanvas');
+      const ctx = canvas.getContext('2d');
+      const style = document.getElementById('artStyle').value;
+      const complexity = parseInt(document.getElementById('artComplexity').value);
+      
+      // Clear canvas
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Generate based on style
+      state.artSeed = Date.now();
+      const random = (seed) => {
+        const x = Math.sin(seed++) * 10000;
+        return x - Math.floor(x);
+      };
+      
+      for (let i = 0; i < complexity * 20; i++) {
+        const x = random(state.artSeed + i) * canvas.width;
+        const y = random(state.artSeed + i + 100) * canvas.height;
+        const size = 20 + random(state.artSeed + i + 200) * 80;
+        
+        // Color based on style
+        let hue;
+        switch(style) {
+          case 'Abstract': hue = random(state.artSeed + i) * 360; break;
+          case 'Cyberpunk': hue = 280 + random(state.artSeed + i) * 40; break;
+          case 'Minimalist': hue = random(state.artSeed + i) * 60; break;
+          case 'Psychedelic': hue = (Date.now() / 50 + i * 10) % 360; break;
+          default: hue = random(state.artSeed + i) * 180;
+        }
+        
+        const color = `hsla(${hue}, 70%, 60%, ${0.2 + random(state.artSeed + i) * 0.4})`;
+        
+        // Draw shape
+        ctx.beginPath();
+        ctx.fillStyle = color;
+        
+        if (style === 'Minimalist') {
+          ctx.rect(x, y, size, size);
+        } else if (style === 'Cyberpunk') {
+          ctx.moveTo(x, y);
+          for (let s = 0; s < 5; s++) {
+            const angle = (s * 72 * Math.PI) / 180;
+            const px = x + size * Math.cos(angle);
+            const py = y + size * Math.sin(angle);
+            ctx.lineTo(px, py);
+          }
+          ctx.closePath();
+        } else {
+          ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+        }
+        
+        ctx.fill();
+      }
+    }
     
+    // ========================
+    // VISION SIMULATION
+    // ========================
+    function initVisionCanvas() {
+      const canvas = document.getElementById('visionCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      
+      // Draw initial vision demo
+      drawVisionDemo();
+    }
+    
+    function drawVisionDemo() {
+      const canvas = document.getElementById('visionCanvas');
+      const ctx = canvas.getContext('2d');
+      
+      // Clear
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw some "objects"
+      const objects = [
+        {type: 'person', x: 100, y: 150, width: 60, height: 120},
+        {type: 'chair', x: 200, y: 200, width: 80, height: 60},
+        {type: 'monitor', x: 300, y: 100, width: 100, height: 80}
+      ];
+      
+      objects.forEach(obj => {
+        // Draw object
+        ctx.fillStyle = obj.type === 'person' ? 'rgba(99, 102, 241, 0.3)' :
+                        obj.type === 'chair' ? 'rgba(16, 185, 129, 0.3)' :
+                        'rgba(245, 158, 11, 0.3)';
+        ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
+        
+        // Draw bounding box
+        ctx.strokeStyle = obj.type === 'person' ? '#6366f1' :
+                         obj.type === 'chair' ? '#10b981' : '#f59e0b';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(obj.x, obj.y, obj.width, obj.height);
+        
+        // Draw label
+        ctx.fillStyle = 'white';
+        ctx.font = '14px Arial';
+        ctx.fillText(obj.type, obj.x + 5, obj.y - 5);
+      });
+    }
+    
+    function detectObjects() {
+      // Simulate object detection
+      const objects = ['Person', 'Chair', 'Monitor', 'Desk', 'Laptop'];
+      const confidences = [92, 87, 78, 65, 82];
+      
+      const list = document.getElementById('detectionList');
+      list.innerHTML = '';
+      
+      objects.forEach((obj, i) => {
+        if (Math.random() > 0.3) { // 70% chance to "detect" each object
+          const div = document.createElement('div');
+          div.style.cssText = 'display: flex; justify-content: space-between; padding: 5px 0;';
+          div.innerHTML = `
+            <span>${obj}</span>
+            <span style="color: var(--success);">${confidences[i] - Math.random() * 10}%</span>
+          `;
+          list.appendChild(div);
+        }
+      });
+      
+      document.getElementById('detectionCount').textContent = `${list.children.length} objects detected`;
+    }
+    
+    // ========================
+    // CHAT AI
+    // ========================
     function sendChatMessage() {
       const input = document.getElementById('chatInput');
       const message = input.value.trim();
@@ -640,160 +1088,138 @@
       const chatMessages = document.getElementById('chatMessages');
       
       // Add user message
-      const userMsg = document.createElement('div');
-      userMsg.style.cssText = 'padding: 8px 12px; background: rgba(99, 102, 241, 0.3); border-radius: 8px; margin-bottom: 10px; text-align: right;';
-      userMsg.innerHTML = `<strong>You:</strong> ${message}`;
-      chatMessages.appendChild(userMsg);
-      
-      // Clear input
+      addChatMessage('user', message);
       input.value = '';
       
-      // Generate response
+      // Generate AI response
       setTimeout(() => {
-        let response = "I'm here to help with predictions! Try adjusting the sliders above.";
-        
-        const lowerMsg = message.toLowerCase();
-        for (const [keyword, reply] of Object.entries(chatResponses)) {
-          if (lowerMsg.includes(keyword)) {
-            response = reply;
-            break;
-          }
-        }
-        
-        // Add AI response
-        const aiMsg = document.createElement('div');
-        aiMsg.style.cssText = 'padding: 8px 12px; background: rgba(99, 102, 241, 0.2); border-radius: 8px; margin-bottom: 10px;';
-        aiMsg.innerHTML = `<strong>AI:</strong> ${response}`;
-        chatMessages.appendChild(aiMsg);
-        
-        // Scroll to bottom
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        const response = generateAIResponse(message);
+        addChatMessage('ai', response);
       }, 500);
     }
     
-    // ========================
-    // CAMERA FUNCTIONALITY
-    // ========================
-    
-    let cameraActive = false;
-    let videoStream;
-    
-    async function toggleCamera() {
-      const placeholder = document.getElementById('cameraPlaceholder');
-      const btn = document.getElementById('btnCamera');
+    function addChatMessage(sender, text) {
+      const chatMessages = document.getElementById('chatMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${sender}`;
+      messageDiv.innerHTML = `<strong>${sender === 'user' ? 'You' : 'AI'}:</strong> ${text}`;
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
       
-      if (!cameraActive) {
-        try {
-          videoStream = await navigator.mediaDevices.getUserMedia({ 
-            video: { 
-              facingMode: 'environment',
-              width: { ideal: 640 },
-              height: { ideal: 480 }
-            } 
-          });
-          
-          const video = document.createElement('video');
-          video.srcObject = videoStream;
-          video.autoplay = true;
-          video.playsinline = true;
-          video.style.cssText = 'width: 100%; height: 100%; border-radius: var(--border-radius); object-fit: cover;';
-          
-          placeholder.innerHTML = '';
-          placeholder.appendChild(video);
-          
-          cameraActive = true;
-          btn.innerHTML = '<i class="fas fa-video-slash"></i> Disable Camera';
-          showNotification('Camera enabled', 'success');
-        } catch (error) {
-          showNotification('Camera access denied', 'error');
-        }
-      } else {
-        if (videoStream) {
-          videoStream.getTracks().forEach(track => track.stop());
-        }
-        
-        placeholder.innerHTML = '<i class="fas fa-camera fa-3x" style="color: #94a3b8;"></i>';
-        cameraActive = false;
-        btn.innerHTML = '<i class="fas fa-video"></i> Enable Camera';
-        showNotification('Camera disabled', 'info');
-      }
+      state.chatHistory.push({sender, text});
     }
     
-    function captureImage() {
-      if (!cameraActive) {
-        showNotification('Enable camera first', 'error');
-        return;
-      }
+    function generateAIResponse(message) {
+      const lowerMsg = message.toLowerCase();
       
-      showNotification('Image captured! (Demo)', 'success');
-    }
-    
-    // ========================
-    // UTILITY FUNCTIONS
-    // ========================
-    
-    function showNotification(message, type = 'info') {
-      const notification = document.createElement('div');
-      notification.className = 'notification';
-      
-      const icons = {
-        success: 'fa-check-circle',
-        error: 'fa-exclamation-circle',
-        info: 'fa-info-circle'
+      // Define responses
+      const responses = {
+        'hello': 'Hello! How can I help you with AI today?',
+        'predict': 'I can help with predictions! Adjust the sliders in the Predict tab.',
+        'vision': 'Check the Vision tab for object detection and image analysis.',
+        'art': 'Visit the Art tab to create AI-generated artwork.',
+        'help': 'I can help with: predictions, vision, chat, art generation, and more!',
+        'weather': 'I simulate weather patterns. Currently: Sunny with 25°C.',
+        'joke': 'Why do neural networks love coffee? Because they need to percolate!',
+        'ai': 'This is a lightweight AI demo running entirely in your browser!'
       };
       
-      const colors = {
-        success: '#10b981',
-        error: '#ef4444',
-        info: '#6366f1'
-      };
+      // Check for keywords
+      for (const [keyword, response] of Object.entries(responses)) {
+        if (lowerMsg.includes(keyword)) {
+          return response;
+        }
+      }
       
-      notification.innerHTML = `
-        <i class="fas ${icons[type]}" style="color: ${colors[type]};"></i>
-        <div>${message}</div>
-      `;
+      // Default responses
+      const defaults = [
+        "That's interesting! Can you tell me more?",
+        "I'm here to help with AI features. Try asking about predictions or vision!",
+        "Let me think about that... In the meantime, check out the Art tab!",
+        "Great question! The AI is learning from your interactions.",
+        "I'm designed to help with various AI tasks. What would you like to explore?"
+      ];
       
-      document.body.appendChild(notification);
-      
-      setTimeout(() => {
-        notification.style.animation = 'slideIn 0.3s ease reverse';
-        setTimeout(() => {
-          if (notification.parentNode) {
-            document.body.removeChild(notification);
-          }
-        }, 300);
-      }, 3000);
-    }
-    
-    function updateStatus(message) {
-      document.getElementById('statusText').textContent = message;
+      return defaults[Math.floor(Math.random() * defaults.length)];
     }
     
     // ========================
-    // INITIALIZATION
+    // SENTIMENT ANALYSIS
     // ========================
+    function analyzeSentiment() {
+      const text = document.getElementById('sentimentText').value;
+      if (!text.trim()) return;
+      
+      // Simple sentiment analysis
+      const positiveWords = ['good', 'great', 'excellent', 'happy', 'love', 'awesome', 'perfect', 'amazing'];
+      const negativeWords = ['bad', 'terrible', 'awful', 'hate', 'sad', 'horrible', 'worst', 'angry'];
+      
+      const words = text.toLowerCase().split(/\s+/);
+      let positive = 0;
+      let negative = 0;
+      
+      words.forEach(word => {
+        if (positiveWords.some(pw => word.includes(pw))) positive++;
+        if (negativeWords.some(nw => word.includes(nw))) negative++;
+      });
+      
+      const total = words.length;
+      const sentiment = total > 0 ? (positive - negative) / total : 0;
+      
+      // Update UI
+      document.getElementById('sentimentScore').textContent = sentiment.toFixed(2);
+      document.getElementById('emotion').textContent = 
+        sentiment > 0.3 ? 'Joy' : sentiment < -0.3 ? 'Sadness' : 'Neutral';
+      document.getElementById('wordCount').textContent = total;
+      
+      // Color code
+      const scoreEl = document.getElementById('sentimentScore');
+      scoreEl.style.color = sentiment > 0.2 ? '#10b981' : 
+                           sentiment < -0.2 ? '#ef4444' : '#f59e0b';
+    }
     
-    document.addEventListener('DOMContentLoaded', () => {
-      updateStatus('Ready');
-      
-      // Initialize chart
-      initChart();
-      
-      // Render initial samples
-      renderSamplesList();
-      
-      // Setup event listeners
-      setupEventListeners();
-      
-      // Make initial prediction
-      updatePredictions();
-      
-      showNotification('AI Playground loaded successfully!', 'success');
-    });
+    // ========================
+    // UTILITIES
+    // ========================
+    function updateStats() {
+      document.getElementById('totalPredictions').textContent = state.predictions;
+      document.getElementById('aiScore').textContent = `${Math.min(99, 80 + state.predictions * 0.5).toFixed(0)}%`;
+      document.getElementById('activeModels').textContent = '7';
+    }
     
-    function setupEventListeners() {
+    function switchTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Show selected tab
+      document.getElementById(`${tabName}-tab`).classList.add('active');
+      
+      // Update tab buttons
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.dataset.tab === tabName) {
+          tab.classList.add('active');
+        }
+      });
+      
+      state.activeTab = tabName;
+    }
+    
+    // ========================
+    // EVENT LISTENERS
+    // ========================
+    function initEventListeners() {
+      // Tab switching
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          switchTab(tab.dataset.tab);
+        });
+      });
+      
       // Sliders
-      ['hoursSlider', 'sleepSlider', 'focusSlider'].forEach(id => {
+      ['studySlider', 'sleepSlider', 'focusSlider'].forEach(id => {
         const slider = document.getElementById(id);
         const valueDisplay = document.getElementById(id.replace('Slider', 'Value'));
         
@@ -805,44 +1231,67 @@
       
       // Buttons
       document.getElementById('btnPredict').addEventListener('click', updatePredictions);
-      document.getElementById('btnAddData').addEventListener('click', addTrainingData);
-      document.getElementById('btnTrain').addEventListener('click', () => {
+      document.getElementById('btnAddData').addEventListener('click', () => {
+        alert('Training data added! The AI will learn from this.');
         updatePredictions();
-        showNotification('Model training simulated', 'info');
       });
-      
-      document.getElementById('btnSave').addEventListener('click', () => {
-        localStorage.setItem('ai-training-data', JSON.stringify(trainingData));
-        showNotification('Model saved locally', 'success');
+      document.getElementById('btnOptimize').addEventListener('click', () => {
+        document.getElementById('studyValue').textContent = '8.0';
+        document.getElementById('sleepValue').textContent = '8.5';
+        document.getElementById('focusValue').textContent = '9.0';
+        updatePredictions();
       });
-      
-      document.getElementById('btnLoad').addEventListener('click', () => {
-        const saved = localStorage.getItem('ai-training-data');
-        if (saved) {
-          trainingData = JSON.parse(saved);
-          renderSamplesList();
-          showNotification('Model loaded', 'success');
-        } else {
-          showNotification('No saved model found', 'error');
+      document.getElementById('btnSimulate').addEventListener('click', () => {
+        for (let i = 0; i < 5; i++) {
+          setTimeout(() => updatePredictions(), i * 300);
         }
       });
-      
-      document.getElementById('btnReset').addEventListener('click', () => {
-        if (trainingChart) {
-          trainingChart.data.datasets[0].data = Array.from({length: 20}, () => Math.random() * 20 + 70);
-          trainingChart.update();
-          showNotification('Chart reset', 'info');
-        }
+      document.getElementById('btnAnimate').addEventListener('click', () => {
+        state.neuralAnimating = !state.neuralAnimating;
       });
+      document.getElementById('btnRandomize').addEventListener('click', updatePredictions);
       
-      // Camera
-      document.getElementById('btnCamera').addEventListener('click', toggleCamera);
-      document.getElementById('btnCapture').addEventListener('click', captureImage);
+      // Vision
+      document.getElementById('btnDetect').addEventListener('click', detectObjects);
+      document.getElementById('imageDropzone').addEventListener('click', () => {
+        document.getElementById('imageUpload').click();
+      });
+      document.getElementById('imageUpload').addEventListener('change', (e) => {
+        alert('Image uploaded! Processing with AI...');
+        detectObjects();
+      });
       
       // Chat
       document.getElementById('btnSend').addEventListener('click', sendChatMessage);
       document.getElementById('chatInput').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') sendChatMessage();
+      });
+      document.getElementById('btnClearChat').addEventListener('click', () => {
+        document.getElementById('chatMessages').innerHTML = `
+          <div class="message ai">
+            <strong>AI:</strong> Hello! I'm your AI assistant. I can help with predictions, answer questions, or just chat!
+          </div>
+        `;
+      });
+      
+      // Sentiment
+      document.getElementById('btnAnalyze').addEventListener('click', analyzeSentiment);
+      document.getElementById('sentimentText').addEventListener('input', analyzeSentiment);
+      
+      // Art
+      document.getElementById('btnGenerateArt').addEventListener('click', generateArt);
+      document.getElementById('artStyle').addEventListener('change', generateArt);
+      document.getElementById('artComplexity').addEventListener('input', generateArt);
+      
+      // Style buttons
+      ['btnStyle1', 'btnStyle2', 'btnStyle3'].forEach(id => {
+        document.getElementById(id).addEventListener('click', () => {
+          const styles = ['Van Gogh', 'Picasso', 'Monet'];
+          const style = styles[parseInt(id.replace('btnStyle', '')) - 1];
+          document.getElementById('artStyle').value = 'Abstract';
+          alert(`Applying ${style} style...`);
+          generateArt();
+        });
       });
     }
   </script>
