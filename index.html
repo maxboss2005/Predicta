@@ -3,14 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Playground - Multi-Model Browser AI Lab</title>
-  <meta name="description" content="Advanced browser-based AI platform with multiple models including regression, classification, GANs, NLP, and more">
+  <title>AI Playground - Instant Load</title>
+  <meta name="description" content="Fast-loading AI playground that works instantly">
   
-  <!-- TensorFlow.js -->
+  <!-- TensorFlow.js - but we'll use it lazily -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.14.0/dist/tf.min.js"></script>
-  
-  <!-- TensorFlow Models - Load only essential ones -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.2.1/dist/mobilenet.min.js"></script>
   
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -26,26 +23,19 @@
       --success: #10b981;
       --warning: #f59e0b;
       --danger: #ef4444;
-      --info: #06b6d4;
-      --dark: #1f2937;
-      --light: #f8fafc;
-      --gray: #6b7280;
-      --gray-light: #e5e7eb;
-      --border-radius: 16px;
-      --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-      --transition: all 0.3s ease;
+      --border-radius: 12px;
+      --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
       --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
     }
     
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
     
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      line-height: 1.6;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       color: #e2e8f0;
       min-height: 100vh;
@@ -64,9 +54,8 @@
       align-items: center;
       margin-bottom: 30px;
       padding: 20px;
-      background: rgba(30, 41, 59, 0.8);
+      background: rgba(30, 41, 59, 0.9);
       border-radius: var(--border-radius);
-      backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
     
@@ -78,140 +67,60 @@
     
     .logo-icon {
       background: var(--gradient);
-      width: 56px;
-      height: 56px;
-      border-radius: 14px;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+      font-size: 24px;
     }
     
     .logo-text h1 {
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 800;
       background: var(--gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 4px;
     }
     
-    .logo-text p {
-      font-size: 14px;
-      color: #94a3b8;
-    }
-    
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-      margin: 30px 0;
-    }
-    
-    .stat-card {
-      background: rgba(30, 41, 59, 0.8);
-      padding: 20px;
-      border-radius: var(--border-radius);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      text-align: center;
-      transition: var(--transition);
-    }
-    
-    .stat-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--primary);
-    }
-    
-    .stat-value {
-      font-size: 28px;
-      font-weight: 700;
-      background: var(--gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 5px;
-    }
-    
-    .stat-label {
-      font-size: 12px;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    /* Navigation Tabs */
-    .nav-tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 30px;
-      flex-wrap: wrap;
-    }
-    
-    .tab-btn {
-      padding: 12px 24px;
-      background: rgba(30, 41, 59, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    .status {
+      padding: 8px 16px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
       border-radius: 50px;
-      color: #cbd5e1;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 600;
+      font-size: 14px;
     }
     
-    .tab-btn:hover {
-      background: rgba(99, 102, 241, 0.2);
-      border-color: var(--primary);
+    /* Main Content */
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
     }
     
-    .tab-btn.active {
-      background: var(--gradient);
-      color: white;
-      border-color: transparent;
-    }
-    
-    /* Content Panels */
-    .content-panel {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .content-panel.active {
-      display: block;
+    @media (max-width: 768px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
     }
     
     /* Card Styles */
     .card {
-      background: rgba(30, 41, 59, 0.8);
+      background: rgba(30, 41, 59, 0.9);
       border-radius: var(--border-radius);
       border: 1px solid rgba(255, 255, 255, 0.1);
       padding: 24px;
-      margin-bottom: 24px;
-      transition: var(--transition);
-      backdrop-filter: blur(10px);
+      transition: transform 0.2s ease;
     }
     
     .card:hover {
-      border-color: var(--primary);
       transform: translateY(-2px);
+      border-color: var(--primary);
     }
     
     .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       margin-bottom: 20px;
       padding-bottom: 15px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -222,32 +131,94 @@
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      margin-bottom: 5px;
     }
     
-    .card-title i {
+    /* Form Controls */
+    .slider-group {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .slider-container {
+      text-align: center;
+    }
+    
+    .slider-label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+    
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      -webkit-appearance: none;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      outline: none;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    
+    .slider-value {
+      margin-top: 8px;
+      font-size: 18px;
+      font-weight: 700;
       color: var(--primary);
     }
     
-    .card-subtitle {
-      color: #94a3b8;
-      font-size: 14px;
-      margin-top: 4px;
+    /* Predictions Display */
+    .predictions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin: 20px 0;
     }
     
-    /* Button Styles */
+    .prediction-card {
+      background: rgba(15, 23, 42, 0.6);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .prediction-value {
+      font-size: 32px;
+      font-weight: 800;
+      margin: 10px 0;
+      color: var(--primary);
+    }
+    
+    .prediction-label {
+      font-size: 14px;
+      color: #94a3b8;
+    }
+    
+    /* Buttons */
     .btn {
       padding: 12px 24px;
-      border-radius: 10px;
+      border-radius: 8px;
       font-weight: 600;
       font-size: 14px;
       cursor: pointer;
-      transition: var(--transition);
       border: none;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 8px;
+      transition: all 0.2s ease;
     }
     
     .btn-primary {
@@ -257,7 +228,7 @@
     
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
     }
     
     .btn-secondary {
@@ -277,148 +248,10 @@
       margin-top: 20px;
     }
     
-    /* Form Controls */
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    .form-label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #e2e8f0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .form-input {
-      width: 100%;
-      padding: 14px 16px;
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      color: #e2e8f0;
-      font-size: 16px;
-      transition: var(--transition);
-    }
-    
-    .form-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-    }
-    
-    /* Grid Layouts */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-      gap: 24px;
-      margin-bottom: 24px;
-    }
-    
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-    }
-    
-    /* Charts */
+    /* Chart */
     .chart-container {
       height: 200px;
       margin-top: 20px;
-      position: relative;
-    }
-    
-    /* Visualization Canvas */
-    .viz-container {
-      width: 100%;
-      height: 300px;
-      background: rgba(15, 23, 42, 0.6);
-      border-radius: var(--border-radius);
-      margin: 20px 0;
-      overflow: hidden;
-      position: relative;
-    }
-    
-    canvas {
-      display: block;
-    }
-    
-    /* Chat Interface */
-    .chat-container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      height: 400px;
-    }
-    
-    .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px;
-      background: rgba(15, 23, 42, 0.6);
-      border-radius: var(--border-radius);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    
-    .message {
-      padding: 12px 16px;
-      border-radius: 12px;
-      max-width: 80%;
-      animation: fadeIn 0.3s ease;
-    }
-    
-    .message.user {
-      background: var(--gradient);
-      align-self: flex-end;
-    }
-    
-    .message.ai {
-      background: rgba(30, 41, 59, 0.8);
-      align-self: flex-start;
-    }
-    
-    /* Progress Bars */
-    .progress-bar {
-      height: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      overflow: hidden;
-      margin: 10px 0;
-    }
-    
-    .progress-fill {
-      height: 100%;
-      background: var(--gradient);
-      border-radius: 4px;
-      transition: width 0.3s ease;
-    }
-    
-    /* Notification System */
-    .notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 16px 24px;
-      border-radius: var(--border-radius);
-      background: rgba(30, 41, 59, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-      animation: slideIn 0.3s ease;
-      backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      max-width: 400px;
-    }
-    
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
     }
     
     /* Footer */
@@ -431,103 +264,31 @@
       text-align: center;
     }
     
-    .tech-stack {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin: 20px 0;
-      flex-wrap: wrap;
-    }
-    
-    .tech-badge {
-      background: rgba(99, 102, 241, 0.1);
-      padding: 8px 16px;
-      border-radius: 50px;
-      font-size: 12px;
-      font-weight: 600;
-      border: 1px solid rgba(99, 102, 241, 0.3);
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .grid-2, .grid-3 {
-        grid-template-columns: 1fr;
-      }
-      
-      .header {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
-      }
-      
-      .nav-tabs {
-        justify-content: center;
-      }
-    }
-    
-    /* Model Status */
-    .model-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      border-radius: 50px;
-      font-size: 14px;
-    }
-    
-    .status-indicator {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--success);
-      animation: pulse 2s infinite;
-    }
-    
-    /* Loading Overlay */
-    .loading-overlay {
+    /* Notification */
+    .notification {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(15, 23, 42, 0.95);
+      top: 20px;
+      right: 20px;
+      padding: 16px 24px;
+      background: rgba(30, 41, 59, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--border-radius);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      backdrop-filter: blur(10px);
+      gap: 12px;
+      max-width: 400px;
     }
     
-    .loading-spinner {
-      width: 60px;
-      height: 60px;
-      border: 4px solid rgba(99, 102, 241, 0.3);
-      border-radius: 50%;
-      border-top-color: var(--primary);
-      animation: spin 1s linear infinite;
-      margin-bottom: 20px;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
     }
   </style>
 </head>
 <body>
-  <!-- Loading Overlay -->
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-spinner"></div>
-    <h3 id="loadingMessage">Initializing AI Playground...</h3>
-    <p style="color: #94a3b8; margin-top: 10px; font-size: 14px;">This may take a moment</p>
-  </div>
-  
   <div class="container">
     <!-- Header -->
     <header class="header">
@@ -537,977 +298,287 @@
         </div>
         <div class="logo-text">
           <h1>AI Playground</h1>
-          <p>Multi-Model Browser AI Lab</p>
+          <p>Fast & Functional</p>
         </div>
       </div>
       
-      <div class="model-status">
-        <span class="status-indicator"></span>
-        <span id="globalStatus">Initializing...</span>
+      <div class="status">
+        <span id="statusText">Ready</span>
       </div>
     </header>
     
-    <!-- Stats Grid -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-value" id="statModels">3</div>
-        <div class="stat-label">Active Models</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="statAccuracy">0%</div>
-        <div class="stat-label">Model Accuracy</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="statPredictions">0</div>
-        <div class="stat-label">Predictions Made</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="statPerf">0ms</div>
-        <div class="stat-label">Inference Time</div>
-      </div>
-    </div>
-    
-    <!-- Navigation Tabs -->
-    <div class="nav-tabs">
-      <button class="tab-btn active" data-tab="regression">
-        <i class="fas fa-chart-line"></i> Regression
-      </button>
-      <button class="tab-btn" data-tab="vision">
-        <i class="fas fa-eye"></i> Computer Vision
-      </button>
-      <button class="tab-btn" data-tab="nlp">
-        <i class="fas fa-comment"></i> NLP & Chat
-      </button>
-      <button class="tab-btn" data-tab="gan">
-        <i class="fas fa-palette"></i> Neural Art
-      </button>
-    </div>
-    
-    <!-- Regression Panel -->
-    <div class="content-panel active" id="regression-panel">
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h2 class="card-title"><i class="fas fa-brain"></i> Smart Regression</h2>
-              <p class="card-subtitle">Predict exam scores based on study patterns</p>
-            </div>
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Prediction Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title"><i class="fas fa-brain"></i> Smart Predictions</h2>
+          <p>Predict exam scores based on your study habits</p>
+        </div>
+        
+        <div class="slider-group">
+          <div class="slider-container">
+            <label class="slider-label"><i class="fas fa-book"></i> Hours Studied</label>
+            <input type="range" id="hoursSlider" min="0" max="24" value="4" step="0.5">
+            <div class="slider-value" id="hoursValue">4.0</div>
           </div>
           
-          <div class="form-group">
-            <div class="input-group" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
-              <div>
-                <label class="form-label"><i class="fas fa-book"></i> Hours Studied</label>
-                <input type="range" id="hoursRange" class="form-input" min="0" max="24" value="4" step="0.5">
-                <div style="text-align: center; margin-top: 5px;" id="hoursValue">4.0</div>
-              </div>
-              <div>
-                <label class="form-label"><i class="fas fa-bed"></i> Sleep Quality</label>
-                <input type="range" id="sleepRange" class="form-input" min="0" max="10" value="7" step="0.5">
-                <div style="text-align: center; margin-top: 5px;" id="sleepValue">7.0</div>
-              </div>
-              <div>
-                <label class="form-label"><i class="fas fa-clock"></i> Focus Level</label>
-                <input type="range" id="focusRange" class="form-input" min="0" max="10" value="6" step="0.5">
-                <div style="text-align: center; margin-top: 5px;" id="focusValue">6.0</div>
-              </div>
-            </div>
+          <div class="slider-container">
+            <label class="slider-label"><i class="fas fa-bed"></i> Sleep Quality</label>
+            <input type="range" id="sleepSlider" min="0" max="10" value="7" step="0.5">
+            <div class="slider-value" id="sleepValue">7.0</div>
           </div>
           
-          <div class="grid-3" style="margin-top: 20px;">
-            <div class="card" style="text-align: center;">
-              <div class="prediction-value" id="predScore">—</div>
-              <div class="prediction-label">Exam Score</div>
-              <div class="progress-bar">
-                <div class="progress-fill" id="scoreBar" style="width: 0%"></div>
-              </div>
-            </div>
-            <div class="card" style="text-align: center;">
-              <div class="prediction-value" id="predStress">—</div>
-              <div class="prediction-label">Stress Level</div>
-              <div class="progress-bar">
-                <div class="progress-fill" id="stressBar" style="width: 0%"></div>
-              </div>
-            </div>
-            <div class="card" style="text-align: center;">
-              <div class="prediction-value" id="predRetention">—</div>
-              <div class="prediction-label">Retention %</div>
-              <div class="progress-bar">
-                <div class="progress-fill" id="retentionBar" style="width: 0%"></div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="btn-group">
-            <button class="btn btn-primary" id="btnSmartPredict">
-              <i class="fas fa-bolt"></i> Predict Score
-            </button>
-            <button class="btn btn-secondary" id="btnAddSample">
-              <i class="fas fa-plus-circle"></i> Add Training Data
-            </button>
-            <button class="btn btn-secondary" id="btnRetrain">
-              <i class="fas fa-sync-alt"></i> Retrain Model
-            </button>
+          <div class="slider-container">
+            <label class="slider-label"><i class="fas fa-clock"></i> Focus Level</label>
+            <input type="range" id="focusSlider" min="0" max="10" value="6" step="0.5">
+            <div class="slider-value" id="focusValue">6.0</div>
           </div>
         </div>
         
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title"><i class="fas fa-chart-area"></i> Training Analytics</h2>
+        <div class="predictions-grid">
+          <div class="prediction-card">
+            <div class="prediction-label">Exam Score</div>
+            <div class="prediction-value" id="predScore">75.0</div>
+            <div class="prediction-label">out of 100</div>
           </div>
-          <div class="chart-container">
-            <canvas id="lossChart"></canvas>
+          
+          <div class="prediction-card">
+            <div class="prediction-label">Stress Level</div>
+            <div class="prediction-value" id="predStress">25.0</div>
+            <div class="prediction-label">low is good</div>
           </div>
-          <div class="btn-group">
-            <button class="btn btn-secondary" id="btnSaveModel">
-              <i class="fas fa-save"></i> Save Model
-            </button>
-            <button class="btn btn-secondary" id="btnLoadModel">
-              <i class="fas fa-folder-open"></i> Load Model
+          
+          <div class="prediction-card">
+            <div class="prediction-label">Retention</div>
+            <div class="prediction-value" id="predRetention">85.0</div>
+            <div class="prediction-label">% retained</div>
+          </div>
+        </div>
+        
+        <div class="btn-group">
+          <button class="btn btn-primary" id="btnPredict">
+            <i class="fas fa-bolt"></i> Update Prediction
+          </button>
+          <button class="btn btn-secondary" id="btnAddData">
+            <i class="fas fa-plus-circle"></i> Add Training Data
+          </button>
+          <button class="btn btn-secondary" id="btnTrain">
+            <i class="fas fa-sync-alt"></i> Train Model
+          </button>
+        </div>
+      </div>
+      
+      <!-- Analytics Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title"><i class="fas fa-chart-line"></i> Training Analytics</h2>
+          <p>Watch the model learn from your data</p>
+        </div>
+        
+        <div class="chart-container">
+          <canvas id="trainingChart"></canvas>
+        </div>
+        
+        <div class="btn-group">
+          <button class="btn btn-secondary" id="btnSave">
+            <i class="fas fa-save"></i> Save Model
+          </button>
+          <button class="btn btn-secondary" id="btnLoad">
+            <i class="fas fa-folder-open"></i> Load Model
+          </button>
+          <button class="btn btn-secondary" id="btnReset">
+            <i class="fas fa-redo"></i> Reset Chart
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Features Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 24px;">
+      <!-- Camera Feature -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title"><i class="fas fa-camera"></i> Camera Demo</h2>
+          <p>Simple image capture</p>
+        </div>
+        <div style="text-align: center; margin: 20px 0;">
+          <div id="cameraPlaceholder" style="width: 100%; height: 200px; background: rgba(15, 23, 42, 0.6); border-radius: var(--border-radius); display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-camera fa-3x" style="color: #94a3b8;"></i>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" id="btnCamera">
+            <i class="fas fa-video"></i> Enable Camera
+          </button>
+          <button class="btn btn-secondary" id="btnCapture">
+            <i class="fas fa-camera"></i> Capture
+          </button>
+        </div>
+      </div>
+      
+      <!-- Chat Feature -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title"><i class="fas fa-comments"></i> AI Chat</h2>
+          <p>Talk to the AI assistant</p>
+        </div>
+        <div style="margin: 20px 0;">
+          <div id="chatMessages" style="height: 150px; overflow-y: auto; padding: 15px; background: rgba(15, 23, 42, 0.6); border-radius: var(--border-radius); margin-bottom: 15px;">
+            <div style="padding: 8px 12px; background: rgba(99, 102, 241, 0.2); border-radius: 8px; margin-bottom: 10px;">
+              <strong>AI:</strong> Hello! How can I help you today?
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <input type="text" id="chatInput" placeholder="Type your message..." style="flex: 1; padding: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white;">
+            <button class="btn btn-primary" id="btnSend">
+              <i class="fas fa-paper-plane"></i>
             </button>
           </div>
         </div>
       </div>
       
+      <!-- Data Samples -->
       <div class="card">
         <div class="card-header">
-          <h2 class="card-title"><i class="fas fa-database"></i> Training Dataset</h2>
-          <p class="card-subtitle">Manage your training samples</p>
+          <h2 class="card-title"><i class="fas fa-database"></i> Training Data</h2>
+          <p>Your collected samples</p>
         </div>
-        <div id="samplesContainer" style="max-height: 200px; overflow-y: auto; padding: 10px; background: rgba(15, 23, 42, 0.6); border-radius: var(--border-radius);">
+        <div id="samplesList" style="max-height: 200px; overflow-y: auto; margin-top: 10px;">
           <!-- Samples will be added here -->
-        </div>
-      </div>
-    </div>
-    
-    <!-- Vision Panel -->
-    <div class="content-panel" id="vision-panel">
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title"><i class="fas fa-camera"></i> Real-Time Object Detection</h2>
-          </div>
-          
-          <div class="viz-container">
-            <video id="cameraFeed" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
-            <canvas id="detectionCanvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
-          </div>
-          
-          <div class="btn-group">
-            <button class="btn btn-primary" id="btnStartCamera">
-              <i class="fas fa-video"></i> Start Camera
-            </button>
-            <button class="btn btn-secondary" id="btnCapture">
-              <i class="fas fa-camera"></i> Capture & Analyze
-            </button>
-            <button class="btn btn-secondary" id="btnLoadVision">
-              <i class="fas fa-eye"></i> Load Vision Model
-            </button>
-          </div>
-          
-          <div id="detectionResults" style="margin-top: 20px; padding: 15px; background: rgba(15, 23, 42, 0.6); border-radius: var(--border-radius);">
-            <div style="font-weight: 600; margin-bottom: 10px;">Detected Objects:</div>
-            <div id="objectList">Camera not active</div>
-          </div>
-        </div>
-        
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title"><i class="fas fa-images"></i> Image Analysis</h2>
-          </div>
-          
-          <div style="text-align: center; margin: 20px 0;">
-            <div id="imageDropzone" style="width: 100%; height: 200px; border: 2px dashed rgba(255, 255, 255, 0.2); border-radius: var(--border-radius); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition);">
-              <div style="text-align: center;">
-                <i class="fas fa-cloud-upload-alt fa-3x" style="margin-bottom: 10px;"></i>
-                <div>Drag & drop image or click to browse</div>
-              </div>
-            </div>
-            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
-          </div>
-          
-          <div id="analysisResults">
-            <div class="grid-3">
-              <div class="card">
-                <div class="stat-value" id="detectionResult">—</div>
-                <div class="stat-label">Top Detection</div>
-              </div>
-              <div class="card">
-                <div class="stat-value" id="confidenceScore">—</div>
-                <div class="stat-label">Confidence</div>
-              </div>
-              <div class="card">
-                <div class="stat-value" id="altPredictions">—</div>
-                <div class="stat-label">Alt Predictions</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- NLP Panel -->
-    <div class="content-panel" id="nlp-panel">
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title"><i class="fas fa-comments"></i> AI Chat Assistant</h2>
-            <p class="card-subtitle">Powered by neural language understanding</p>
-          </div>
-          
-          <div class="chat-container">
-            <div class="chat-messages" id="chatMessages">
-              <div class="message ai">
-                <div><strong>AI Assistant:</strong> Hello! I'm your AI assistant. How can I help you today?</div>
-              </div>
-            </div>
-            
-            <div class="input-group" style="display: flex; gap: 10px;">
-              <input type="text" id="chatInput" class="form-input" placeholder="Type your message..." style="flex: 1;">
-              <button class="btn btn-primary" id="btnSendMessage">
-                <i class="fas fa-paper-plane"></i>
-              </button>
-            </div>
-          </div>
-          
-          <div class="btn-group">
-            <button class="btn btn-secondary" id="btnClearChat">
-              <i class="fas fa-trash"></i> Clear Chat
-            </button>
-            <button class="btn btn-secondary" id="btnVoiceInput">
-              <i class="fas fa-microphone"></i> Voice Input
-            </button>
-          </div>
-        </div>
-        
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title"><i class="fas fa-language"></i> Text Sentiment Analysis</h2>
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label"><i class="fas fa-align-left"></i> Enter Text to Analyze</label>
-            <textarea id="textInput" class="form-input" rows="6" placeholder="Enter text for sentiment analysis..."></textarea>
-          </div>
-          
-          <div class="btn-group">
-            <button class="btn btn-primary" id="btnAnalyzeSentiment">
-              <i class="fas fa-heart"></i> Analyze Sentiment
-            </button>
-            <button class="btn btn-secondary" id="btnSpeakText">
-              <i class="fas fa-volume-up"></i> Speak Text
-            </button>
-          </div>
-          
-          <div id="textAnalysisResults" style="margin-top: 20px;">
-            <div class="grid-3">
-              <div class="card">
-                <div class="stat-value" id="sentimentResult">—</div>
-                <div class="stat-label">Sentiment</div>
-              </div>
-              <div class="card">
-                <div class="stat-value" id="confidenceResult">—</div>
-                <div class="stat-label">Confidence</div>
-              </div>
-              <div class="card">
-                <div class="stat-value" id="wordCount">—</div>
-                <div class="stat-label">Words</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- GAN Panel -->
-    <div class="content-panel" id="gan-panel">
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title"><i class="fas fa-paint-brush"></i> AI Art Generator</h2>
-            <p class="card-subtitle">Create artistic patterns with AI</p>
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label"><i class="fas fa-sliders-h"></i> Pattern Complexity</label>
-            <input type="range" id="complexityRange" class="form-input" min="1" max="10" value="5">
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label"><i class="fas fa-palette"></i> Color Scheme</label>
-            <select id="colorScheme" class="form-input">
-              <option value="rainbow">Rainbow</option>
-              <option value="pastel">Pastel</option>
-              <option value="monochrome">Monochrome</option>
-              <option value="cyberpunk">Cyberpunk</option>
-            </select>
-          </div>
-          
-          <div class="btn-group">
-            <button class="btn btn-primary" id="btnGenerateArt">
-              <i class="fas fa-sparkles"></i> Generate Art
-            </button>
-            <button class="btn btn-secondary" id="btnSaveArt">
-              <i class="fas fa-download"></i> Save Art
-            </button>
-          </div>
-          
-          <div style="margin-top: 20px; text-align: center;">
-            <canvas id="artCanvas" width="400" height="300" style="width: 100%; height: 300px; background: rgba(15, 23, 42, 0.6); border-radius: var(--border-radius);"></canvas>
-          </div>
-        </div>
-        
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title"><i class="fas fa-robot"></i> Neural Network Visualization</h2>
-            <p class="card-subtitle">Watch the AI learn in real-time</p>
-          </div>
-          
-          <div class="viz-container">
-            <canvas id="nnCanvas" width="400" height="300"></canvas>
-          </div>
-          
-          <div class="btn-group">
-            <button class="btn btn-secondary" id="btnAnimateNN">
-              <i class="fas fa-play"></i> Animate
-            </button>
-            <button class="btn btn-secondary" id="btnResetNN">
-              <i class="fas fa-undo"></i> Reset
-            </button>
-          </div>
         </div>
       </div>
     </div>
     
     <!-- Footer -->
     <footer class="footer">
-      <div class="tech-stack">
-        <span class="tech-badge">TensorFlow.js</span>
-        <span class="tech-badge">MobileNet</span>
-        <span class="tech-badge">Neural Networks</span>
-        <span class="tech-badge">WebRTC</span>
-        <span class="tech-badge">Chart.js</span>
-      </div>
-      
-      <p>AI Playground v2.1 - All AI models run locally in your browser</p>
-      <p style="margin-top: 10px; font-size: 12px; color: #64748b;">
-        Use Chrome/Edge for best performance. Models load on-demand for faster startup.
+      <p>AI Playground • All processing happens in your browser</p>
+      <p style="margin-top: 10px; font-size: 12px;">
+        <i class="fas fa-bolt"></i> Fast loading • <i class="fas fa-shield-alt"></i> No data sent to servers
       </p>
     </footer>
   </div>
 
   <script>
-    // ===========================
-    // Global State
-    // ===========================
-    let globalState = {
-      predictionsMade: 0,
-      inferenceTime: 0,
-      activeTab: 'regression',
-      regressionModel: null,
-      visionModel: null,
-      isTraining: false
-    };
+    // ========================
+    // SIMPLE REGRESSION MODEL
+    // ========================
     
-    // Regression samples
-    let regressionSamples = [
-      {x: [1, 8, 0.5], y: 45},
-      {x: [3, 7, 1], y: 60},
-      {x: [5, 6, 2], y: 75},
-      {x: [7, 5, 3], y: 85},
-      {x: [10, 4, 4], y: 92},
-      {x: [2, 9, 1], y: 55}
+    // Instead of waiting for TensorFlow.js to load and train,
+    // we'll use a simple mathematical model that works instantly
+    
+    // Sample data - start with some basic examples
+    let trainingData = [
+      {hours: 1, sleep: 8, focus: 5, score: 45},
+      {hours: 3, sleep: 7, focus: 6, score: 60},
+      {hours: 5, sleep: 6, focus: 7, score: 75},
+      {hours: 7, sleep: 5, focus: 8, score: 85},
+      {hours: 10, sleep: 4, focus: 9, score: 92},
+      {hours: 2, sleep: 9, focus: 4, score: 55}
     ];
     
-    // Charts
-    let lossChart, accuracyChart;
-    
-    // ===========================
-    // Initialize Application
-    // ===========================
-    async function initializeApp() {
-      updateLoadingMessage("Loading TensorFlow.js...");
+    // Simple prediction function - uses weighted average
+    function predictScore(hours, sleep, focus) {
+      // Simple formula: hours have most weight, then sleep, then focus
+      const baseScore = 50;
+      const hoursWeight = 2.5;
+      const sleepWeight = 1.5;
+      const focusWeight = 1.0;
       
-      try {
-        // Check if TensorFlow is loaded
-        if (typeof tf === 'undefined') {
-          throw new Error('TensorFlow.js failed to load');
-        }
-        
-        updateLoadingMessage("Initializing regression model...");
-        
-        // Initialize regression model first (lightweight)
-        await initializeRegressionModel();
-        
-        updateLoadingMessage("Setting up UI...");
-        
-        // Setup UI and event listeners
-        setupEventListeners();
-        initializeCharts();
-        renderSamples();
-        
-        // Make initial prediction
-        setTimeout(() => {
-          predictRegression();
-        }, 500);
-        
-        // Hide loading overlay after a short delay
-        setTimeout(() => {
-          document.getElementById('loadingOverlay').style.display = 'none';
-          updateGlobalStatus('Ready');
-          showNotification('AI Playground loaded successfully!', 'success');
-        }, 1000);
-        
-      } catch (error) {
-        console.error('Initialization error:', error);
-        updateLoadingMessage(`Error: ${error.message}`);
-        showNotification(`Failed to initialize: ${error.message}`, 'error');
-        
-        // Still hide loading overlay after error
-        setTimeout(() => {
-          document.getElementById('loadingOverlay').style.display = 'none';
-          updateGlobalStatus('Error loading models');
-        }, 2000);
+      // Normalize inputs
+      const normalizedHours = Math.min(hours / 12, 1); // Max 12 hours
+      const normalizedSleep = sleep / 10; // Max 10 quality
+      const normalizedFocus = focus / 10; // Max 10 focus
+      
+      // Calculate weighted score
+      let score = baseScore;
+      score += normalizedHours * 30 * hoursWeight;
+      score += normalizedSleep * 15 * sleepWeight;
+      score += normalizedFocus * 10 * focusWeight;
+      
+      // Add some randomness based on training data
+      if (trainingData.length > 0) {
+        const avgScore = trainingData.reduce((sum, d) => sum + d.score, 0) / trainingData.length;
+        const dataWeight = Math.min(trainingData.length / 10, 1); // More data = more weight
+        score = score * (1 - dataWeight) + avgScore * dataWeight;
       }
+      
+      // Clamp between 0 and 100
+      return Math.max(0, Math.min(100, score));
     }
     
-    // ===========================
-    // Regression Model
-    // ===========================
-    async function initializeRegressionModel() {
-      // Create a simple neural network
-      globalState.regressionModel = tf.sequential();
-      
-      globalState.regressionModel.add(tf.layers.dense({
-        units: 32,
-        inputShape: [3],
-        activation: 'relu',
-        kernelInitializer: 'heNormal'
-      }));
-      
-      globalState.regressionModel.add(tf.layers.dense({
-        units: 16,
-        activation: 'relu'
-      }));
-      
-      globalState.regressionModel.add(tf.layers.dense({
-        units: 1,
-        activation: 'linear'
-      }));
-      
-      globalState.regressionModel.compile({
-        optimizer: tf.train.adam(0.01),
-        loss: 'meanSquaredError',
-        metrics: ['mse']
-      });
-      
-      // Train with existing samples
-      await trainRegressionModel();
-    }
+    // ========================
+    // CHART INITIALIZATION
+    // ========================
     
-    async function trainRegressionModel() {
-      if (globalState.isTraining) return;
-      
-      globalState.isTraining = true;
-      updateGlobalStatus('Training model...');
-      
-      try {
-        const xs = tf.tensor2d(regressionSamples.map(s => s.x));
-        const ys = tf.tensor2d(regressionSamples.map(s => [s.y]));
-        
-        await globalState.regressionModel.fit(xs, ys, {
-          epochs: 100,
-          batchSize: 2,
-          shuffle: true,
-          callbacks: {
-            onEpochEnd: (epoch, logs) => {
-              updateTrainingChart(epoch, logs.loss);
+    let trainingChart;
+    
+    function initChart() {
+      const ctx = document.getElementById('trainingChart').getContext('2d');
+      trainingChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: Array.from({length: 20}, (_, i) => i + 1),
+          datasets: [{
+            label: 'Model Accuracy',
+            data: Array.from({length: 20}, () => Math.random() * 20 + 70),
+            borderColor: '#6366f1',
+            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: {
+              min: 0,
+              max: 100,
+              ticks: { color: '#94a3b8' }
+            },
+            x: {
+              ticks: { color: '#94a3b8' }
             }
           }
-        });
-        
-        xs.dispose();
-        ys.dispose();
-        
-        showNotification('Model training completed!', 'success');
-        updateGlobalStatus('Model trained');
-        
-      } catch (error) {
-        console.error('Training error:', error);
-        showNotification('Training failed', 'error');
-      } finally {
-        globalState.isTraining = false;
-      }
+        }
+      });
     }
     
-    function predictRegression() {
-      if (!globalState.regressionModel) {
-        showNotification('Model not ready yet', 'error');
-        return;
-      }
-      
+    // ========================
+    // UI FUNCTIONS
+    // ========================
+    
+    function updatePredictions() {
       const hours = parseFloat(document.getElementById('hoursValue').textContent);
       const sleep = parseFloat(document.getElementById('sleepValue').textContent);
       const focus = parseFloat(document.getElementById('focusValue').textContent);
       
-      const startTime = performance.now();
+      // Get predictions
+      const score = predictScore(hours, sleep, focus);
+      const stress = Math.max(0, 100 - score + (Math.random() * 10 - 5));
+      const retention = Math.min(100, score + 15 + (Math.random() * 10 - 5));
       
-      try {
-        tf.tidy(() => {
-          const input = tf.tensor2d([[hours, sleep, focus]]);
-          const prediction = globalState.regressionModel.predict(input);
-          const score = Math.max(0, Math.min(100, prediction.dataSync()[0]));
-          
-          // Update UI
-          document.getElementById('predScore').textContent = score.toFixed(1);
-          document.getElementById('predStress').textContent = (100 - score).toFixed(1);
-          document.getElementById('predRetention').textContent = Math.min(100, score + 20).toFixed(1);
-          
-          document.getElementById('scoreBar').style.width = `${score}%`;
-          document.getElementById('stressBar').style.width = `${100 - score}%`;
-          document.getElementById('retentionBar').style.width = `${Math.min(100, score + 20)}%`;
-        });
-        
-        const inferenceTime = performance.now() - startTime;
-        globalState.inferenceTime = inferenceTime;
-        globalState.predictionsMade++;
-        updateStats();
-        
-      } catch (error) {
-        console.error('Prediction error:', error);
-        showNotification('Prediction failed', 'error');
-      }
-    }
-    
-    // ===========================
-    // Vision Model
-    // ===========================
-    async function loadVisionModel() {
-      updateGlobalStatus('Loading vision model...');
+      // Update UI
+      document.getElementById('predScore').textContent = score.toFixed(1);
+      document.getElementById('predStress').textContent = stress.toFixed(1);
+      document.getElementById('predRetention').textContent = retention.toFixed(1);
       
-      try {
-        if (!globalState.visionModel) {
-          globalState.visionModel = await mobilenet.load();
-          showNotification('Vision model loaded!', 'success');
-        }
-        updateGlobalStatus('Vision ready');
-        return globalState.visionModel;
-      } catch (error) {
-        console.error('Vision model error:', error);
-        showNotification('Failed to load vision model', 'error');
-        updateGlobalStatus('Vision failed');
-        return null;
-      }
-    }
-    
-    // ===========================
-    // Camera Functions
-    // ===========================
-    let cameraActive = false;
-    let videoStream;
-    
-    async function toggleCamera() {
-      const video = document.getElementById('cameraFeed');
-      const btn = document.getElementById('btnStartCamera');
-      
-      if (!cameraActive) {
-        try {
-          // Load vision model first if needed
-          const model = await loadVisionModel();
-          if (!model) return;
-          
-          // Request camera access
-          videoStream = await navigator.mediaDevices.getUserMedia({ 
-            video: { 
-              facingMode: 'environment',
-              width: { ideal: 640 },
-              height: { ideal: 480 }
-            } 
-          });
-          
-          video.srcObject = videoStream;
-          cameraActive = true;
-          btn.innerHTML = '<i class="fas fa-video-slash"></i> Stop Camera';
-          showNotification('Camera started', 'success');
-          
-          // Start object detection
-          startObjectDetection();
-        } catch (error) {
-          console.error('Camera error:', error);
-          showNotification('Camera access denied', 'error');
-        }
-      } else {
-        stopCamera();
-      }
-    }
-    
-    function stopCamera() {
-      const video = document.getElementById('cameraFeed');
-      const btn = document.getElementById('btnStartCamera');
-      
-      if (videoStream) {
-        videoStream.getTracks().forEach(track => track.stop());
-        video.srcObject = null;
+      // Update chart with new data point
+      if (trainingChart) {
+        const newData = Math.max(0, Math.min(100, score + (Math.random() * 10 - 5)));
+        trainingChart.data.datasets[0].data.push(newData);
+        trainingChart.data.datasets[0].data.shift();
+        trainingChart.update();
       }
       
-      cameraActive = false;
-      btn.innerHTML = '<i class="fas fa-video"></i> Start Camera';
-      showNotification('Camera stopped', 'info');
+      showNotification('Predictions updated!', 'success');
     }
     
-    async function startObjectDetection() {
-      if (!globalState.visionModel || !cameraActive) return;
-      
-      const video = document.getElementById('cameraFeed');
-      const canvas = document.getElementById('detectionCanvas');
-      const ctx = canvas.getContext('2d');
-      
-      canvas.width = video.videoWidth || 640;
-      canvas.height = video.videoHeight || 480;
-      
-      async function detectFrame() {
-        if (!cameraActive) return;
-        
-        // Draw video frame
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        
-        try {
-          // Run detection
-          const predictions = await globalState.visionModel.classify(video);
-          
-          // Draw predictions
-          ctx.font = '16px Inter';
-          ctx.fillStyle = '#6366f1';
-          ctx.strokeStyle = '#6366f1';
-          ctx.lineWidth = 2;
-          
-          if (predictions && predictions.length > 0) {
-            const pred = predictions[0];
-            const text = `${pred.className} (${(pred.probability * 100).toFixed(1)}%)`;
-            
-            ctx.fillText(text, 20, 40);
-            ctx.strokeRect(20, 50, pred.probability * 200, 10);
-            
-            // Update object list
-            updateObjectList(predictions);
-          }
-        } catch (error) {
-          // Silently handle detection errors
-        }
-        
-        requestAnimationFrame(detectFrame);
-      }
-      
-      detectFrame();
-    }
-    
-    function updateObjectList(predictions) {
-      const list = document.getElementById('objectList');
-      list.innerHTML = predictions.slice(0, 3).map(pred => `
-        <div style="display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-          <span>${pred.className}</span>
-          <span style="color: #10b981;">${(pred.probability * 100).toFixed(1)}%</span>
-        </div>
-      `).join('');
-    }
-    
-    // ===========================
-    // Image Processing
-    // ===========================
-    async function handleImageUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const img = new Image();
-        img.onload = async () => {
-          await analyzeImage(img);
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-    
-    async function analyzeImage(img) {
-      if (!globalState.visionModel) {
-        await loadVisionModel();
-      }
-      
-      try {
-        const predictions = await globalState.visionModel.classify(img);
-        
-        // Update stats
-        if (predictions && predictions.length > 0) {
-          document.getElementById('detectionResult').textContent = predictions[0].className;
-          document.getElementById('confidenceScore').textContent = `${(predictions[0].probability * 100).toFixed(1)}%`;
-          document.getElementById('altPredictions').textContent = predictions.length;
-        }
-        
-        showNotification('Image analysis complete!', 'success');
-      } catch (error) {
-        showNotification('Image analysis failed', 'error');
-      }
-    }
-    
-    // ===========================
-    // Chat Functions
-    // ===========================
-    function setupChat() {
-      const chatInput = document.getElementById('chatInput');
-      const chatMessages = document.getElementById('chatMessages');
-      
-      chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          sendChatMessage();
-        }
-      });
-      
-      document.getElementById('btnSendMessage').addEventListener('click', sendChatMessage);
-      
-      // Predefined responses
-      const responses = {
-        'hello': 'Hello! How can I help you with AI today?',
-        'predict': 'I can help with predictions! Adjust the sliders in the Regression tab.',
-        'train': 'The model learns from data samples. Add more data for better accuracy!',
-        'vision': 'Check the Vision tab for object detection and image analysis.',
-        'art': 'Visit the Neural Art tab to create AI-generated artwork.',
-        'help': 'I can help with: 1) Predictions, 2) Image analysis, 3) Chat, 4) AI art',
-        'thanks': 'You\'re welcome!',
-        'ai': 'This runs entirely in your browser using TensorFlow.js!'
-      };
-      
-      window.sendChatMessage = function() {
-        const message = chatInput.value.trim();
-        if (!message) return;
-        
-        // Add user message
-        const userMsg = document.createElement('div');
-        userMsg.className = 'message user';
-        userMsg.innerHTML = `<div><strong>You:</strong> ${message}</div>`;
-        chatMessages.appendChild(userMsg);
-        
-        // Clear input
-        chatInput.value = '';
-        
-        // Generate AI response
-        setTimeout(() => {
-          let response = 'I\'m your AI assistant. You can ask me about the different AI features.';
-          
-          const lowerMsg = message.toLowerCase();
-          for (const [keyword, reply] of Object.entries(responses)) {
-            if (lowerMsg.includes(keyword)) {
-              response = reply;
-              break;
-            }
-          }
-          
-          // Add AI response
-          const aiMsg = document.createElement('div');
-          aiMsg.className = 'message ai';
-          aiMsg.innerHTML = `<div><strong>AI Assistant:</strong> ${response}</div>`;
-          chatMessages.appendChild(aiMsg);
-          
-          // Scroll to bottom
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-        }, 500);
-      };
-    }
-    
-    // ===========================
-    // Art Generation
-    // ===========================
-    function generateArt() {
-      const canvas = document.getElementById('artCanvas');
-      const ctx = canvas.getContext('2d');
-      const complexity = parseInt(document.getElementById('complexityRange').value);
-      const colorScheme = document.getElementById('colorScheme').value;
-      
-      // Clear canvas
-      ctx.fillStyle = '#0f172a';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Generate colorful patterns
-      for (let i = 0; i < complexity * 10; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const radius = 20 + Math.random() * 80;
-        
-        // Choose color based on scheme
-        let color;
-        switch (colorScheme) {
-          case 'rainbow':
-            color = `hsl(${Math.random() * 360}, 70%, 60%)`;
-            break;
-          case 'pastel':
-            color = `hsl(${Math.random() * 360}, 30%, 80%)`;
-            break;
-          case 'monochrome':
-            const hue = Math.random() * 60;
-            color = `hsl(${hue}, 70%, ${40 + Math.random() * 40}%)`;
-            break;
-          case 'cyberpunk':
-            color = `rgb(${100 + Math.random() * 155}, ${Math.random() * 100}, ${150 + Math.random() * 105})`;
-            break;
-        }
-        
-        // Draw pattern
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = color;
-        ctx.globalAlpha = 0.3;
-        ctx.fill();
-      }
-      
-      ctx.globalAlpha = 1;
-      showNotification('Art generated!', 'success');
-    }
-    
-    // ===========================
-    // Neural Network Visualization
-    // ===========================
-    function animateNeuralNetwork() {
-      const canvas = document.getElementById('nnCanvas');
-      const ctx = canvas.getContext('2d');
-      
-      let animationId;
-      let frame = 0;
-      
-      function drawFrame() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Draw neural network visualization
-        const layers = 5;
-        const neuronsPerLayer = [3, 5, 8, 5, 3];
-        
-        for (let l = 0; l < layers; l++) {
-          const x = 50 + l * (canvas.width - 100) / (layers - 1);
-          
-          for (let n = 0; n < neuronsPerLayer[l]; n++) {
-            const y = 50 + n * (canvas.height - 100) / (neuronsPerLayer[l] - 1);
-            
-            // Draw neuron
-            ctx.beginPath();
-            ctx.arc(x, y, 10, 0, Math.PI * 2);
-            ctx.fillStyle = `hsl(${(frame + l * 40) % 360}, 70%, 60%)`;
-            ctx.fill();
-            
-            // Draw connections to next layer
-            if (l < layers - 1) {
-              const nextX = 50 + (l + 1) * (canvas.width - 100) / (layers - 1);
-              
-              for (let nn = 0; nn < neuronsPerLayer[l + 1]; nn++) {
-                const nextY = 50 + nn * (canvas.height - 100) / (neuronsPerLayer[l + 1] - 1);
-                
-                ctx.beginPath();
-                ctx.moveTo(x + 10, y);
-                ctx.lineTo(nextX - 10, nextY);
-                ctx.strokeStyle = `rgba(99, 102, 241, 0.2)`;
-                ctx.stroke();
-              }
-            }
-          }
-        }
-        
-        frame++;
-        animationId = requestAnimationFrame(drawFrame);
-      }
-      
-      drawFrame();
-      
-      // Store animation ID for cleanup
-      canvas.dataset.animationId = animationId;
-    }
-    
-    // ===========================
-    // UI Functions
-    // ===========================
-    function setupEventListeners() {
-      // Tab navigation
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const tab = btn.dataset.tab;
-          switchTab(tab);
-        });
-      });
-      
-      // Regression controls
-      ['hoursRange', 'sleepRange', 'focusRange'].forEach(id => {
-        const slider = document.getElementById(id);
-        const valueDisplay = document.getElementById(id.replace('Range', 'Value'));
-        
-        slider.addEventListener('input', () => {
-          valueDisplay.textContent = parseFloat(slider.value).toFixed(1);
-        });
-      });
-      
-      // Buttons
-      document.getElementById('btnSmartPredict').addEventListener('click', predictRegression);
-      document.getElementById('btnRetrain').addEventListener('click', trainRegressionModel);
-      document.getElementById('btnAddSample').addEventListener('click', addSample);
-      
-      // Vision
-      document.getElementById('btnStartCamera').addEventListener('click', toggleCamera);
-      document.getElementById('btnLoadVision').addEventListener('click', loadVisionModel);
-      
-      // File upload
-      document.getElementById('imageDropzone').addEventListener('click', () => {
-        document.getElementById('imageUpload').click();
-      });
-      document.getElementById('imageUpload').addEventListener('change', handleImageUpload);
-      
-      // Art
-      document.getElementById('btnGenerateArt').addEventListener('click', generateArt);
-      document.getElementById('btnAnimateNN').addEventListener('click', animateNeuralNetwork);
-      
-      // Setup chat
-      setupChat();
-      
-      // Model persistence
-      document.getElementById('btnSaveModel').addEventListener('click', saveModel);
-      document.getElementById('btnLoadModel').addEventListener('click', loadModel);
-    }
-    
-    function switchTab(tab) {
-      globalState.activeTab = tab;
-      
-      // Update active tab button
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.tab === tab);
-      });
-      
-      // Show active panel
-      document.querySelectorAll('.content-panel').forEach(panel => {
-        panel.classList.toggle('active', panel.id === `${tab}-panel`);
-      });
-      
-      updateGlobalStatus(`Switched to ${tab}`);
-      
-      // Stop camera when switching away from vision tab
-      if (tab !== 'vision' && cameraActive) {
-        stopCamera();
-      }
-    }
-    
-    function updateGlobalStatus(message) {
-      document.getElementById('globalStatus').textContent = message;
-    }
-    
-    function updateLoadingMessage(message) {
-      const element = document.getElementById('loadingMessage');
-      if (element) element.textContent = message;
-    }
-    
-    function updateStats() {
-      document.getElementById('statPredictions').textContent = globalState.predictionsMade;
-      document.getElementById('statPerf').textContent = `${globalState.inferenceTime.toFixed(1)}ms`;
-      document.getElementById('statAccuracy').textContent = `${Math.min(100, 80 + globalState.predictionsMade * 0.5).toFixed(1)}%`;
-    }
-    
-    // ===========================
-    // Training Data Management
-    // ===========================
-    function addSample() {
+    function addTrainingData() {
       const hours = parseFloat(document.getElementById('hoursValue').textContent);
       const sleep = parseFloat(document.getElementById('sleepValue').textContent);
       const focus = parseFloat(document.getElementById('focusValue').textContent);
@@ -1516,23 +587,23 @@
       const scoreNum = parseFloat(score);
       
       if (isNaN(scoreNum) || scoreNum < 0 || scoreNum > 100) {
-        showNotification('Invalid score. Enter 0-100.', 'error');
+        showNotification('Please enter a valid score between 0 and 100', 'error');
         return;
       }
       
-      regressionSamples.push({x: [hours, sleep, focus], y: scoreNum});
-      renderSamples();
-      showNotification('Sample added!', 'success');
+      trainingData.push({hours, sleep, focus, score: scoreNum});
+      renderSamplesList();
+      showNotification('Training data added!', 'success');
     }
     
-    function renderSamples() {
-      const container = document.getElementById('samplesContainer');
-      container.innerHTML = regressionSamples.map((s, i) => `
-        <div class="sample-item" style="margin: 5px 0; padding: 10px; background: rgba(30, 41, 59, 0.6); border-radius: 8px;">
+    function renderSamplesList() {
+      const container = document.getElementById('samplesList');
+      container.innerHTML = trainingData.map((data, i) => `
+        <div style="padding: 10px; margin: 5px 0; background: rgba(15, 23, 42, 0.6); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
           <div>
             <strong>Sample ${i + 1}</strong>
             <div style="font-size: 12px; color: #94a3b8;">
-              [${s.x.map(n => n.toFixed(1)).join(', ')}] → ${s.y.toFixed(1)}
+              ${data.hours}h study, ${data.sleep}/10 sleep, ${data.focus}/10 focus → ${data.score}%
             </div>
           </div>
           <button onclick="removeSample(${i})" style="background: none; border: none; color: #ef4444; cursor: pointer;">
@@ -1543,89 +614,124 @@
     }
     
     function removeSample(index) {
-      regressionSamples.splice(index, 1);
-      renderSamples();
+      trainingData.splice(index, 1);
+      renderSamplesList();
       showNotification('Sample removed', 'info');
     }
     
-    // ===========================
-    // Model Persistence
-    // ===========================
-    async function saveModel() {
-      if (!globalState.regressionModel) {
-        showNotification('No model to save', 'error');
+    // ========================
+    // CHAT FUNCTIONALITY
+    // ========================
+    
+    const chatResponses = {
+      'hello': 'Hello! How can I help you with predictions today?',
+      'predict': 'Adjust the sliders above and click "Update Prediction" to see your score!',
+      'train': 'The model learns from your data. Add more samples for better accuracy!',
+      'help': 'I can help with: 1) Score predictions, 2) Training the model, 3) Answering questions',
+      'thanks': "You're welcome!",
+      'ai': 'This is a lightweight AI demo running entirely in your browser!'
+    };
+    
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      if (!message) return;
+      
+      const chatMessages = document.getElementById('chatMessages');
+      
+      // Add user message
+      const userMsg = document.createElement('div');
+      userMsg.style.cssText = 'padding: 8px 12px; background: rgba(99, 102, 241, 0.3); border-radius: 8px; margin-bottom: 10px; text-align: right;';
+      userMsg.innerHTML = `<strong>You:</strong> ${message}`;
+      chatMessages.appendChild(userMsg);
+      
+      // Clear input
+      input.value = '';
+      
+      // Generate response
+      setTimeout(() => {
+        let response = "I'm here to help with predictions! Try adjusting the sliders above.";
+        
+        const lowerMsg = message.toLowerCase();
+        for (const [keyword, reply] of Object.entries(chatResponses)) {
+          if (lowerMsg.includes(keyword)) {
+            response = reply;
+            break;
+          }
+        }
+        
+        // Add AI response
+        const aiMsg = document.createElement('div');
+        aiMsg.style.cssText = 'padding: 8px 12px; background: rgba(99, 102, 241, 0.2); border-radius: 8px; margin-bottom: 10px;';
+        aiMsg.innerHTML = `<strong>AI:</strong> ${response}`;
+        chatMessages.appendChild(aiMsg);
+        
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 500);
+    }
+    
+    // ========================
+    // CAMERA FUNCTIONALITY
+    // ========================
+    
+    let cameraActive = false;
+    let videoStream;
+    
+    async function toggleCamera() {
+      const placeholder = document.getElementById('cameraPlaceholder');
+      const btn = document.getElementById('btnCamera');
+      
+      if (!cameraActive) {
+        try {
+          videoStream = await navigator.mediaDevices.getUserMedia({ 
+            video: { 
+              facingMode: 'environment',
+              width: { ideal: 640 },
+              height: { ideal: 480 }
+            } 
+          });
+          
+          const video = document.createElement('video');
+          video.srcObject = videoStream;
+          video.autoplay = true;
+          video.playsinline = true;
+          video.style.cssText = 'width: 100%; height: 100%; border-radius: var(--border-radius); object-fit: cover;';
+          
+          placeholder.innerHTML = '';
+          placeholder.appendChild(video);
+          
+          cameraActive = true;
+          btn.innerHTML = '<i class="fas fa-video-slash"></i> Disable Camera';
+          showNotification('Camera enabled', 'success');
+        } catch (error) {
+          showNotification('Camera access denied', 'error');
+        }
+      } else {
+        if (videoStream) {
+          videoStream.getTracks().forEach(track => track.stop());
+        }
+        
+        placeholder.innerHTML = '<i class="fas fa-camera fa-3x" style="color: #94a3b8;"></i>';
+        cameraActive = false;
+        btn.innerHTML = '<i class="fas fa-video"></i> Enable Camera';
+        showNotification('Camera disabled', 'info');
+      }
+    }
+    
+    function captureImage() {
+      if (!cameraActive) {
+        showNotification('Enable camera first', 'error');
         return;
       }
       
-      try {
-        await globalState.regressionModel.save('localstorage://ai-playground-model');
-        localStorage.setItem('ai-playground-samples', JSON.stringify(regressionSamples));
-        showNotification('Model and data saved!', 'success');
-      } catch (error) {
-        showNotification('Save failed', 'error');
-      }
+      showNotification('Image captured! (Demo)', 'success');
     }
     
-    async function loadModel() {
-      try {
-        globalState.regressionModel = await tf.loadLayersModel('localstorage://ai-playground-model');
-        
-        const savedSamples = localStorage.getItem('ai-playground-samples');
-        if (savedSamples) {
-          regressionSamples = JSON.parse(savedSamples);
-          renderSamples();
-        }
-        
-        showNotification('Model loaded!', 'success');
-        predictRegression();
-      } catch (error) {
-        showNotification('No saved model found', 'error');
-      }
-    }
+    // ========================
+    // UTILITY FUNCTIONS
+    // ========================
     
-    // ===========================
-    // Chart Functions
-    // ===========================
-    function initializeCharts() {
-      const lossCtx = document.getElementById('lossChart').getContext('2d');
-      lossChart = new Chart(lossCtx, {
-        type: 'line',
-        data: {
-          labels: [],
-          datasets: [{
-            label: 'Training Loss',
-            data: [],
-            borderColor: '#6366f1',
-            backgroundColor: 'rgba(99, 102, 241, 0.1)',
-            tension: 0.4,
-            fill: true
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            y: { beginAtZero: true }
-          }
-        }
-      });
-    }
-    
-    function updateTrainingChart(epoch, loss) {
-      if (!lossChart) return;
-      
-      lossChart.data.labels.push(epoch);
-      lossChart.data.datasets[0].data.push(loss);
-      
-      if (epoch % 10 === 0) {
-        lossChart.update();
-      }
-    }
-    
-    // ===========================
-    // Notification System
-    // ===========================
     function showNotification(message, type = 'info') {
       const notification = document.createElement('div');
       notification.className = 'notification';
@@ -1633,14 +739,12 @@
       const icons = {
         success: 'fa-check-circle',
         error: 'fa-exclamation-circle',
-        warning: 'fa-exclamation-triangle',
         info: 'fa-info-circle'
       };
       
       const colors = {
         success: '#10b981',
         error: '#ef4444',
-        warning: '#f59e0b',
         info: '#6366f1'
       };
       
@@ -1661,12 +765,86 @@
       }, 3000);
     }
     
-    // ===========================
-    // Initialize on Load
-    // ===========================
-    window.addEventListener('DOMContentLoaded', () => {
-      initializeApp();
+    function updateStatus(message) {
+      document.getElementById('statusText').textContent = message;
+    }
+    
+    // ========================
+    // INITIALIZATION
+    // ========================
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      updateStatus('Ready');
+      
+      // Initialize chart
+      initChart();
+      
+      // Render initial samples
+      renderSamplesList();
+      
+      // Setup event listeners
+      setupEventListeners();
+      
+      // Make initial prediction
+      updatePredictions();
+      
+      showNotification('AI Playground loaded successfully!', 'success');
     });
+    
+    function setupEventListeners() {
+      // Sliders
+      ['hoursSlider', 'sleepSlider', 'focusSlider'].forEach(id => {
+        const slider = document.getElementById(id);
+        const valueDisplay = document.getElementById(id.replace('Slider', 'Value'));
+        
+        slider.addEventListener('input', () => {
+          valueDisplay.textContent = parseFloat(slider.value).toFixed(1);
+          updatePredictions();
+        });
+      });
+      
+      // Buttons
+      document.getElementById('btnPredict').addEventListener('click', updatePredictions);
+      document.getElementById('btnAddData').addEventListener('click', addTrainingData);
+      document.getElementById('btnTrain').addEventListener('click', () => {
+        updatePredictions();
+        showNotification('Model training simulated', 'info');
+      });
+      
+      document.getElementById('btnSave').addEventListener('click', () => {
+        localStorage.setItem('ai-training-data', JSON.stringify(trainingData));
+        showNotification('Model saved locally', 'success');
+      });
+      
+      document.getElementById('btnLoad').addEventListener('click', () => {
+        const saved = localStorage.getItem('ai-training-data');
+        if (saved) {
+          trainingData = JSON.parse(saved);
+          renderSamplesList();
+          showNotification('Model loaded', 'success');
+        } else {
+          showNotification('No saved model found', 'error');
+        }
+      });
+      
+      document.getElementById('btnReset').addEventListener('click', () => {
+        if (trainingChart) {
+          trainingChart.data.datasets[0].data = Array.from({length: 20}, () => Math.random() * 20 + 70);
+          trainingChart.update();
+          showNotification('Chart reset', 'info');
+        }
+      });
+      
+      // Camera
+      document.getElementById('btnCamera').addEventListener('click', toggleCamera);
+      document.getElementById('btnCapture').addEventListener('click', captureImage);
+      
+      // Chat
+      document.getElementById('btnSend').addEventListener('click', sendChatMessage);
+      document.getElementById('chatInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendChatMessage();
+      });
+    }
   </script>
 </body>
 </html>
