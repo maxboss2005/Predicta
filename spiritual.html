@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spiritual Growth | Campus Compass</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .spiritual-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .spiritual-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+        }
+        
+        .spiritual-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .daily-verse {
+            background: linear-gradient(135deg, #fff9e6 0%, #ffeaa7 100%);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            border-left: 5px solid gold;
+        }
+        
+        .verse-text {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin: 1.5rem 0;
+            color: #333;
+        }
+        
+        .verse-reference {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .study-plan {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .plan-day {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .plan-day:hover {
+            background: #f5f5f5;
+        }
+        
+        .plan-day.completed {
+            background: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .spiritual-calendar {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .calendar-day.completed {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .calendar-day.today {
+            background: #FFC107;
+            color: #333;
+            border: 2px solid #FF9800;
+        }
+        
+        .calendar-day.empty {
+            background: #f5f5f5;
+            color: #ccc;
+        }
+        
+        .bible-quiz {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .quiz-question {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .quiz-option {
+            display: block;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            background: #f5f5f5;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .quiz-option:hover {
+            background: #e0e0e0;
+        }
+        
+        .quiz-option.selected {
+            background: var(--primary-light);
+            color: white;
+        }
+        
+        .prayer-journal {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .prayer-item {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+        
+        .prayer-date {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .spiritual-habits {
+            background: #f5f5f5;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .habit-item {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .habit-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .habit-checkbox.checked {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        
+        .scripture-reading {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .reading-plan {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .progress-tracking {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .streak-display {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        
+        .streak-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .streak-label {
+            color: var(--gray);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Campus Compass</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="financial.html">Financial</a></li>
+                    <li><a href="academic.html">Academic</a></li>
+                    <li><a href="emotional.html">Emotional</a></li>
+                    <li><a href="spiritual.html" class="active">Spiritual</a></li>
+                    <li><a href="health.html">Health</a></li>
+                    <li><a href="career.html">Career</a></li>
+                </ul>
+                
+                <div class="auth-controls">
+                    <div id="user-profile" class="profile-dropdown hidden">
+                        <div class="user-profile">
+                            <div class="user-avatar" id="header-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="user-info">
+                                <span class="user-name" id="header-username">User</span>
+                                <span class="user-email" id="header-useremail">user@example.com</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item" onclick="showProfileSettings()">
+                                <i class="fas fa-user-cog"></i> Profile Settings
+                            </a>
+                            <a href="#" class="dropdown-item" onclick="showMyData()">
+                                <i class="fas fa-database"></i> My Data
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" onclick="signOut()">
+                                <i class="fas fa-sign-out-alt"></i> Sign Out
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <button id="login-button" class="login-btn" onclick="window.location.href='login.html'">Sign In</button>
+                    
+                    <div class="mobile-toggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Page Header -->
+        <section class="hero" style="background: linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%); margin-bottom: 2rem;">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Spiritual Growth</h1>
+                    <p>Nurture your spiritual life with daily Bible verses, study plans, and spiritual tracking.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Spiritual Overview -->
+        <section>
+            <h2>Your Spiritual Journey</h2>
+            <div class="spiritual-overview">
+                <div class="spiritual-card">
+                    <div class="spiritual-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <h3>Current Streak</h3>
+                    <p class="stat-value" id="current-streak">0</p>
+                    <p class="stat-label">Days in a row</p>
+                </div>
+                
+                <div class="spiritual-card">
+                    <div class="spiritual-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Total Days</h3>
+                    <p class="stat-value" id="total-days">0</p>
+                    <p class="stat-label">Days completed</p>
+                </div>
+                
+                <div class="spiritual-card">
+                    <div class="spiritual-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Longest Streak</h3>
+                    <p class="stat-value" id="longest-streak">0</p>
+                    <p class="stat-label">Best record</p>
+                </div>
+                
+                <div class="spiritual-card">
+                    <div class="spiritual-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3>Badges Earned</h3>
+                    <p class="stat-value" id="badges-earned">0</p>
+                    <p class="stat-label">Spiritual achievements</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Daily Verse -->
+        <section class="daily-verse">
+            <h2><i class="fas fa-bible"></i> Verse of the Day</h2>
+            <div class="verse-text" id="verse-text">
+                "I can do all things through Christ who strengthens me."
+            </div>
+            <div class="verse-reference" id="verse-reference">Philippians 4:13</div>
+            
+            <div class="mt-3">
+                <button class="btn" onclick="loadNewVerse()">
+                    <i class="fas fa-sync"></i> New Verse
+                </button>
+                <button class="btn btn-outline" onclick="saveFavoriteVerse()">
+                    <i class="fas fa-heart"></i> Save to Favorites
+                </button>
+            </div>
+        </section>
+
+        <!-- Verse Meditation -->
+        <section>
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-meditation"></i>
+                    <h3>Today's Meditation</h3>
+                </div>
+                <div class="card-body">
+                    <div id="verse-meditation">
+                        This powerful verse reminds us that our strength doesn't come from ourselves but from Christ. As students facing academic challenges, personal struggles, and the pressures of life, we can find comfort knowing that we're not relying on our own limited abilities. When you feel overwhelmed by exams, relationships, or future uncertainties, remember that Christ provides the strength you need to persevere. Take a moment today to reflect on areas where you need His strength and surrender them in prayer.
+                    </div>
+                    
+                    <div class="form-group mt-3">
+                        <label for="meditation-notes">Your Reflection Notes</label>
+                        <textarea id="meditation-notes" class="form-control" rows="3" placeholder="Write your thoughts about today's verse..."></textarea>
+                    </div>
+                    
+                    <button class="btn mt-2" onclick="saveMeditationNotes()">
+                        <i class="fas fa-save"></i> Save Reflection
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Spiritual Calendar -->
+        <section class="spiritual-calendar">
+            <h2><i class="fas fa-calendar-alt"></i> Spiritual Calendar</h2>
+            <p>Track your daily spiritual practice this month</p>
+            
+            <div class="calendar-grid" id="calendar-grid">
+                <!-- Calendar will be generated here -->
+            </div>
+            
+            <div class="mt-3 text-center">
+                <button class="btn" onclick="markTodayComplete()" id="mark-today-btn">
+                    <i class="fas fa-check-circle"></i> Mark Today as Complete
+                </button>
+                <p id="completion-message" class="mt-2" style="color: var(--gray); font-size: 0.9rem;"></p>
+            </div>
+        </section>
+
+        <!-- Bible Quiz -->
+        <section class="bible-quiz">
+            <h2><i class="fas fa-question-circle"></i> Daily Bible Quiz</h2>
+            <p>Test your Bible knowledge and earn badges!</p>
+            
+            <div id="quiz-container">
+                <!-- Quiz questions will be loaded here -->
+            </div>
+            
+            <button class="btn mt-3" onclick="submitQuiz()" id="submit-quiz-btn" style="display: none;">
+                <i class="fas fa-paper-plane"></i> Submit Answers
+            </button>
+            
+            <div id="quiz-result" class="mt-3" style="display: none;">
+                <!-- Quiz results will be shown here -->
+            </div>
+        </section>
+
+        <!-- Weekly Study Plan -->
+        <section class="study-plan">
+            <h2><i class="fas fa-book-open"></i> Weekly Study Plan</h2>
+            <p>Follow this 7-day Bible study plan</p>
+            
+            <div id="study-plan-days">
+                <!-- Study plan days will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Prayer Journal -->
+        <section class="prayer-journal">
+            <h2><i class="fas fa-pray"></i> Prayer Journal</h2>
+            <p>Record your prayers and reflections</p>
+            
+            <div class="form-group">
+                <label for="prayer-title">Prayer Title</label>
+                <input type="text" id="prayer-title" class="form-control" placeholder="What are you praying for?">
+            </div>
+            
+            <div class="form-group">
+                <label for="prayer-content">Your Prayer</label>
+                <textarea id="prayer-content" class="form-control" rows="4" placeholder="Write your prayer here..."></textarea>
+            </div>
+            
+            <button class="btn" onclick="savePrayer()">
+                <i class="fas fa-save"></i> Save Prayer
+            </button>
+            
+            <div id="prayer-entries" class="mt-3">
+                <!-- Prayer entries will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Spiritual Habits -->
+        <section class="spiritual-habits">
+            <h2><i class="fas fa-check-circle"></i> Daily Spiritual Habits</h2>
+            <p>Track your daily spiritual disciplines</p>
+            
+            <div class="habit-item">
+                <div>
+                    <h4>Bible Reading</h4>
+                    <p>Read at least one chapter</p>
+                </div>
+                <div class="habit-checkbox" id="habit-bible" onclick="toggleHabit('bible')"></div>
+            </div>
+            
+            <div class="habit-item">
+                <div>
+                    <h4>Prayer Time</h4>
+                    <p>Spend 5+ minutes in prayer</p>
+                </div>
+                <div class="habit-checkbox" id="habit-prayer" onclick="toggleHabit('prayer')"></div>
+            </div>
+            
+            <div class="habit-item">
+                <div>
+                    <h4>Meditation</h4>
+                    <p>Reflect on Scripture</p>
+                </div>
+                <div class="habit-checkbox" id="habit-meditation" onclick="toggleHabit('meditation')"></div>
+            </div>
+            
+            <div class="habit-item">
+                <div>
+                    <h4>Gratitude Journal</h4>
+                    <p>Write 3 things you're thankful for</p>
+                </div>
+                <div class="habit-checkbox" id="habit-gratitude" onclick="toggleHabit('gratitude')"></div>
+            </div>
+        </section>
+
+        <!-- Progress Tracking -->
+        <section class="progress-tracking">
+            <h2><i class="fas fa-chart-line"></i> Progress Tracking</h2>
+            
+            <div class="streak-display">
+                <div class="streak-number" id="display-streak">0</div>
+                <div class="streak-label">Day Streak</div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="monthly-progress" style="width: 0%"></div>
+            </div>
+            <p class="text-center"><span id="days-completed">0</span>/30 days this month</p>
+            
+            <div class="badges-container mt-3" id="spiritual-badges">
+                <!-- Spiritual badges will be displayed here -->
+            </div>
+        </section>
+
+        <!-- Spiritual Resources -->
+        <section>
+            <div class="card mt-4">
+                <div class="card-header" style="background-color: var(--primary);">
+                    <i class="fas fa-book"></i>
+                    <h3>Spiritual Resources</h3>
+                </div>
+                <div class="card-body">
+                    <div class="feature-item">
+                        <h4><i class="fas fa-headphones"></i> Audio Bible</h4>
+                        <p>Listen to the Bible while studying or commuting.</p>
+                        <a href="#" class="btn btn-outline btn-sm" onclick="alert('Audio Bible feature coming soon!')">Listen Now</a>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <h4><i class="fas fa-users"></i> Campus Ministry</h4>
+                        <p>Connect with Christian groups on your campus.</p>
+                        <a href="#" class="btn btn-outline btn-sm" onclick="alert('Campus ministry finder coming soon!')">Find Groups</a>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <h4><i class="fas fa-hands-helping"></i> Prayer Partners</i></h4>
+                        <p>Connect with other students for prayer support.</p>
+                        <a href="#" class="btn btn-outline btn-sm" onclick="alert('Prayer partner matching coming soon!')">Find Partner</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Campus Compass</h3>
+                    <p>Grow spiritually while growing academically.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Spiritual Tools</h3>
+                    <ul class="footer-links">
+                        <li><a href="#daily-verse">Daily Verse</a></li>
+                        <li><a href="#bible-quiz">Bible Quiz</a></li>
+                        <li><a href="#prayer-journal">Prayer Journal</a></li>
+                        <li><a href="#study-plan">Study Plan</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Campus Compass. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="data-manager.js"></script>
+    <script>
+        // Global variables
+        let currentUser = null;
+        let currentVerse = null;
+        let quizSelections = [];
+        let quizQuestions = [];
+        
+        // Bible verses database
+        const bibleVerses = window.dailyVerses || [
+            {
+                reference: "Philippians 4:13",
+                text: "\"I can do all things through Christ who strengthens me.\"",
+                study: "This powerful verse reminds us that our strength doesn't come from ourselves but from Christ. As students facing academic challenges, personal struggles, and the pressures of life, we can find comfort knowing that we're not relying on our own limited abilities. When you feel overwhelmed by exams, relationships, or future uncertainties, remember that Christ provides the strength you need to persevere. Take a moment today to reflect on areas where you need His strength and surrender them in prayer."
+            },
+            {
+                reference: "Jeremiah 29:11",
+                text: "\"For I know the plans I have for you,\" declares the LORD, \"plans to prosper you and not to harm you, plans to give you hope and a future.\"",
+                study: "God has a specific plan for your life that includes your education, career, relationships, and personal growth. This verse assures us that God's plans are always for our good, even when we can't see the bigger picture. As a student, you might be anxious about your future - what major to choose, what career path to follow, or where life will take you. Trust that God is guiding your steps and has prepared opportunities specifically designed for you. Your current studies and challenges are part of His preparation process."
+            },
+            {
+                reference: "Proverbs 3:5-6",
+                text: "\"Trust in the LORD with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.\"",
+                study: "This passage emphasizes complete reliance on God rather than our own wisdom. As students, we're constantly learning and accumulating knowledge, but this verse reminds us that true wisdom begins with trusting God. When facing difficult decisions about relationships, academic choices, or life direction, resist the temptation to rely solely on your own reasoning. Instead, seek God's guidance through prayer and scripture. As you acknowledge Him in all your ways, He promises to direct your path clearly."
+            },
+            {
+                reference: "Isaiah 40:31",
+                text: "\"But those who hope in the LORD will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.\"",
+                study: "Student life can be exhausting - late-night study sessions, part-time jobs, social commitments, and personal responsibilities. This verse promises supernatural renewal for those who place their hope in God. Like eagles that soar above storms, God can lift you above your circumstances. When you feel like you can't continue, when burnout threatens, turn to God in hope. He will renew your physical, emotional, and spiritual energy, enabling you to continue your journey without collapsing under the pressure."
+            },
+            {
+                reference: "Psalm 119:105",
+                text: "\"Your word is a lamp for my feet, a light on my path.\"",
+                study: "Scripture provides guidance for our daily decisions and long-term direction. Just as a lamp illuminates only the next step in a dark path, God's word often reveals just enough light for our immediate next steps rather than the entire journey. This is especially relevant for students making decisions about their future. You might not see your entire career path, but God's word will guide your next right step - which classes to take, which opportunities to pursue, which relationships to invest in. Regular Bible study keeps this light shining brightly."
+            }
+        ];
+        
+        // Bible quiz questions
+        const bibleQuizData = window.bibleQuizQuestions || [
+            {
+                question: "Who wrote most of the New Testament letters?",
+                options: ["Peter", "Paul", "John", "James"],
+                correct: 1
+            },
+            {
+                question: "What is the first book of the Bible?",
+                options: ["Exodus", "Genesis", "Matthew", "Psalms"],
+                correct: 1
+            },
+            {
+                question: "How many disciples did Jesus have?",
+                options: ["10", "12", "14", "7"],
+                correct: 1
+            },
+            {
+                question: "What city was Jesus born in?",
+                options: ["Jerusalem", "Bethlehem", "Nazareth", "Capernaum"],
+                correct: 1
+            },
+            {
+                question: "Who was the first king of Israel?",
+                options: ["David", "Solomon", "Saul", "Samuel"],
+                correct: 2
+            }
+        ];
+        
+        // Study plan
+        const studyPlan = [
+            { day: 1, title: "God's Love", reference: "John 3:16", focus: "Understanding God's unconditional love" },
+            { day: 2, title: "Prayer", reference: "Philippians 4:6-7", focus: "Learning to pray with thanksgiving" },
+            { day: 3, title: "Faith", reference: "Hebrews 11:1", focus: "What faith is and how to grow it" },
+            { day: 4, title: "Forgiveness", reference: "Matthew 6:14-15", focus: "Forgiving others as God forgives us" },
+            { day: 5, title: "Strength", reference: "Isaiah 40:31", focus: "Finding strength in God" },
+            { day: 6, title: "Wisdom", reference: "Proverbs 3:5-6", focus: "Trusting God's wisdom over our own" },
+            { day: 7, title: "Peace", reference: "John 14:27", focus: "Receiving God's peace in difficult times" }
+        ];
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            await initializePage();
+            setupNavigation();
+            loadDailyVerse();
+            loadCalendar();
+            loadStudyPlan();
+            loadQuiz();
+            loadPrayerEntries();
+            updateSpiritualOverview();
+            updateBadgesDisplay();
+        });
+        
+        // Initialize page
+        async function initializePage() {
+            // Check authentication
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (session && session.user) {
+                currentUser = session.user;
+                await loadUserData();
+                updateHeaderUI();
+            } else {
+                // Redirect to login if not authenticated
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // Load user data
+        async function loadUserData() {
+            if (!currentUser) return;
+            
+            try {
+                const { data, error } = await supabase
+                    .from('user_data')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                if (data && data.data) {
+                    // Merge with existing studentData
+                    Object.assign(studentData, data.data);
+                    studentData.user_id = currentUser.id;
+                    
+                    // Initialize spiritual data if not present
+                    if (!studentData.spiritual) {
+                        studentData.spiritual = {
+                            completions: [],
+                            currentStreak: 0,
+                            longestStreak: 0,
+                            totalDays: 0,
+                            lastCompletedDate: null,
+                            bibleStudyNotes: [],
+                            prayerJournal: [],
+                            favoriteVerses: [],
+                            quizResults: []
+                        };
+                    }
+                    
+                    // Update UI with loaded data
+                    updateSpiritualOverview();
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        // Update header UI
+        function updateHeaderUI() {
+            const userProfileDiv = document.getElementById('user-profile');
+            const loginButton = document.getElementById('login-button');
+            
+            if (userProfileDiv) userProfileDiv.classList.remove('hidden');
+            if (loginButton) loginButton.style.display = 'none';
+        }
+        
+        // Setup navigation
+        function setupNavigation() {
+            // Mobile menu toggle
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (mobileToggle && navLinks) {
+                mobileToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        }
+        
+        // Load daily verse
+        function loadDailyVerse() {
+            // Use day of year to get consistent verse for the day
+            const today = new Date();
+            const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+            const verseIndex = dayOfYear % bibleVerses.length;
+            currentVerse = bibleVerses[verseIndex];
+            
+            document.getElementById('verse-text').textContent = currentVerse.text;
+            document.getElementById('verse-reference').textContent = currentVerse.reference;
+            document.getElementById('verse-meditation').textContent = currentVerse.study;
+            
+            // Check if there are saved meditation notes for today
+            const todayString = today.toISOString().split('T')[0];
+            if (studentData.spiritual?.bibleStudyNotes) {
+                const todayNotes = studentData.spiritual.bibleStudyNotes.find(note => note.date === todayString);
+                if (todayNotes) {
+                    document.getElementById('meditation-notes').value = todayNotes.notes;
+                }
+            }
+        }
+        
+        // Load new verse
+        function loadNewVerse() {
+            // Get random verse (not today's verse)
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * bibleVerses.length);
+            } while (bibleVerses[randomIndex] === currentVerse);
+            
+            currentVerse = bibleVerses[randomIndex];
+            
+            document.getElementById('verse-text').textContent = currentVerse.text;
+            document.getElementById('verse-reference').textContent = currentVerse.reference;
+            document.getElementById('verse-meditation').textContent = currentVerse.study;
+            
+            alert('New verse loaded!');
+        }
+        
+        // Save favorite verse
+        function saveFavoriteVerse() {
+            if (!currentVerse) return;
+            
+            if (!studentData.spiritual.favoriteVerses) {
+                studentData.spiritual.favoriteVerses = [];
+            }
+            
+            // Check if already saved
+            const alreadySaved = studentData.spiritual.favoriteVerses.some(
+                verse => verse.reference === currentVerse.reference
+            );
+            
+            if (!alreadySaved) {
+                studentData.spiritual.favoriteVerses.push({
+                    reference: currentVerse.reference,
+                    text: currentVerse.text,
+                    date: new Date().toISOString().split('T')[0]
+                });
+                
+                saveSpiritualData();
+                alert('Verse saved to favorites!');
+            } else {
+                alert('This verse is already in your favorites.');
+            }
+        }
+        
+        // Save meditation notes
+        async function saveMeditationNotes() {
+            const notes = document.getElementById('meditation-notes').value.trim();
+            const today = new Date().toISOString().split('T')[0];
+            
+            if (!studentData.spiritual.bibleStudyNotes) {
+                studentData.spiritual.bibleStudyNotes = [];
+            }
+            
+            // Remove existing entry for today
+            studentData.spiritual.bibleStudyNotes = studentData.spiritual.bibleStudyNotes.filter(
+                note => note.date !== today
+            );
+            
+            // Add new entry
+            studentData.spiritual.bibleStudyNotes.push({
+                date: today,
+                verse: currentVerse.reference,
+                notes: notes
+            });
+            
+            await saveSpiritualData();
+            alert('Meditation notes saved!');
+        }
+        
+        // Load calendar
+        function loadCalendar() {
+            const calendarGrid = document.getElementById('calendar-grid');
+            if (!calendarGrid) return;
+            
+            calendarGrid.innerHTML = '';
+            
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+            
+            // Get first day of month
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            // Get last day of month
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            
+            // Get completions for this month
+            const completions = studentData.spiritual?.completions || [];
+            const monthCompletions = completions.filter(date => {
+                const dateObj = new Date(date);
+                return dateObj.getMonth() === currentMonth && dateObj.getFullYear() === currentYear;
+            });
+            
+            // Add empty cells for days before first day of month
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-day empty';
+                calendarGrid.appendChild(emptyCell);
+            }
+            
+            // Add cells for each day of month
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day';
+                dayCell.textContent = day;
+                
+                const dateString = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                
+                // Check if completed
+                if (monthCompletions.includes(dateString)) {
+                    dayCell.classList.add('completed');
+                }
+                
+                // Check if today
+                if (day === today.getDate() && currentMonth === today.getMonth()) {
+                    dayCell.classList.add('today');
+                    
+                    // Check if today already completed
+                    if (monthCompletions.includes(dateString)) {
+                        document.getElementById('mark-today-btn').disabled = true;
+                        document.getElementById('mark-today-btn').innerHTML = '<i class="fas fa-check-circle"></i> Today Completed';
+                        document.getElementById('completion-message').textContent = 'You\'ve already completed your spiritual practice today!';
+                    }
+                }
+                
+                calendarGrid.appendChild(dayCell);
+            }
+            
+            // Update days completed
+            document.getElementById('days-completed').textContent = monthCompletions.length;
+            const progressPercent = (monthCompletions.length / lastDay.getDate()) * 100;
+            document.getElementById('monthly-progress').style.width = `${progressPercent}%`;
+        }
+        
+        // Mark today as complete
+        async function markTodayComplete() {
+            const today = new Date();
+            const todayString = today.toISOString().split('T')[0];
+            
+            // Check if already completed
+            if (studentData.spiritual?.completions?.includes(todayString)) {
+                alert('You\'ve already marked today as complete!');
+                return;
+            }
+            
+            // Add to completions
+            if (!studentData.spiritual.completions) {
+                studentData.spiritual.completions = [];
+            }
+            studentData.spiritual.completions.push(todayString);
+            
+            // Update streak
+            updateStreakInfo();
+            
+            // Check badges
+            checkSpiritualBadges();
+            
+            // Save data
+            await saveSpiritualData();
+            
+            // Update UI
+            loadCalendar();
+            updateSpiritualOverview();
+            updateBadgesDisplay();
+            
+            alert('Great job! Today\'s spiritual practice has been recorded.');
+        }
+        
+        // Update streak info
+        function updateStreakInfo() {
+            const completions = studentData.spiritual?.completions || [];
+            if (completions.length === 0) {
+                studentData.spiritual.currentStreak = 0;
+                studentData.spiritual.longestStreak = 0;
+                studentData.spiritual.totalDays = 0;
+                return;
+            }
+            
+            // Sort completions
+            const sortedCompletions = [...completions].sort();
+            
+            // Calculate current streak
+            let currentStreak = 0;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            for (let i = 0; i < sortedCompletions.length; i++) {
+                const completionDate = new Date(sortedCompletions[sortedCompletions.length - 1 - i]);
+                const expectedDate = new Date(today);
+                expectedDate.setDate(expectedDate.getDate() - i);
+                
+                if (completionDate.toISOString().split('T')[0] === expectedDate.toISOString().split('T')[0]) {
+                    currentStreak++;
+                } else {
+                    break;
+                }
+            }
+            
+            studentData.spiritual.currentStreak = currentStreak;
+            studentData.spiritual.totalDays = sortedCompletions.length;
+            
+            // Calculate longest streak
+            let longestStreak = 0;
+            let tempStreak = 1;
+            
+            for (let i = 1; i < sortedCompletions.length; i++) {
+                const prevDate = new Date(sortedCompletions[i - 1]);
+                const currDate = new Date(sortedCompletions[i]);
+                const diffTime = Math.abs(currDate - prevDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === 1) {
+                    tempStreak++;
+                } else {
+                    longestStreak = Math.max(longestStreak, tempStreak);
+                    tempStreak = 1;
+                }
+            }
+            
+            studentData.spiritual.longestStreak = Math.max(longestStreak, tempStreak, currentStreak);
+        }
+        
+        // Update spiritual overview
+        function updateSpiritualOverview() {
+            document.getElementById('current-streak').textContent = studentData.spiritual?.currentStreak || 0;
+            document.getElementById('total-days').textContent = studentData.spiritual?.totalDays || 0;
+            document.getElementById('longest-streak').textContent = studentData.spiritual?.longestStreak || 0;
+            document.getElementById('display-streak').textContent = studentData.spiritual?.currentStreak || 0;
+            
+            // Count earned badges
+            const badgesEarned = countSpiritualBadges();
+            document.getElementById('badges-earned').textContent = badgesEarned;
+        }
+        
+        // Check spiritual badges
+        function checkSpiritualBadges() {
+            const totalDays = studentData.spiritual.totalDays || 0;
+            const currentStreak = studentData.spiritual.currentStreak || 0;
+            
+            // Initialize badges if not present
+            if (!studentData.badges) studentData.badges = {};
+            if (!studentData.badges.spiritual) {
+                studentData.badges.spiritual = {
+                    sevenDays: { earned: false, consecutive: false },
+                    twoWeeks: { earned: false, consecutive: false },
+                    oneMonth: { earned: false, consecutive: false },
+                    threeMonths: { earned: false, consecutive: false },
+                    oneYear: { earned: false, consecutive: false }
+                };
+            }
+            
+            // Check non-consecutive badges
+            if (totalDays >= 7) studentData.badges.spiritual.sevenDays.earned = true;
+            if (totalDays >= 14) studentData.badges.spiritual.twoWeeks.earned = true;
+            if (totalDays >= 30) studentData.badges.spiritual.oneMonth.earned = true;
+            if (totalDays >= 90) studentData.badges.spiritual.threeMonths.earned = true;
+            if (totalDays >= 365) studentData.badges.spiritual.oneYear.earned = true;
+            
+            // Check consecutive badges
+            if (currentStreak >= 7) studentData.badges.spiritual.sevenDays.consecutive = true;
+            if (currentStreak >= 14) studentData.badges.spiritual.twoWeeks.consecutive = true;
+            if (currentStreak >= 30) studentData.badges.spiritual.oneMonth.consecutive = true;
+            if (currentStreak >= 90) studentData.badges.spiritual.threeMonths.consecutive = true;
+            if (currentStreak >= 365) studentData.badges.spiritual.oneYear.consecutive = true;
+        }
+        
+        // Count spiritual badges
+        function countSpiritualBadges() {
+            if (!studentData.badges?.spiritual) return 0;
+            
+            let count = 0;
+            const badges = studentData.badges.spiritual;
+            
+            // Count earned badges
+            if (badges.sevenDays.earned) count++;
+            if (badges.twoWeeks.earned) count++;
+            if (badges.oneMonth.earned) count++;
+            if (badges.threeMonths.earned) count++;
+            if (badges.oneYear.earned) count++;
+            if (badges.sevenDays.consecutive) count++;
+            if (badges.twoWeeks.consecutive) count++;
+            if (badges.oneMonth.consecutive) count++;
+            if (badges.threeMonths.consecutive) count++;
+            if (badges.oneYear.consecutive) count++;
+            
+            return count;
+        }
+        
+        // Update badges display
+        function updateBadgesDisplay() {
+            const container = document.getElementById('spiritual-badges');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (!studentData.badges?.spiritual) {
+                container.innerHTML = '<p>Complete spiritual practices to earn badges!</p>';
+                return;
+            }
+            
+            const badges = [
+                { name: "7 Days", earned: studentData.badges.spiritual.sevenDays.earned, consecutive: false },
+                { name: "7 Days (Consecutive)", earned: studentData.badges.spiritual.sevenDays.consecutive, consecutive: true },
+                { name: "2 Weeks", earned: studentData.badges.spiritual.twoWeeks.earned, consecutive: false },
+                { name: "2 Weeks (Consecutive)", earned: studentData.badges.spiritual.twoWeeks.consecutive, consecutive: true },
+                { name: "1 Month", earned: studentData.badges.spiritual.oneMonth.earned, consecutive: false },
+                { name: "1 Month (Consecutive)", earned: studentData.badges.spiritual.oneMonth.consecutive, consecutive: true }
+            ];
+            
+            const earnedBadges = badges.filter(badge => badge.earned);
+            
+            if (earnedBadges.length === 0) {
+                container.innerHTML = '<p>Complete spiritual practices to earn badges!</p>';
+                return;
+            }
+            
+            earnedBadges.forEach(badge => {
+                const badgeDiv = document.createElement('div');
+                badgeDiv.className = `badge earned ${badge.consecutive ? 'badge-consecutive' : 'badge-regular'}`;
+                badgeDiv.innerHTML = `
+                    <div class="badge-icon">
+                        <i class="fas fa-${badge.consecutive ? 'crown' : 'star'}"></i>
+                    </div>
+                    <div class="badge-title">${badge.name}</div>
+                    <div class="badge-desc">${badge.consecutive ? 'Consecutive days' : 'Total days'}</div>
+                `;
+                container.appendChild(badgeDiv);
+            });
+        }
+        
+        // Load study plan
+        function loadStudyPlan() {
+            const container = document.getElementById('study-plan-days');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const today = new Date();
+            const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+            
+            studyPlan.forEach((day, index) => {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'plan-day';
+                if (index < dayOfWeek) {
+                    dayDiv.classList.add('completed');
+                }
+                
+                dayDiv.innerHTML = `
+                    <h4>Day ${day.day}: ${day.title}</h4>
+                    <p><strong>${day.reference}</strong> - ${day.focus}</p>
+                    ${index < dayOfWeek ? '<small><i class="fas fa-check"></i> Completed</small>' : ''}
+                `;
+                container.appendChild(dayDiv);
+            });
+        }
+        
+        // Load quiz
+        function loadQuiz() {
+            const container = document.getElementById('quiz-container');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            quizQuestions = [...bibleQuizData].slice(0, 3); // Show 3 questions
+            quizSelections = new Array(quizQuestions.length).fill(-1);
+            
+            quizQuestions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'quiz-question';
+                questionDiv.innerHTML = `
+                    <h4>${index + 1}. ${question.question}</h4>
+                    ${question.options.map((option, optIndex) => `
+                        <div class="quiz-option" onclick="selectQuizAnswer(${index}, ${optIndex})" 
+                             id="quiz-${index}-${optIndex}">
+                            ${option}
+                        </div>
+                    `).join('')}
+                `;
+                container.appendChild(questionDiv);
+            });
+            
+            document.getElementById('submit-quiz-btn').style.display = 'block';
+            document.getElementById('quiz-result').style.display = 'none';
+        }
+        
+        // Select quiz answer
+        function selectQuizAnswer(questionIndex, optionIndex) {
+            // Reset all options for this question
+            for (let i = 0; i < 4; i++) {
+                const option = document.getElementById(`quiz-${questionIndex}-${i}`);
+                if (option) {
+                    option.classList.remove('selected');
+                }
+            }
+            
+            // Select clicked option
+            const selectedOption = document.getElementById(`quiz-${questionIndex}-${optionIndex}`);
+            if (selectedOption) {
+                selectedOption.classList.add('selected');
+                quizSelections[questionIndex] = optionIndex;
+            }
+        }
+        
+        // Submit quiz
+        async function submitQuiz() {
+            let score = 0;
+            const results = [];
+            
+            // Check answers
+            quizQuestions.forEach((question, index) => {
+                const selected = quizSelections[index];
+                const isCorrect = selected === question.correct;
+                
+                if (isCorrect) score++;
+                
+                // Store result
+                results.push({
+                    question: question.question,
+                    selected: selected,
+                    correct: question.correct,
+                    isCorrect: isCorrect
+                });
+                
+                // Highlight correct/incorrect
+                for (let i = 0; i < 4; i++) {
+                    const option = document.getElementById(`quiz-${index}-${i}`);
+                    if (option) {
+                        option.classList.remove('selected', 'correct', 'incorrect');
+                        if (i === question.correct) {
+                            option.classList.add('correct');
+                        } else if (i === selected && !isCorrect) {
+                            option.classList.add('incorrect');
+                        }
+                    }
+                }
+            });
+            
+            // Save quiz results
+            if (!studentData.spiritual.quizResults) {
+                studentData.spiritual.quizResults = [];
+            }
+            
+            const quizResult = {
+                date: new Date().toISOString().split('T')[0],
+                score: score,
+                total: quizQuestions.length,
+                results: results
+            };
+            
+            studentData.spiritual.quizResults.push(quizResult);
+            await saveSpiritualData();
+            
+            // Show results
+            const resultDiv = document.getElementById('quiz-result');
+            const percentage = (score / quizQuestions.length) * 100;
+            
+            let message = `<h4>Your Score: ${score}/${quizQuestions.length} (${percentage.toFixed(0)}%)</h4>`;
+            
+            if (percentage === 100) {
+                message += '<p>Perfect score! You\'ve earned the "Bible Expert" badge!</p>';
+                // Award badge
+                if (!studentData.badges) studentData.badges = {};
+                if (!studentData.badges.bibleQuiz) studentData.badges.bibleQuiz = {};
+                studentData.badges.bibleQuiz.dailyQuiz = { earned: true, date: new Date().toISOString().split('T')[0] };
+                await saveSpiritualData();
+                updateBadgesDisplay();
+            } else if (percentage >= 80) {
+                message += '<p>Great job! You know your Bible well.</p>';
+            } else if (percentage >= 60) {
+                message += '<p>Good effort! Keep studying God\'s word.</p>';
+            } else {
+                message += '<p>Keep studying! The more you read the Bible, the more you\'ll learn.</p>';
+            }
+            
+            resultDiv.innerHTML = message;
+            resultDiv.style.display = 'block';
+            
+            document.getElementById('submit-quiz-btn').style.display = 'none';
+        }
+        
+        // Load prayer entries
+        function loadPrayerEntries() {
+            const container = document.getElementById('prayer-entries');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const prayers = studentData.spiritual?.prayerJournal || [];
+            
+            if (prayers.length === 0) {
+                container.innerHTML = '<p class="text-center">No prayer entries yet. Write your first prayer!</p>';
+                return;
+            }
+            
+            // Sort by date (newest first)
+            const sortedPrayers = [...prayers].sort((a, b) => 
+                new Date(b.date) - new Date(a.date)
+            ).slice(0, 5); // Show only 5 most recent
+            
+            sortedPrayers.forEach(prayer => {
+                const prayerDiv = document.createElement('div');
+                prayerDiv.className = 'prayer-item';
+                prayerDiv.innerHTML = `
+                    <div class="prayer-date">${formatDate(prayer.date)}</div>
+                    <h4>${prayer.title}</h4>
+                    <p>${prayer.content}</p>
+                    <button class="btn btn-outline" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;" onclick="deletePrayer('${prayer.id}')">
+                        Delete
+                    </button>
+                `;
+                container.appendChild(prayerDiv);
+            });
+        }
+        
+        // Save prayer
+        async function savePrayer() {
+            const title = document.getElementById('prayer-title').value.trim();
+            const content = document.getElementById('prayer-content').value.trim();
+            
+            if (!title || !content) {
+                alert('Please enter both a title and content for your prayer.');
+                return;
+            }
+            
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Create prayer entry
+            const prayerEntry = {
+                id: Date.now().toString(),
+                date: today,
+                title,
+                content
+            };
+            
+            // Add to prayer journal
+            if (!studentData.spiritual.prayerJournal) {
+                studentData.spiritual.prayerJournal = [];
+            }
+            studentData.spiritual.prayerJournal.push(prayerEntry);
+            
+            // Save data
+            await saveSpiritualData();
+            
+            // Update UI
+            loadPrayerEntries();
+            
+            // Reset form
+            document.getElementById('prayer-title').value = '';
+            document.getElementById('prayer-content').value = '';
+            
+            alert('Prayer saved successfully!');
+        }
+        
+        // Delete prayer
+        async function deletePrayer(prayerId) {
+            if (!confirm('Are you sure you want to delete this prayer?')) {
+                return;
+            }
+            
+            if (!studentData.spiritual?.prayerJournal) return;
+            
+            studentData.spiritual.prayerJournal = studentData.spiritual.prayerJournal.filter(
+                prayer => prayer.id !== prayerId
+            );
+            
+            // Save data
+            await saveSpiritualData();
+            
+            // Update UI
+            loadPrayerEntries();
+            
+            alert('Prayer deleted.');
+        }
+        
+        // Toggle habit
+        function toggleHabit(habit) {
+            const checkbox = document.getElementById(`habit-${habit}`);
+            checkbox.classList.toggle('checked');
+            
+            if (checkbox.classList.contains('checked')) {
+                checkbox.innerHTML = '<i class="fas fa-check"></i>';
+            } else {
+                checkbox.innerHTML = '';
+            }
+        }
+        
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                month: 'long', 
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+        
+        // Save spiritual data
+        async function saveSpiritualData() {
+            if (!currentUser) return;
+            
+            try {
+                const dataToSave = {
+                    user_id: currentUser.id,
+                    data: studentData,
+                    updated_at: new Date().toISOString()
+                };
+                
+                // Check if data exists
+                const { data: existing } = await supabase
+                    .from('user_data')
+                    .select('id')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                if (existing) {
+                    // Update existing
+                    await supabase
+                        .from('user_data')
+                        .update(dataToSave)
+                        .eq('user_id', currentUser.id);
+                } else {
+                    // Insert new
+                    await supabase
+                        .from('user_data')
+                        .insert([dataToSave]);
+                }
+                
+                // Also save to localStorage as backup
+                const key = `studentData_${currentUser.id}`;
+                localStorage.setItem(key, JSON.stringify(studentData));
+            } catch (error) {
+                console.error('Error saving spiritual data:', error);
+            }
+        }
+        
+        // Profile settings modal
+        function showProfileSettings() {
+            alert('Profile settings feature coming soon!');
+        }
+        
+        // My data modal
+        function showMyData() {
+            alert('Data management feature coming soon!');
+        }
+        
+        // Sign out
+        async function signOut() {
+            try {
+                await supabase.auth.signOut();
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+            }
+        }
+        
+        // Expose functions to global scope
+        window.loadNewVerse = loadNewVerse;
+        window.saveFavoriteVerse = saveFavoriteVerse;
+        window.saveMeditationNotes = saveMeditationNotes;
+        window.markTodayComplete = markTodayComplete;
+        window.selectQuizAnswer = selectQuizAnswer;
+        window.submitQuiz = submitQuiz;
+        window.savePrayer = savePrayer;
+        window.deletePrayer = deletePrayer;
+        window.toggleHabit = toggleHabit;
+        window.showProfileSettings = showProfileSettings;
+        window.showMyData = showMyData;
+        window.signOut = signOut;
+    </script>
+</body>
+</html>

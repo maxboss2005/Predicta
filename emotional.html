@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotional Wellbeing | Campus Compass</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .emotional-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .mood-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+        }
+        
+        .mood-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .mood-tracker {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .mood-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+        
+        .mood-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .mood-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .mood-btn.angry { background-color: #ffebee; color: #c62828; }
+        .mood-btn.stressed { background-color: #fff3e0; color: #ef6c00; }
+        .mood-btn.neutral { background-color: #f5f5f5; color: #616161; }
+        .mood-btn.calm { background-color: #e3f2fd; color: #1565c0; }
+        .mood-btn.happy { background-color: #e8f5e9; color: #2e7d32; }
+        
+        .mood-history {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .mood-chart-container {
+            height: 300px;
+            margin-top: 1.5rem;
+        }
+        
+        .journal-section {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .journal-entry {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .journal-date {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stress-management {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .breathing-exercise {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .breathing-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 100%);
+            margin: 1.5rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            transition: all 4s ease-in-out;
+        }
+        
+        .breathing-circle.breathing-in {
+            transform: scale(1.5);
+        }
+        
+        .breathing-instructions {
+            margin: 1rem 0;
+            font-size: 1.1rem;
+        }
+        
+        .relationship-guidance {
+            background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .guidance-topic {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .guidance-topic:hover {
+            background: #f5f5f5;
+        }
+        
+        .guidance-content {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            display: none;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .coping-strategies {
+            background: #f5f5f5;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .strategy-item {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .self-care {
+            background: linear-gradient(135deg, #ffecb3 0%, #ffd54f 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .self-care-activity {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .self-care-activity:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Campus Compass</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="financial.html">Financial</a></li>
+                    <li><a href="academic.html">Academic</a></li>
+                    <li><a href="emotional.html" class="active">Emotional</a></li>
+                    <li><a href="spiritual.html">Spiritual</a></li>
+                    <li><a href="health.html">Health</a></li>
+                    <li><a href="career.html">Career</a></li>
+                </ul>
+                
+                <div class="auth-controls">
+                    <div id="user-profile" class="profile-dropdown hidden">
+                        <div class="user-profile">
+                            <div class="user-avatar" id="header-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="user-info">
+                                <span class="user-name" id="header-username">User</span>
+                                <span class="user-email" id="header-useremail">user@example.com</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item" onclick="showProfileSettings()">
+                                <i class="fas fa-user-cog"></i> Profile Settings
+                            </a>
+                            <a href="#" class="dropdown-item" onclick="showMyData()">
+                                <i class="fas fa-database"></i> My Data
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" onclick="signOut()">
+                                <i class="fas fa-sign-out-alt"></i> Sign Out
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <button id="login-button" class="login-btn" onclick="window.location.href='login.html'">Sign In</button>
+                    
+                    <div class="mobile-toggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Page Header -->
+        <section class="hero" style="background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%); margin-bottom: 2rem;">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Emotional Wellbeing</h1>
+                    <p>Track your emotions, manage stress, and find guidance for relationships and personal growth.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emotional Overview -->
+        <section>
+            <h2>How Are You Feeling Today?</h2>
+            <div class="emotional-overview">
+                <div class="mood-card">
+                    <div class="mood-emoji" id="current-mood-emoji">😊</div>
+                    <h3>Current Mood</h3>
+                    <p id="current-mood-text">Happy</p>
+                </div>
+                
+                <div class="mood-card">
+                    <div class="mood-emoji">📈</div>
+                    <h3>Weekly Average</h3>
+                    <p id="weekly-average-mood">Calm</p>
+                </div>
+                
+                <div class="mood-card">
+                    <div class="mood-emoji">🔥</div>
+                    <h3>Current Streak</h3>
+                    <p id="mood-streak">5 days</p>
+                </div>
+                
+                <div class="mood-card">
+                    <div class="mood-emoji">💭</div>
+                    <h3>Journal Entries</h3>
+                    <p id="journal-count">12 entries</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mood Tracker -->
+        <section class="mood-tracker">
+            <h2><i class="fas fa-heart"></i> Daily Mood Tracker</h2>
+            <p>How are you feeling right now?</p>
+            
+            <div class="mood-buttons">
+                <button class="mood-btn angry" onclick="trackMood('angry')" title="Angry">
+                    😠
+                </button>
+                <button class="mood-btn stressed" onclick="trackMood('stressed')" title="Stressed">
+                    😟
+                </button>
+                <button class="mood-btn neutral" onclick="trackMood('neutral')" title="Neutral">
+                    😐
+                </button>
+                <button class="mood-btn calm" onclick="trackMood('calm')" title="Calm">
+                    😌
+                </button>
+                <button class="mood-btn happy" onclick="trackMood('happy')" title="Happy">
+                    😊
+                </button>
+            </div>
+            
+            <div class="form-group">
+                <label for="mood-notes">Additional Notes (Optional)</label>
+                <textarea id="mood-notes" class="form-control" rows="2" placeholder="What's influencing your mood today?"></textarea>
+            </div>
+            
+            <button class="btn" onclick="saveMoodEntry()">
+                <i class="fas fa-save"></i> Save Mood Entry
+            </button>
+        </section>
+
+        <!-- Mood History -->
+        <section class="mood-history">
+            <h2><i class="fas fa-chart-line"></i> Mood History</h2>
+            <p>Your emotional patterns over the last 7 days</p>
+            
+            <div class="mood-chart-container">
+                <canvas id="moodChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Journal Section -->
+        <section class="journal-section">
+            <h2><i class="fas fa-book"></i> Emotional Journal</h2>
+            <p>Write about your thoughts, feelings, and experiences.</p>
+            
+            <div class="form-group">
+                <label for="journal-title">Journal Title</label>
+                <input type="text" id="journal-title" class="form-control" placeholder="What's on your mind?">
+            </div>
+            
+            <div class="form-group">
+                <label for="journal-content">Your Thoughts</label>
+                <textarea id="journal-content" class="form-control" rows="5" placeholder="Write freely about your feelings, experiences, or anything you'd like to reflect on..."></textarea>
+            </div>
+            
+            <button class="btn" onclick="saveJournalEntry()">
+                <i class="fas fa-save"></i> Save Journal Entry
+            </button>
+            
+            <div id="journal-entries" class="mt-3">
+                <!-- Journal entries will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Stress Management -->
+        <section class="stress-management">
+            <h2><i class="fas fa-wind"></i> Stress Management</h2>
+            <p>Practice breathing exercises to reduce stress and anxiety.</p>
+            
+            <div class="breathing-exercise">
+                <h3>4-7-8 Breathing Exercise</h3>
+                <p class="breathing-instructions" id="breathing-instruction">Get Ready</p>
+                
+                <div class="breathing-circle" id="breathing-circle">
+                    <span id="breathing-text">Ready</span>
+                </div>
+                
+                <div class="timer-controls">
+                    <button class="btn" onclick="startBreathingExercise()" id="breathing-start-btn">
+                        <i class="fas fa-play"></i> Start Exercise
+                    </button>
+                    <button class="btn btn-outline" onclick="stopBreathingExercise()" id="breathing-stop-btn" disabled>
+                        <i class="fas fa-stop"></i> Stop
+                    </button>
+                </div>
+                
+                <p class="mt-3"><small>Instructions: Breathe in for 4 seconds, hold for 7 seconds, exhale for 8 seconds. Repeat 4 times.</small></p>
+            </div>
+        </section>
+
+        <!-- Relationship Guidance -->
+        <section class="relationship-guidance">
+            <h2><i class="fas fa-hands-helping"></i> Relationship Guidance</h2>
+            <p>Get advice for common relationship situations and decisions.</p>
+            
+            <div class="guidance-topic" onclick="showGuidance('friendship')">
+                <h4><i class="fas fa-user-friends"></i> Friendship Issues</h4>
+                <p>Dealing with conflicts, boundaries, or changes in friendships</p>
+            </div>
+            
+            <div class="guidance-topic" onclick="showGuidance('dating')">
+                <h4><i class="fas fa-heart"></i> Dating Relationships</h4>
+                <p>Navigating romantic relationships and making healthy decisions</p>
+            </div>
+            
+            <div class="guidance-topic" onclick="showGuidance('family')">
+                <h4><i class="fas fa-home"></i> Family Conflicts</h4>
+                <p>Managing family relationships and communication challenges</p>
+            </div>
+            
+            <div class="guidance-topic" onclick="showGuidance('peer')">
+                <h4><i class="fas fa-users"></i> Peer Pressure</h4>
+                <p>Staying true to yourself while navigating social situations</p>
+            </div>
+            
+            <div class="guidance-content" id="guidance-content">
+                <!-- Guidance content will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Coping Strategies -->
+        <section class="coping-strategies">
+            <h2><i class="fas fa-shield-alt"></i> Coping Strategies</h2>
+            <p>Healthy ways to manage difficult emotions and situations.</p>
+            
+            <div class="strategy-item">
+                <h4><i class="fas fa-walking"></i> Physical Activity</h4>
+                <p>Exercise releases endorphins that improve mood and reduce stress. Even a 10-minute walk can help.</p>
+            </div>
+            
+            <div class="strategy-item">
+                <h4><i class="fas fa-pen"></i> Journaling</h4>
+                <p>Writing about your feelings can help process emotions and gain perspective.</p>
+            </div>
+            
+            <div class="strategy-item">
+                <h4><i class="fas fa-moon"></i> Mindfulness</h4>
+                <p>Practice being present in the moment through meditation or mindful breathing.</p>
+            </div>
+            
+            <div class="strategy-item">
+                <h4><i class="fas fa-phone"></i> Social Support</h4>
+                <p>Reach out to trusted friends, family, or counselors when you need support.</p>
+            </div>
+        </section>
+
+        <!-- Self-Care Activities -->
+        <section class="self-care">
+            <h2><i class="fas fa-spa"></i> Self-Care Activities</h2>
+            <p>Take care of yourself with these simple activities.</p>
+            
+            <div class="self-care-activity" onclick="suggestActivity('Take a walk in nature')">
+                <h4><i class="fas fa-tree"></i> Nature Walk</h4>
+                <p>Spend time outdoors to clear your mind and reduce stress.</p>
+            </div>
+            
+            <div class="self-care-activity" onclick="suggestActivity('Listen to calming music')">
+                <h4><i class="fas fa-music"></i> Music Therapy</h4>
+                <p>Listen to calming music or your favorite songs to boost your mood.</p>
+            </div>
+            
+            <div class="self-care-activity" onclick="suggestActivity('Practice gratitude')">
+                <h4><i class="fas fa-star"></i> Gratitude Practice</h4>
+                <p>Write down three things you're grateful for each day.</p>
+            </div>
+            
+            <div class="self-care-activity" onclick="suggestActivity('Digital detox for 1 hour')">
+                <h4><i class="fas fa-mobile-alt"></i> Digital Detox</h4>
+                <p>Take a break from screens and social media for a set period.</p>
+            </div>
+        </section>
+
+        <!-- Crisis Resources -->
+        <section>
+            <div class="card mt-4" style="border-color: var(--danger);">
+                <div class="card-header" style="background-color: var(--danger);">
+                    <i class="fas fa-life-ring"></i>
+                    <h3>Immediate Help Resources</h3>
+                </div>
+                <div class="card-body">
+                    <p><strong>If you're in crisis or having thoughts of harming yourself:</strong></p>
+                    <ul>
+                        <li><strong>National Suicide Prevention Lifeline:</strong> 988 or 1-800-273-8255</li>
+                        <li><strong>Crisis Text Line:</strong> Text HOME to 741741</li>
+                        <li><strong>Campus Counseling Center:</strong> Contact your university's mental health services</li>
+                        <li><strong>Emergency Services:</strong> Call 911 or go to the nearest emergency room</li>
+                    </ul>
+                    <p class="mt-2"><small>You are not alone. Help is available, and recovery is possible.</small></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Campus Compass</h3>
+                    <p>Your emotional wellbeing matters.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Emotional Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#mood-tracker">Mood Tracker</a></li>
+                        <li><a href="#journal">Emotional Journal</a></li>
+                        <li><a href="#stress-management">Stress Management</a></li>
+                        <li><a href="#relationship-guidance">Relationship Guidance</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Campus Compass. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="data-manager.js"></script>
+    <script>
+        // Global variables
+        let currentUser = null;
+        let moodChart = null;
+        let breathingInterval = null;
+        let breathingPhase = 0; // 0=ready, 1=inhale, 2=hold, 3=exhale
+        
+        // Mood data
+        const moodData = {
+            angry: { emoji: '😠', value: 1, color: '#c62828' },
+            stressed: { emoji: '😟', value: 2, color: '#ef6c00' },
+            neutral: { emoji: '😐', value: 3, color: '#616161' },
+            calm: { emoji: '😌', value: 4, color: '#1565c0' },
+            happy: { emoji: '😊', value: 5, color: '#2e7d32' }
+        };
+        
+        // Sample mood history
+        const sampleMoodHistory = [
+            { date: '2023-11-15', mood: 'happy', notes: 'Had a great study session' },
+            { date: '2023-11-14', mood: 'calm', notes: 'Feeling relaxed after yoga' },
+            { date: '2023-11-13', mood: 'stressed', notes: 'Exam preparation' },
+            { date: '2023-11-12', mood: 'happy', notes: 'Weekend with friends' },
+            { date: '2023-11-11', mood: 'neutral', notes: 'Regular day' },
+            { date: '2023-11-10', mood: 'calm', notes: 'Meditation helped' },
+            { date: '2023-11-09', mood: 'stressed', notes: 'Assignment deadline' }
+        ];
+        
+        // Sample journal entries
+        const sampleJournalEntries = [
+            { id: 1, date: '2023-11-15', title: 'Feeling Accomplished', content: 'Finished my big project today. Feeling proud of my work and looking forward to presenting it.' },
+            { id: 2, date: '2023-11-14', title: 'Mindful Morning', content: 'Started the day with meditation. Feeling more centered and ready to tackle the week.' },
+            { id: 3, date: '2023-11-12', title: 'Weekend Reflections', content: 'Spent time with friends and realized how important social connections are for my wellbeing.' }
+        ];
+        
+        // Guidance content
+        const guidanceContent = {
+            friendship: {
+                title: 'Friendship Guidance',
+                content: `
+                    <h3>Healthy Friendships</h3>
+                    <p>Friendships should make you feel supported, respected, and valued. Here are some tips for maintaining healthy friendships:</p>
+                    <ul>
+                        <li><strong>Communicate openly:</strong> Share your feelings honestly and listen to your friends' perspectives</li>
+                        <li><strong>Set boundaries:</strong> It's okay to say no when you need to prioritize your wellbeing</li>
+                        <li><strong>Quality over quantity:</strong> A few close, supportive friends are more valuable than many superficial relationships</li>
+                        <li><strong>Give and take:</strong> Healthy friendships involve mutual support and reciprocity</li>
+                        <li><strong>Respect differences:</strong> It's normal for friends to have different opinions and interests</li>
+                    </ul>
+                    <p>Remember that friendships evolve, and it's okay for relationships to change as you grow.</p>
+                `
+            },
+            dating: {
+                title: 'Dating Relationships',
+                content: `
+                    <h3>Healthy Dating Relationships</h3>
+                    <p>A healthy relationship is built on mutual respect, trust, and communication. Here are some key principles:</p>
+                    <ul>
+                        <li><strong>Respect boundaries:</strong> Both partners should feel comfortable setting and respecting boundaries</li>
+                        <li><strong>Maintain independence:</strong> Keep your own hobbies, friends, and goals outside the relationship</li>
+                        <li><strong>Communicate effectively:</strong> Discuss feelings, concerns, and expectations openly and respectfully</li>
+                        <li><strong>Watch for red flags:</strong> Be aware of controlling behavior, jealousy, or lack of respect</li>
+                        <li><strong>Take your time:</strong> Don't rush important decisions; let the relationship develop naturally</li>
+                    </ul>
+                    <p>Trust your instincts. If something doesn't feel right, it probably isn't.</p>
+                `
+            },
+            family: {
+                title: 'Family Relationships',
+                content: `
+                    <h3>Navigating Family Dynamics</h3>
+                    <p>Family relationships can be complex, especially during college years. Here are some strategies:</p>
+                    <ul>
+                        <li><strong>Practice empathy:</strong> Try to understand your family members' perspectives</li>
+                        <li><strong>Use "I" statements:</strong> Express your feelings without blaming (e.g., "I feel..." instead of "You always...")</li>
+                        <li><strong>Set healthy boundaries:</strong> It's okay to establish limits on communication or visits</li>
+                        <li><strong>Schedule regular contact:</strong> Consistent communication can prevent misunderstandings</li>
+                        <li><strong>Seek compromise:</strong> Look for solutions that work for everyone when possible</li>
+                    </ul>
+                    <p>Remember that family relationships often improve with time and increased independence.</p>
+                `
+            },
+            peer: {
+                title: 'Peer Pressure',
+                content: `
+                    <h3>Handling Peer Pressure</h3>
+                    <p>Staying true to yourself while navigating social situations can be challenging. Here's how to handle peer pressure:</p>
+                    <ul>
+                        <li><strong>Know your values:</strong> Be clear about what's important to you and what your boundaries are</li>
+                        <li><strong>Practice saying no:</strong> You can say no without explanation: "No thanks, I'm good"</li>
+                        <li><strong>Find supportive friends:</strong> Surround yourself with people who respect your decisions</li>
+                        <li><strong>Have an exit plan:</strong> Know how you'll leave uncomfortable situations</li>
+                        <li><strong>Trust your instincts:</strong> If something doesn't feel right, it probably isn't</li>
+                    </ul>
+                    <p>Real friends will respect your boundaries and decisions.</p>
+                `
+            }
+        };
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            await initializePage();
+            setupNavigation();
+            initializeMoodChart();
+            loadJournalEntries();
+            updateMoodOverview();
+        });
+        
+        // Initialize page
+        async function initializePage() {
+            // Check authentication
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (session && session.user) {
+                currentUser = session.user;
+                await loadUserData();
+                updateHeaderUI();
+            } else {
+                // Redirect to login if not authenticated
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // Load user data
+        async function loadUserData() {
+            if (!currentUser) return;
+            
+            try {
+                const { data, error } = await supabase
+                    .from('user_data')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                if (data && data.data) {
+                    // Merge with existing studentData
+                    Object.assign(studentData, data.data);
+                    studentData.user_id = currentUser.id;
+                    
+                    // Initialize emotional data if not present
+                    if (!studentData.emotional) {
+                        studentData.emotional = {
+                            moodLog: sampleMoodHistory,
+                            journalEntries: sampleJournalEntries,
+                            stressLevels: []
+                        };
+                    }
+                    
+                    // Update UI with loaded data
+                    updateMoodOverview();
+                    updateMoodChart();
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        // Update header UI
+        function updateHeaderUI() {
+            const userProfileDiv = document.getElementById('user-profile');
+            const loginButton = document.getElementById('login-button');
+            
+            if (userProfileDiv) userProfileDiv.classList.remove('hidden');
+            if (loginButton) loginButton.style.display = 'none';
+        }
+        
+        // Setup navigation
+        function setupNavigation() {
+            // Mobile menu toggle
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (mobileToggle && navLinks) {
+                mobileToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        }
+        
+        // Initialize mood chart
+        function initializeMoodChart() {
+            const ctx = document.getElementById('moodChart').getContext('2d');
+            
+            // Get last 7 days of mood data
+            const last7Days = getLast7Days();
+            const moodValues = last7Days.map(day => {
+                const moodEntry = studentData.emotional?.moodLog?.find(entry => 
+                    entry.date === day.date
+                );
+                return moodEntry ? moodData[moodEntry.mood].value : null;
+            });
+            
+            moodChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: last7Days.map(day => day.label),
+                    datasets: [{
+                        label: 'Mood Level',
+                        data: moodValues,
+                        borderColor: '#4361ee',
+                        backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 1,
+                            max: 5,
+                            ticks: {
+                                callback: function(value) {
+                                    const moods = ['Angry', 'Stressed', 'Neutral', 'Calm', 'Happy'];
+                                    return moods[value - 1] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const moods = ['Angry', 'Stressed', 'Neutral', 'Calm', 'Happy'];
+                                    return `Mood: ${moods[context.raw - 1] || 'Not tracked'}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Get last 7 days
+        function getLast7Days() {
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateString = date.toISOString().split('T')[0];
+                const label = date.toLocaleDateString('en-US', { weekday: 'short' });
+                days.push({ date: dateString, label });
+            }
+            return days;
+        }
+        
+        // Update mood overview
+        function updateMoodOverview() {
+            const moodLog = studentData.emotional?.moodLog || [];
+            
+            if (moodLog.length > 0) {
+                // Get today's mood
+                const today = new Date().toISOString().split('T')[0];
+                const todayMood = moodLog.find(entry => entry.date === today);
+                
+                if (todayMood) {
+                    document.getElementById('current-mood-emoji').textContent = moodData[todayMood.mood].emoji;
+                    document.getElementById('current-mood-text').textContent = todayMood.mood.charAt(0).toUpperCase() + todayMood.mood.slice(1);
+                }
+                
+                // Calculate weekly average
+                const last7Days = getLast7Days();
+                const weeklyMoods = last7Days
+                    .map(day => moodLog.find(entry => entry.date === day.date))
+                    .filter(entry => entry)
+                    .map(entry => moodData[entry.mood].value);
+                
+                if (weeklyMoods.length > 0) {
+                    const average = weeklyMoods.reduce((a, b) => a + b, 0) / weeklyMoods.length;
+                    const averageMood = Object.entries(moodData).find(([key, data]) => 
+                        Math.abs(data.value - average) < 0.5
+                    );
+                    if (averageMood) {
+                        document.getElementById('weekly-average-mood').textContent = 
+                            averageMood[0].charAt(0).toUpperCase() + averageMood[0].slice(1);
+                    }
+                }
+                
+                // Calculate streak
+                let streak = 0;
+                const sortedLog = [...moodLog].sort((a, b) => new Date(b.date) - new Date(a.date));
+                for (let i = 0; i < sortedLog.length; i++) {
+                    const expectedDate = new Date();
+                    expectedDate.setDate(expectedDate.getDate() - i);
+                    const expectedDateString = expectedDate.toISOString().split('T')[0];
+                    
+                    if (sortedLog[i].date === expectedDateString) {
+                        streak++;
+                    } else {
+                        break;
+                    }
+                }
+                document.getElementById('mood-streak').textContent = `${streak} days`;
+                
+                // Journal count
+                const journalCount = studentData.emotional?.journalEntries?.length || 0;
+                document.getElementById('journal-count').textContent = `${journalCount} entries`;
+            }
+        }
+        
+        // Update mood chart
+        function updateMoodChart() {
+            if (!moodChart) return;
+            
+            const last7Days = getLast7Days();
+            const moodValues = last7Days.map(day => {
+                const moodEntry = studentData.emotional?.moodLog?.find(entry => 
+                    entry.date === day.date
+                );
+                return moodEntry ? moodData[moodEntry.mood].value : null;
+            });
+            
+            moodChart.data.labels = last7Days.map(day => day.label);
+            moodChart.data.datasets[0].data = moodValues;
+            moodChart.update();
+        }
+        
+        // Track mood
+        function trackMood(mood) {
+            // Update the mood notes placeholder with the selected mood
+            const moodText = mood.charAt(0).toUpperCase() + mood.slice(1);
+            document.getElementById('mood-notes').placeholder = `Feeling ${moodText.toLowerCase()} today...`;
+            
+            // Highlight the selected mood button
+            document.querySelectorAll('.mood-btn').forEach(btn => {
+                btn.style.transform = 'scale(1)';
+                btn.style.boxShadow = 'none';
+            });
+            event.target.style.transform = 'scale(1.1)';
+            event.target.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
+            
+            // Store selected mood in data attribute
+            document.getElementById('mood-notes').dataset.selectedMood = mood;
+        }
+        
+        // Save mood entry
+        async function saveMoodEntry() {
+            const selectedMood = document.getElementById('mood-notes').dataset.selectedMood;
+            const notes = document.getElementById('mood-notes').value.trim();
+            
+            if (!selectedMood) {
+                alert('Please select a mood first by clicking on one of the mood buttons.');
+                return;
+            }
+            
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Create mood entry
+            const moodEntry = {
+                date: today,
+                mood: selectedMood,
+                notes: notes || ''
+            };
+            
+            // Add to mood log
+            if (!studentData.emotional) studentData.emotional = {};
+            if (!studentData.emotional.moodLog) studentData.emotional.moodLog = [];
+            
+            // Remove existing entry for today if it exists
+            studentData.emotional.moodLog = studentData.emotional.moodLog.filter(
+                entry => entry.date !== today
+            );
+            
+            // Add new entry
+            studentData.emotional.moodLog.push(moodEntry);
+            
+            // Save data
+            await saveEmotionalData();
+            
+            // Update UI
+            updateMoodOverview();
+            updateMoodChart();
+            
+            // Reset form
+            document.getElementById('mood-notes').value = '';
+            document.getElementById('mood-notes').dataset.selectedMood = '';
+            document.querySelectorAll('.mood-btn').forEach(btn => {
+                btn.style.transform = 'scale(1)';
+                btn.style.boxShadow = 'none';
+            });
+            
+            alert(`Mood recorded: ${selectedMood.charAt(0).toUpperCase() + selectedMood.slice(1)}`);
+        }
+        
+        // Load journal entries
+        function loadJournalEntries() {
+            const container = document.getElementById('journal-entries');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const journalEntries = studentData.emotional?.journalEntries || [];
+            
+            if (journalEntries.length === 0) {
+                container.innerHTML = '<p class="text-center">No journal entries yet. Write your first entry!</p>';
+                return;
+            }
+            
+            // Sort by date (newest first)
+            const sortedEntries = [...journalEntries].sort((a, b) => 
+                new Date(b.date) - new Date(a.date)
+            ).slice(0, 5); // Show only 5 most recent
+            
+            sortedEntries.forEach(entry => {
+                const entryDiv = document.createElement('div');
+                entryDiv.className = 'journal-entry';
+                entryDiv.innerHTML = `
+                    <div class="journal-date">${formatDate(entry.date)}</div>
+                    <h4>${entry.title}</h4>
+                    <p>${entry.content}</p>
+                    <button class="btn btn-outline" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;" onclick="deleteJournalEntry(${entry.id})">
+                        Delete
+                    </button>
+                `;
+                container.appendChild(entryDiv);
+            });
+        }
+        
+        // Save journal entry
+        async function saveJournalEntry() {
+            const title = document.getElementById('journal-title').value.trim();
+            const content = document.getElementById('journal-content').value.trim();
+            
+            if (!title || !content) {
+                alert('Please enter both a title and content for your journal entry.');
+                return;
+            }
+            
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Create journal entry
+            const journalEntry = {
+                id: Date.now(),
+                date: today,
+                title,
+                content
+            };
+            
+            // Add to journal entries
+            if (!studentData.emotional) studentData.emotional = {};
+            if (!studentData.emotional.journalEntries) studentData.emotional.journalEntries = [];
+            studentData.emotional.journalEntries.push(journalEntry);
+            
+            // Save data
+            await saveEmotionalData();
+            
+            // Update UI
+            loadJournalEntries();
+            
+            // Reset form
+            document.getElementById('journal-title').value = '';
+            document.getElementById('journal-content').value = '';
+            
+            alert('Journal entry saved successfully!');
+        }
+        
+        // Delete journal entry
+        async function deleteJournalEntry(entryId) {
+            if (!confirm('Are you sure you want to delete this journal entry?')) {
+                return;
+            }
+            
+            if (!studentData.emotional?.journalEntries) return;
+            
+            studentData.emotional.journalEntries = studentData.emotional.journalEntries.filter(
+                entry => entry.id !== entryId
+            );
+            
+            // Save data
+            await saveEmotionalData();
+            
+            // Update UI
+            loadJournalEntries();
+            
+            alert('Journal entry deleted.');
+        }
+        
+        // Start breathing exercise
+        function startBreathingExercise() {
+            const circle = document.getElementById('breathing-circle');
+            const instruction = document.getElementById('breathing-instruction');
+            const text = document.getElementById('breathing-text');
+            const startBtn = document.getElementById('breathing-start-btn');
+            const stopBtn = document.getElementById('breathing-stop-btn');
+            
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            
+            breathingPhase = 0;
+            let cycleCount = 0;
+            
+            breathingInterval = setInterval(() => {
+                switch(breathingPhase) {
+                    case 0: // Inhale (4 seconds)
+                        instruction.textContent = 'Breathe In...';
+                        text.textContent = 'Breathe In';
+                        circle.classList.add('breathing-in');
+                        breathingPhase = 1;
+                        setTimeout(() => {
+                            if (breathingInterval) breathingPhase = 2;
+                        }, 4000);
+                        break;
+                    case 1: // Hold (7 seconds)
+                        instruction.textContent = 'Hold...';
+                        text.textContent = 'Hold';
+                        breathingPhase = 2;
+                        setTimeout(() => {
+                            if (breathingInterval) breathingPhase = 3;
+                        }, 7000);
+                        break;
+                    case 2: // Exhale (8 seconds)
+                        instruction.textContent = 'Breathe Out...';
+                        text.textContent = 'Breathe Out';
+                        circle.classList.remove('breathing-in');
+                        breathingPhase = 3;
+                        setTimeout(() => {
+                            if (breathingInterval) {
+                                breathingPhase = 0;
+                                cycleCount++;
+                                if (cycleCount >= 4) {
+                                    stopBreathingExercise();
+                                    alert('Breathing exercise complete! Take a moment to notice how you feel.');
+                                }
+                            }
+                        }, 8000);
+                        break;
+                }
+            }, 100);
+        }
+        
+        // Stop breathing exercise
+        function stopBreathingExercise() {
+            clearInterval(breathingInterval);
+            breathingInterval = null;
+            
+            const circle = document.getElementById('breathing-circle');
+            const instruction = document.getElementById('breathing-instruction');
+            const text = document.getElementById('breathing-text');
+            const startBtn = document.getElementById('breathing-start-btn');
+            const stopBtn = document.getElementById('breathing-stop-btn');
+            
+            circle.classList.remove('breathing-in');
+            instruction.textContent = 'Get Ready';
+            text.textContent = 'Ready';
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+        }
+        
+        // Show guidance
+        function showGuidance(topic) {
+            const contentDiv = document.getElementById('guidance-content');
+            const guidance = guidanceContent[topic];
+            
+            if (guidance) {
+                contentDiv.innerHTML = guidance.content;
+                contentDiv.style.display = 'block';
+                
+                // Scroll to guidance
+                contentDiv.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // Suggest activity
+        function suggestActivity(activity) {
+            if (confirm(`Would you like to try: "${activity}"?`)) {
+                alert(`Great! Take some time for self-care. Remember to check in with how you feel after.`);
+            }
+        }
+        
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                month: 'long', 
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+        
+        // Save emotional data
+        async function saveEmotionalData() {
+            if (!currentUser) return;
+            
+            try {
+                const dataToSave = {
+                    user_id: currentUser.id,
+                    data: studentData,
+                    updated_at: new Date().toISOString()
+                };
+                
+                // Check if data exists
+                const { data: existing } = await supabase
+                    .from('user_data')
+                    .select('id')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                if (existing) {
+                    // Update existing
+                    await supabase
+                        .from('user_data')
+                        .update(dataToSave)
+                        .eq('user_id', currentUser.id);
+                } else {
+                    // Insert new
+                    await supabase
+                        .from('user_data')
+                        .insert([dataToSave]);
+                }
+                
+                // Also save to localStorage as backup
+                const key = `studentData_${currentUser.id}`;
+                localStorage.setItem(key, JSON.stringify(studentData));
+            } catch (error) {
+                console.error('Error saving emotional data:', error);
+            }
+        }
+        
+        // Profile settings modal
+        function showProfileSettings() {
+            alert('Profile settings feature coming soon!');
+        }
+        
+        // My data modal
+        function showMyData() {
+            alert('Data management feature coming soon!');
+        }
+        
+        // Sign out
+        async function signOut() {
+            try {
+                await supabase.auth.signOut();
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+            }
+        }
+        
+        // Expose functions to global scope
+        window.trackMood = trackMood;
+        window.saveMoodEntry = saveMoodEntry;
+        window.saveJournalEntry = saveJournalEntry;
+        window.deleteJournalEntry = deleteJournalEntry;
+        window.startBreathingExercise = startBreathingExercise;
+        window.stopBreathingExercise = stopBreathingExercise;
+        window.showGuidance = showGuidance;
+        window.suggestActivity = suggestActivity;
+        window.showProfileSettings = showProfileSettings;
+        window.showMyData = showMyData;
+        window.signOut = signOut;
+    </script>
+</body>
+</html>

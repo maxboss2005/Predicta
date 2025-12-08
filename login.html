@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Campus Compass</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .login-container {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 450px;
+            padding: 2.5rem;
+            margin: 0 auto;
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: var(--gray);
+        }
+        
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: var(--light-gray);
+        }
+        
+        .auth-divider span {
+            padding: 0 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--light-gray);
+        }
+        
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .auth-message {
+            padding: 0.8rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .auth-message.success {
+            background-color: #efffee;
+            color: #2a7;
+            display: block;
+        }
+        
+        .auth-message.error {
+            background-color: #fee;
+            color: #c33;
+            display: block;
+        }
+        
+        .back-to-home {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--gray);
+            text-decoration: none;
+        }
+        
+        .back-to-home:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Campus Compass</span>
+                </a>
+                <a href="index.html" class="back-to-home">← Back to Home</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Login/Register Container -->
+    <section class="login-container">
+        <div class="container">
+            <div class="auth-card">
+                <!-- Auth Tabs -->
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="login-tab" onclick="switchTab('login')">Sign In</button>
+                    <button class="auth-tab" id="signup-tab" onclick="switchTab('signup')">Sign Up</button>
+                </div>
+                
+                <!-- Messages -->
+                <div id="auth-message" class="auth-message"></div>
+                
+                <!-- Login Form -->
+                <div id="login-form" class="auth-form active">
+                    <div class="auth-header">
+                        <div class="auth-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3>Welcome Back!</h3>
+                        <p>Sign in to continue to Campus Compass</p>
+                    </div>
+                    
+                    <div class="social-auth">
+                        <button class="social-btn google" onclick="signInWithGoogle()">
+                            <i class="fab fa-google"></i> Continue with Google
+                        </button>
+                        <button class="social-btn github" onclick="signInWithGitHub()">
+                            <i class="fab fa-github"></i> Continue with GitHub
+                        </button>
+                    </div>
+                    
+                    <div class="auth-divider">
+                        <span>or continue with email</span>
+                    </div>
+                    
+                    <form id="login-email-form" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label for="login-email">Email Address</label>
+                            <input type="email" id="login-email" class="form-control" placeholder="you@example.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <div class="password-toggle">
+                                <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('login-password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="text-right">
+                                <a href="#" class="text-small" onclick="showForgotPassword()">Forgot password?</a>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn" style="width: 100%;">
+                            <span id="login-btn-text">Sign In</span>
+                            <i class="fas fa-spinner fa-spin" id="login-spinner" style="display: none;"></i>
+                        </button>
+                    </form>
+                    
+                    <div class="auth-footer">
+                        <p>Don't have an account? <a href="#" onclick="switchTab('signup')">Sign up</a></p>
+                    </div>
+                </div>
+                
+                <!-- Signup Form -->
+                <div id="signup-form" class="auth-form">
+                    <div class="auth-header">
+                        <div class="auth-avatar">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <h3>Create Account</h3>
+                        <p>Join Campus Compass to start your journey</p>
+                    </div>
+                    
+                    <div class="social-auth">
+                        <button class="social-btn google" onclick="signInWithGoogle()">
+                            <i class="fab fa-google"></i> Continue with Google
+                        </button>
+                        <button class="social-btn github" onclick="signInWithGitHub()">
+                            <i class="fab fa-github"></i> Continue with GitHub
+                        </button>
+                    </div>
+                    
+                    <div class="auth-divider">
+                        <span>or sign up with email</span>
+                    </div>
+                    
+                    <form id="signup-form-elements" onsubmit="handleSignup(event)">
+                        <div class="form-group">
+                            <label for="signup-name">Full Name</label>
+                            <input type="text" id="signup-name" class="form-control" placeholder="John Doe" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signup-email">Email Address</label>
+                            <input type="email" id="signup-email" class="form-control" placeholder="you@example.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signup-password">Password</label>
+                            <div class="password-toggle">
+                                <input type="password" id="signup-password" class="form-control" placeholder="••••••••" minlength="6" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('signup-password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <small class="form-text">Must be at least 6 characters</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signup-confirm-password">Confirm Password</label>
+                            <div class="password-toggle">
+                                <input type="password" id="signup-confirm-password" class="form-control" placeholder="••••••••" minlength="6" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('signup-confirm-password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input type="checkbox" id="terms" class="form-check-input" required>
+                            <label class="form-check-label" for="terms">
+                                I agree to the <a href="#" onclick="showTerms()">Terms of Service</a> and <a href="#" onclick="showPrivacy()">Privacy Policy</a>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn" style="width: 100%;">
+                            <span id="signup-btn-text">Create Account</span>
+                            <i class="fas fa-spinner fa-spin" id="signup-spinner" style="display: none;"></i>
+                        </button>
+                    </form>
+                    
+                    <div class="auth-footer">
+                        <p>Already have an account? <a href="#" onclick="switchTab('login')">Sign in</a></p>
+                    </div>
+                </div>
+                
+                <!-- Forgot Password Form -->
+                <div id="forgot-password-form" class="auth-form">
+                    <div class="auth-header">
+                        <div class="auth-avatar">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <h3>Reset Password</h3>
+                        <p>Enter your email to receive a reset link</p>
+                    </div>
+                    
+                    <form id="forgot-password-form-elements" onsubmit="handleForgotPassword(event)">
+                        <div class="form-group">
+                            <label for="reset-email">Email Address</label>
+                            <input type="email" id="reset-email" class="form-control" placeholder="you@example.com" required>
+                        </div>
+                        
+                        <button type="submit" class="btn" style="width: 100%;">
+                            <span id="reset-btn-text">Send Reset Link</span>
+                            <i class="fas fa-spinner fa-spin" id="reset-spinner" style="display: none;"></i>
+                        </button>
+                    </form>
+                    
+                    <div class="auth-footer">
+                        <p><a href="#" onclick="switchTab('login')">Back to Sign In</a></p>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="index.html" class="back-to-home">
+                <i class="fas fa-arrow-left"></i> Return to Homepage
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                <p>&copy; 2023 Campus Compass. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // Switch between tabs
+        function switchTab(tabName) {
+            // Update tabs
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.id === `${tabName}-tab`);
+            });
+            
+            // Show selected form
+            document.querySelectorAll('.auth-form').forEach(form => {
+                form.classList.toggle('active', form.id === `${tabName}-form`);
+            });
+            
+            // Clear messages
+            clearMessage();
+        }
+        
+        // Show forgot password form
+        function showForgotPassword() {
+            switchTab('forgot-password');
+        }
+        
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+        
+        // Show message
+        function showMessage(message, type = 'error') {
+            const messageDiv = document.getElementById('auth-message');
+            messageDiv.textContent = message;
+            messageDiv.className = `auth-message ${type}`;
+        }
+        
+        // Clear message
+        function clearMessage() {
+            const messageDiv = document.getElementById('auth-message');
+            messageDiv.textContent = '';
+            messageDiv.className = 'auth-message';
+        }
+        
+        // Handle login
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const btnText = document.getElementById('login-btn-text');
+            const spinner = document.getElementById('login-spinner');
+            
+            btnText.textContent = 'Signing in...';
+            spinner.style.display = 'inline-block';
+            
+            const result = await auth.signInWithEmail(email, password);
+            
+            if (result.success) {
+                showMessage('Successfully signed in! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            } else {
+                showMessage(result.error || 'Failed to sign in');
+                btnText.textContent = 'Sign In';
+                spinner.style.display = 'none';
+            }
+        }
+        
+        // Handle signup
+        async function handleSignup(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+            const btnText = document.getElementById('signup-btn-text');
+            const spinner = document.getElementById('signup-spinner');
+            
+            // Validation
+            if (password !== confirmPassword) {
+                showMessage('Passwords do not match');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage('Password must be at least 6 characters');
+                return;
+            }
+            
+            btnText.textContent = 'Creating account...';
+            spinner.style.display = 'inline-block';
+            
+            const result = await auth.signUpWithEmail(email, password, name);
+            
+            if (result.success) {
+                showMessage('Account created successfully! Please check your email to confirm your account.', 'success');
+                setTimeout(() => {
+                    switchTab('login');
+                }, 3000);
+            } else {
+                showMessage(result.error || 'Failed to create account');
+            }
+            
+            btnText.textContent = 'Create Account';
+            spinner.style.display = 'none';
+        }
+        
+        // Handle forgot password
+        async function handleForgotPassword(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('reset-email').value;
+            const btnText = document.getElementById('reset-btn-text');
+            const spinner = document.getElementById('reset-spinner');
+            
+            btnText.textContent = 'Sending...';
+            spinner.style.display = 'inline-block';
+            
+            const result = await auth.resetPassword(email);
+            
+            if (result.success) {
+                showMessage('Password reset link sent! Please check your email.', 'success');
+                setTimeout(() => {
+                    switchTab('login');
+                }, 2000);
+            } else {
+                showMessage(result.error || 'Failed to send reset link');
+            }
+            
+            btnText.textContent = 'Send Reset Link';
+            spinner.style.display = 'none';
+        }
+        
+        // Social sign in
+        async function signInWithGoogle() {
+            await auth.signInWithGoogle();
+        }
+        
+        async function signInWithGitHub() {
+            await auth.signInWithGitHub();
+        }
+        
+        // Terms and Privacy
+        function showTerms() {
+            alert('Terms of Service:\n\n1. You must be a student to use this platform\n2. Respect other users\' privacy\n3. Use the platform for educational purposes only\n4. Follow community guidelines');
+        }
+        
+        function showPrivacy() {
+            alert('Privacy Policy:\n\n1. We respect your privacy\n2. Your data is encrypted and secure\n3. We never sell your personal information\n4. You can delete your data at any time');
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already logged in
+            if (auth.isAuthenticated()) {
+                window.location.href = 'dashboard.html';
+            }
+            
+            // Setup password toggle buttons
+            document.querySelectorAll('.toggle-password').forEach(button => {
+                const inputId = button.previousElementSibling.id;
+                button.onclick = () => togglePassword(inputId);
+            });
+        });
+    </script>
+</body>
+</html>

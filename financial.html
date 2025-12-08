@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Management | Campus Compass</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .financial-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .overview-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .overview-card.income {
+            border-top: 4px solid var(--success);
+        }
+        
+        .overview-card.expenses {
+            border-top: 4px solid var(--danger);
+        }
+        
+        .overview-card.savings {
+            border-top: 4px solid var(--primary);
+        }
+        
+        .overview-card.budget {
+            border-top: 4px solid var(--warning);
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .expense-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .category-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: var(--border-radius);
+        }
+        
+        .category-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 1rem;
+        }
+        
+        .expense-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+        
+        .expense-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .expense-item:last-child {
+            border-bottom: none;
+        }
+        
+        .expense-date {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .expense-amount {
+            font-weight: 600;
+        }
+        
+        .expense-amount.income {
+            color: var(--success);
+        }
+        
+        .expense-amount.expense {
+            color: var(--danger);
+        }
+        
+        .savings-goal {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f0ff 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .goal-progress {
+            margin: 1rem 0;
+        }
+        
+        .budget-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #856404;
+        }
+        
+        .transaction-form {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Campus Compass</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="financial.html" class="active">Financial</a></li>
+                    <li><a href="academic.html">Academic</a></li>
+                    <li><a href="emotional.html">Emotional</a></li>
+                    <li><a href="spiritual.html">Spiritual</a></li>
+                    <li><a href="health.html">Health</a></li>
+                    <li><a href="career.html">Career</a></li>
+                </ul>
+                
+                <div class="auth-controls">
+                    <div id="user-profile" class="profile-dropdown hidden">
+                        <div class="user-profile">
+                            <div class="user-avatar" id="header-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="user-info">
+                                <span class="user-name" id="header-username">User</span>
+                                <span class="user-email" id="header-useremail">user@example.com</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item" onclick="showProfileSettings()">
+                                <i class="fas fa-user-cog"></i> Profile Settings
+                            </a>
+                            <a href="#" class="dropdown-item" onclick="showMyData()">
+                                <i class="fas fa-database"></i> My Data
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" onclick="signOut()">
+                                <i class="fas fa-sign-out-alt"></i> Sign Out
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <button id="login-button" class="login-btn" onclick="window.location.href='login.html'">Sign In</button>
+                    
+                    <div class="mobile-toggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Page Header -->
+        <section class="hero" style="background: linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%); margin-bottom: 2rem;">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Financial Management</h1>
+                    <p>Track your expenses, create budgets, and achieve your savings goals as a student.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Financial Overview -->
+        <section>
+            <h2>Financial Overview</h2>
+            <div class="financial-overview">
+                <div class="overview-card income">
+                    <h3><i class="fas fa-money-bill-wave"></i> Monthly Income</h3>
+                    <p class="stat-value" id="monthly-income">$1,200</p>
+                    <p class="stat-label">From all sources</p>
+                </div>
+                
+                <div class="overview-card expenses">
+                    <h3><i class="fas fa-receipt"></i> Monthly Expenses</h3>
+                    <p class="stat-value" id="monthly-expenses">$845</p>
+                    <p class="stat-label">Total spent this month</p>
+                </div>
+                
+                <div class="overview-card savings">
+                    <h3><i class="fas fa-piggy-bank"></i> Current Savings</h3>
+                    <p class="stat-value" id="current-savings">$350</p>
+                    <p class="stat-label">Available balance</p>
+                </div>
+                
+                <div class="overview-card budget">
+                    <h3><i class="fas fa-chart-pie"></i> Budget Remaining</h3>
+                    <p class="stat-value" id="budget-remaining">$355</p>
+                    <p class="stat-label">For this month</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section>
+            <div class="chart-container">
+                <h3>Spending Breakdown</h3>
+                <div style="height: 300px;">
+                    <canvas id="spendingChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Budget Calculator -->
+        <section>
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-calculator"></i>
+                    <h3>Monthly Budget Calculator</h3>
+                </div>
+                <div class="card-body">
+                    <form id="budget-form">
+                        <div class="form-group">
+                            <label for="monthly-income-input">Monthly Income ($)</label>
+                            <input type="number" id="monthly-income-input" class="form-control" value="1200" onchange="updateBudget()">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="rent">Rent/Housing ($)</label>
+                            <input type="number" id="rent" class="form-control" value="500" onchange="updateBudget()">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="food">Food/Groceries ($)</label>
+                            <input type="number" id="food" class="form-control" value="200" onchange="updateBudget()">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="transportation">Transportation ($)</label>
+                            <input type="number" id="transportation" class="form-control" value="100" onchange="updateBudget()">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="entertainment">Entertainment ($)</label>
+                            <input type="number" id="entertainment" class="form-control" value="80" onchange="updateBudget()">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="other">Other Expenses ($)</label>
+                            <input type="number" id="other" class="form-control" value="45" onchange="updateBudget()">
+                        </div>
+                        
+                        <button type="button" class="btn" onclick="calculateBudget()">Update Budget</button>
+                    </form>
+                    
+                    <div id="budget-result" class="mt-3">
+                        <h4>Budget Summary</h4>
+                        <p>Total Expenses: $<span id="total-expenses">925</span></p>
+                        <p>Remaining Budget: $<span id="remaining-budget">275</span></p>
+                        <p>Daily Spending Allowance: $<span id="daily-allowance">9.17</span></p>
+                        
+                        <div class="progress-container mt-2">
+                            <div class="progress-bar" id="budget-progress-bar" style="width: 77%"></div>
+                        </div>
+                        <p class="text-center"><small><span id="budget-percentage">77</span>% of budget used</small></p>
+                        
+                        <div id="budget-warning" class="budget-warning" style="display: none;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Budget Warning:</strong> You've used over 90% of your monthly budget.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Savings Goal Tracker -->
+        <section>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <i class="fas fa-bullseye"></i>
+                    <h3>Savings Goal Tracker</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="savings-goal">Savings Goal ($)</label>
+                        <input type="number" id="savings-goal" class="form-control" value="1000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="current-savings-input">Current Savings ($)</label>
+                        <input type="number" id="current-savings-input" class="form-control" value="350" onchange="updateSavingsProgress()">
+                    </div>
+                    
+                    <div class="goal-progress">
+                        <p>Progress toward goal:</p>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="savings-progress-bar" style="width: 35%"></div>
+                        </div>
+                        <p class="text-center"><span id="savings-percentage">35</span>% saved</p>
+                        <p class="text-center"><small>$<span id="amount-remaining">650</span> remaining</small></p>
+                    </div>
+                    
+                    <button class="btn" onclick="updateSavingsProgress()">Update Progress</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Transactions -->
+        <section>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <i class="fas fa-history"></i>
+                    <h3>Recent Transactions</h3>
+                </div>
+                <div class="card-body">
+                    <div class="expense-list" id="expense-list">
+                        <!-- Transactions will be loaded here -->
+                    </div>
+                    
+                    <button class="btn btn-outline mt-3" onclick="showAddTransactionForm()">
+                        <i class="fas fa-plus"></i> Add Transaction
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expense Categories -->
+        <section>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <i class="fas fa-tags"></i>
+                    <h3>Expense Categories</h3>
+                </div>
+                <div class="card-body">
+                    <div class="expense-categories" id="expense-categories">
+                        <!-- Categories will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Financial Tips -->
+        <section>
+            <div class="card mt-4">
+                <div class="card-header" style="background-color: var(--success);">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Student Financial Tips</h3>
+                </div>
+                <div class="card-body">
+                    <div class="feature-item">
+                        <h4><i class="fas fa-utensils"></i> Cook at Home</h4>
+                        <p>Save money by cooking meals at home instead of eating out. Meal prep can save you $200+ per month.</p>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <h4><i class="fas fa-bus"></i> Use Student Discounts</h4>
+                        <p>Always ask for student discounts on transportation, software, entertainment, and more.</p>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <h4><i class="fas fa-book"></i> Buy Used Textbooks</h4>
+                        <p>Save up to 80% by buying used textbooks or renting them from online services.</p>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <h4><i class="fas fa-wifi"></i> Bundle Services</h4>
+                        <p>Share streaming services and internet costs with roommates to reduce monthly expenses.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Campus Compass</h3>
+                    <p>Master your finances, achieve your goals.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Financial Tools</h3>
+                    <ul class="footer-links">
+                        <li><a href="#budget-calculator">Budget Calculator</a></li>
+                        <li><a href="#savings-tracker">Savings Tracker</a></li>
+                        <li><a href="#expense-tracker">Expense Tracker</a></li>
+                        <li><a href="#financial-tips">Financial Tips</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Campus Compass. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="data-manager.js"></script>
+    <script>
+        // Global variables
+        let spendingChart = null;
+        let currentUser = null;
+        
+        // Sample expense categories
+        const expenseCategories = [
+            { name: 'Housing', color: '#FF6B6B', amount: 500 },
+            { name: 'Food', color: '#4ECDC4', amount: 200 },
+            { name: 'Transportation', color: '#45B7D1', amount: 100 },
+            { name: 'Entertainment', color: '#96CEB4', amount: 80 },
+            { name: 'Utilities', color: '#FFEAA7', amount: 60 },
+            { name: 'Education', color: '#DDA0DD', amount: 50 },
+            { name: 'Other', color: '#A2D5F2', amount: 45 }
+        ];
+        
+        // Sample transactions
+        const sampleTransactions = [
+            { id: 1, date: '2023-11-15', description: 'Groceries', category: 'Food', amount: 45.50, type: 'expense' },
+            { id: 2, date: '2023-11-14', description: 'Part-time job', category: 'Income', amount: 150.00, type: 'income' },
+            { id: 3, date: '2023-11-13', description: 'Bus pass', category: 'Transportation', amount: 35.00, type: 'expense' },
+            { id: 4, date: '2023-11-12', description: 'Textbook', category: 'Education', amount: 85.00, type: 'expense' },
+            { id: 5, date: '2023-11-11', description: 'Movie tickets', category: 'Entertainment', amount: 25.00, type: 'expense' }
+        ];
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            await initializePage();
+            setupNavigation();
+            initializeCharts();
+            loadExpenseCategories();
+            loadTransactions();
+            updateFinancialOverview();
+        });
+        
+        // Initialize page
+        async function initializePage() {
+            // Check authentication
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (session && session.user) {
+                currentUser = session.user;
+                await loadUserData();
+                updateHeaderUI();
+            } else {
+                // Redirect to login if not authenticated
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // Load user data
+        async function loadUserData() {
+            if (!currentUser) return;
+            
+            try {
+                const { data, error } = await supabase
+                    .from('user_data')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                if (data && data.data) {
+                    // Merge with existing studentData
+                    Object.assign(studentData, data.data);
+                    studentData.user_id = currentUser.id;
+                    
+                    // Initialize financial data if not present
+                    if (!studentData.financial) {
+                        studentData.financial = {
+                            income: 1200,
+                            expenses: sampleTransactions,
+                            savingsGoals: [],
+                            budgetCategories: {}
+                        };
+                    }
+                    
+                    // Update UI with loaded data
+                    updateFinancialOverview();
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        // Update header UI
+        function updateHeaderUI() {
+            const userProfileDiv = document.getElementById('user-profile');
+            const loginButton = document.getElementById('login-button');
+            
+            if (userProfileDiv) userProfileDiv.classList.remove('hidden');
+            if (loginButton) loginButton.style.display = 'none';
+        }
+        
+        // Setup navigation
+        function setupNavigation() {
+            // Mobile menu toggle
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (mobileToggle && navLinks) {
+                mobileToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        }
+        
+        // Initialize charts
+        function initializeCharts() {
+            const ctx = document.getElementById('spendingChart').getContext('2d');
+            
+            // Calculate category totals
+            const categories = ['Housing', 'Food', 'Transportation', 'Entertainment', 'Utilities', 'Education', 'Other'];
+            const amounts = [500, 200, 100, 80, 60, 50, 45];
+            const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#A2D5F2'];
+            
+            spendingChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        data: amounts,
+                        backgroundColor: colors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update financial overview
+        function updateFinancialOverview() {
+            // Calculate totals
+            const monthlyIncome = studentData.financial?.income || 1200;
+            const monthlyExpenses = calculateTotalExpenses();
+            const currentSavings = 350; // This would come from savings data
+            const remainingBudget = monthlyIncome - monthlyExpenses;
+            
+            // Update overview cards
+            document.getElementById('monthly-income').textContent = `$${monthlyIncome}`;
+            document.getElementById('monthly-expenses').textContent = `$${monthlyExpenses}`;
+            document.getElementById('current-savings').textContent = `$${currentSavings}`;
+            document.getElementById('budget-remaining').textContent = `$${remainingBudget}`;
+            
+            // Update budget calculator
+            document.getElementById('monthly-income-input').value = monthlyIncome;
+            document.getElementById('total-expenses').textContent = monthlyExpenses;
+            document.getElementById('remaining-budget').textContent = remainingBudget;
+            
+            const budgetPercentage = monthlyIncome > 0 ? Math.round((monthlyExpenses / monthlyIncome) * 100) : 0;
+            document.getElementById('budget-percentage').textContent = budgetPercentage;
+            document.getElementById('budget-progress-bar').style.width = `${budgetPercentage}%`;
+            
+            // Show warning if budget is over 90%
+            const warningDiv = document.getElementById('budget-warning');
+            if (budgetPercentage > 90) {
+                warningDiv.style.display = 'block';
+            } else {
+                warningDiv.style.display = 'none';
+            }
+            
+            // Update daily allowance
+            const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
+            const dailyAllowance = (remainingBudget / (daysInMonth - new Date().getDate())).toFixed(2);
+            document.getElementById('daily-allowance').textContent = dailyAllowance;
+        }
+        
+        // Calculate total expenses
+        function calculateTotalExpenses() {
+            if (!studentData.financial?.expenses) return 925;
+            
+            return studentData.financial.expenses
+                .filter(t => t.type === 'expense')
+                .reduce((total, t) => total + t.amount, 0);
+        }
+        
+        // Update budget
+        function updateBudget() {
+            calculateBudget();
+        }
+        
+        // Calculate budget
+        function calculateBudget() {
+            const income = parseFloat(document.getElementById('monthly-income-input').value) || 0;
+            const rent = parseFloat(document.getElementById('rent').value) || 0;
+            const food = parseFloat(document.getElementById('food').value) || 0;
+            const transportation = parseFloat(document.getElementById('transportation').value) || 0;
+            const entertainment = parseFloat(document.getElementById('entertainment').value) || 0;
+            const other = parseFloat(document.getElementById('other').value) || 0;
+            
+            const totalExpenses = rent + food + transportation + entertainment + other;
+            const remainingBudget = income - totalExpenses;
+            const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
+            const dailyAllowance = (remainingBudget / (daysInMonth - new Date().getDate())).toFixed(2);
+            
+            document.getElementById('total-expenses').textContent = totalExpenses.toFixed(2);
+            document.getElementById('remaining-budget').textContent = remainingBudget.toFixed(2);
+            document.getElementById('daily-allowance').textContent = dailyAllowance;
+            
+            const budgetPercentage = income > 0 ? Math.round((totalExpenses / income) * 100) : 0;
+            document.getElementById('budget-percentage').textContent = budgetPercentage;
+            document.getElementById('budget-progress-bar').style.width = `${budgetPercentage}%`;
+            
+            // Show warning if budget is over 90%
+            const warningDiv = document.getElementById('budget-warning');
+            if (budgetPercentage > 90) {
+                warningDiv.style.display = 'block';
+            } else {
+                warningDiv.style.display = 'none';
+            }
+            
+            // Save to studentData
+            if (!studentData.financial) studentData.financial = {};
+            studentData.financial.income = income;
+            
+            // Update expense categories
+            expenseCategories[0].amount = rent;
+            expenseCategories[1].amount = food;
+            expenseCategories[2].amount = transportation;
+            expenseCategories[3].amount = entertainment;
+            expenseCategories[6].amount = other;
+            
+            // Update chart
+            updateChart();
+            updateFinancialOverview();
+            
+            // Save data
+            saveFinancialData();
+        }
+        
+        // Update savings progress
+        function updateSavingsProgress() {
+            const goal = parseFloat(document.getElementById('savings-goal').value) || 1000;
+            const current = parseFloat(document.getElementById('current-savings-input').value) || 350;
+            
+            const percentage = Math.min(100, Math.round((current / goal) * 100));
+            const remaining = goal - current;
+            
+            document.getElementById('savings-progress-bar').style.width = `${percentage}%`;
+            document.getElementById('savings-percentage').textContent = percentage;
+            document.getElementById('amount-remaining').textContent = remaining.toFixed(2);
+        }
+        
+        // Load expense categories
+        function loadExpenseCategories() {
+            const container = document.getElementById('expense-categories');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            expenseCategories.forEach(category => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category-item';
+                categoryDiv.innerHTML = `
+                    <div style="display: flex; align-items: center;">
+                        <div class="category-color" style="background-color: ${category.color}"></div>
+                        <span>${category.name}</span>
+                    </div>
+                    <span class="expense-amount expense">$${category.amount}</span>
+                `;
+                container.appendChild(categoryDiv);
+            });
+        }
+        
+        // Load transactions
+        function loadTransactions() {
+            const container = document.getElementById('expense-list');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const transactions = studentData.financial?.expenses || sampleTransactions;
+            
+            if (transactions.length === 0) {
+                container.innerHTML = '<p class="text-center">No transactions yet.</p>';
+                return;
+            }
+            
+            // Sort by date (newest first)
+            const sortedTransactions = [...transactions].sort((a, b) => 
+                new Date(b.date) - new Date(a.date)
+            ).slice(0, 10); // Show only 10 most recent
+            
+            sortedTransactions.forEach(transaction => {
+                const transactionDiv = document.createElement('div');
+                transactionDiv.className = 'expense-item';
+                transactionDiv.innerHTML = `
+                    <div>
+                        <strong>${transaction.description}</strong>
+                        <div class="expense-date">${formatDate(transaction.date)} • ${transaction.category}</div>
+                    </div>
+                    <div class="expense-amount ${transaction.type}">
+                        ${transaction.type === 'income' ? '+' : '-'}$${transaction.amount.toFixed(2)}
+                    </div>
+                `;
+                container.appendChild(transactionDiv);
+            });
+        }
+        
+        // Update chart
+        function updateChart() {
+            if (!spendingChart) return;
+            
+            const categories = expenseCategories.map(c => c.name);
+            const amounts = expenseCategories.map(c => c.amount);
+            const colors = expenseCategories.map(c => c.color);
+            
+            spendingChart.data.labels = categories;
+            spendingChart.data.datasets[0].data = amounts;
+            spendingChart.data.datasets[0].backgroundColor = colors;
+            spendingChart.update();
+        }
+        
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+        
+        // Show add transaction form
+        function showAddTransactionForm() {
+            const description = prompt('Enter transaction description:');
+            if (!description) return;
+            
+            const amount = parseFloat(prompt('Enter amount:'));
+            if (isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid amount.');
+                return;
+            }
+            
+            const type = confirm('Is this income? (OK for income, Cancel for expense)') ? 'income' : 'expense';
+            const category = type === 'income' ? 'Income' : prompt('Enter category (Food, Transportation, etc.):') || 'Other';
+            
+            const newTransaction = {
+                id: Date.now(),
+                date: new Date().toISOString().split('T')[0],
+                description,
+                category,
+                amount,
+                type
+            };
+            
+            // Add to transactions
+            if (!studentData.financial) studentData.financial = {};
+            if (!studentData.financial.expenses) studentData.financial.expenses = [];
+            studentData.financial.expenses.push(newTransaction);
+            
+            // Update UI
+            loadTransactions();
+            updateFinancialOverview();
+            updateChart();
+            
+            // Save data
+            saveFinancialData();
+            
+            alert('Transaction added successfully!');
+        }
+        
+        // Save financial data
+        async function saveFinancialData() {
+            if (!currentUser) return;
+            
+            try {
+                const dataToSave = {
+                    user_id: currentUser.id,
+                    data: studentData,
+                    updated_at: new Date().toISOString()
+                };
+                
+                // Check if data exists
+                const { data: existing } = await supabase
+                    .from('user_data')
+                    .select('id')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                if (existing) {
+                    // Update existing
+                    await supabase
+                        .from('user_data')
+                        .update(dataToSave)
+                        .eq('user_id', currentUser.id);
+                } else {
+                    // Insert new
+                    await supabase
+                        .from('user_data')
+                        .insert([dataToSave]);
+                }
+                
+                // Also save to localStorage as backup
+                const key = `studentData_${currentUser.id}`;
+                localStorage.setItem(key, JSON.stringify(studentData));
+            } catch (error) {
+                console.error('Error saving financial data:', error);
+            }
+        }
+        
+        // Profile settings modal
+        function showProfileSettings() {
+            alert('Profile settings feature coming soon!');
+        }
+        
+        // My data modal
+        function showMyData() {
+            alert('Data management feature coming soon!');
+        }
+        
+        // Sign out
+        async function signOut() {
+            try {
+                await supabase.auth.signOut();
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+            }
+        }
+        
+        // Expose functions to global scope
+        window.updateBudget = updateBudget;
+        window.calculateBudget = calculateBudget;
+        window.updateSavingsProgress = updateSavingsProgress;
+        window.showAddTransactionForm = showAddTransactionForm;
+        window.showProfileSettings = showProfileSettings;
+        window.showMyData = showMyData;
+        window.signOut = signOut;
+    </script>
+</body>
+</html>

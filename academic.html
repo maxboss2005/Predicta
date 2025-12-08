@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Tools | Campus Compass</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .academic-tools {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        
+        .tool-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .study-planner {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .course-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .course-item {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .course-grade {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        .assignment-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+        
+        .assignment-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .assignment-item:last-child {
+            border-bottom: none;
+        }
+        
+        .assignment-due {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .assignment-priority {
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .priority-high {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .priority-medium {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        .priority-low {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .grade-predictor {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .prediction-result {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .quiz-container {
+            background: #e8f5e9;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .flashcards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .flashcard {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            perspective: 1000px;
+        }
+        
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+        
+        .study-timer {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .timer-display {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 1rem 0;
+            font-family: monospace;
+        }
+        
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .note-summarizer {
+            background: #f5f5f5;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .summary-result {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Campus Compass</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="financial.html">Financial</a></li>
+                    <li><a href="academic.html" class="active">Academic</a></li>
+                    <li><a href="emotional.html">Emotional</a></li>
+                    <li><a href="spiritual.html">Spiritual</a></li>
+                    <li><a href="health.html">Health</a></li>
+                    <li><a href="career.html">Career</a></li>
+                </ul>
+                
+                <div class="auth-controls">
+                    <div id="user-profile" class="profile-dropdown hidden">
+                        <div class="user-profile">
+                            <div class="user-avatar" id="header-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="user-info">
+                                <span class="user-name" id="header-username">User</span>
+                                <span class="user-email" id="header-useremail">user@example.com</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item" onclick="showProfileSettings()">
+                                <i class="fas fa-user-cog"></i> Profile Settings
+                            </a>
+                            <a href="#" class="dropdown-item" onclick="showMyData()">
+                                <i class="fas fa-database"></i> My Data
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" onclick="signOut()">
+                                <i class="fas fa-sign-out-alt"></i> Sign Out
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <button id="login-button" class="login-btn" onclick="window.location.href='login.html'">Sign In</button>
+                    
+                    <div class="mobile-toggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Page Header -->
+        <section class="hero" style="background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%); margin-bottom: 2rem;">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Academic Tools</h1>
+                    <p>Enhance your learning with study tools, grade predictors, and academic resources.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Academic Tools Grid -->
+        <section>
+            <h2>Academic Tools</h2>
+            <div class="academic-tools">
+                <div class="tool-card" onclick="openNoteSummarizer()">
+                    <div class="tool-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>Note Summarizer</h3>
+                    <p>Upload your notes and get concise summaries to study faster.</p>
+                    <button class="btn btn-outline mt-2">Open Tool</button>
+                </div>
+                
+                <div class="tool-card" onclick="openQuizGenerator()">
+                    <div class="tool-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3>Quiz Generator</h3>
+                    <p>Generate practice questions from your study materials.</p>
+                    <button class="btn btn-outline mt-2">Open Tool</button>
+                </div>
+                
+                <div class="tool-card" onclick="openFlashcards()">
+                    <div class="tool-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3>Flashcards</h3>
+                    <p>Create and study with digital flashcards.</p>
+                    <button class="btn btn-outline mt-2">Open Tool</button>
+                </div>
+                
+                <div class="tool-card" onclick="openStudyTimer()">
+                    <div class="tool-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Study Timer</h3>
+                    <p>Pomodoro timer for focused study sessions.</p>
+                    <button class="btn btn-outline mt-2">Open Tool</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Study Planner -->
+        <section class="study-planner">
+            <h2><i class="fas fa-calendar-alt"></i> Study Planner</h2>
+            <p>Plan your study sessions and track your progress.</p>
+            
+            <div class="form-group">
+                <label for="study-topic">Today's Study Topic</label>
+                <input type="text" id="study-topic" class="form-control" placeholder="Enter what you're studying today...">
+            </div>
+            
+            <div class="form-group">
+                <label for="study-hours">Study Hours Today</label>
+                <input type="range" id="study-hours" class="form-control" min="0" max="8" value="2" oninput="updateStudyHours()">
+                <span id="hours-display">2 hours</span>
+            </div>
+            
+            <button class="btn" onclick="logStudySession()">
+                <i class="fas fa-save"></i> Log Study Session
+            </button>
+            
+            <div class="mt-3">
+                <p>This Week's Progress: <span id="weekly-study-hours">0</span> hours</p>
+                <div class="progress-container">
+                    <div class="progress-bar" id="study-progress" style="width: 0%"></div>
+                </div>
+                <p class="text-center"><small>Goal: 15 hours/week</small></p>
+            </div>
+        </section>
+
+        <!-- Courses & Grades -->
+        <section>
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-book"></i>
+                    <h3>My Courses</h3>
+                </div>
+                <div class="card-body">
+                    <div class="course-list" id="course-list">
+                        <!-- Courses will be loaded here -->
+                    </div>
+                    
+                    <button class="btn btn-outline mt-3" onclick="showAddCourseForm()">
+                        <i class="fas fa-plus"></i> Add Course
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Assignments -->
+        <section>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <i class="fas fa-tasks"></i>
+                    <h3>Upcoming Assignments</h3>
+                </div>
+                <div class="card-body">
+                    <div class="assignment-list" id="assignment-list">
+                        <!-- Assignments will be loaded here -->
+                    </div>
+                    
+                    <button class="btn btn-outline mt-3" onclick="showAddAssignmentForm()">
+                        <i class="fas fa-plus"></i> Add Assignment
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grade Predictor -->
+        <section class="grade-predictor">
+            <h2><i class="fas fa-chart-line"></i> Grade Predictor</h2>
+            <p>Predict your grades based on study habits and performance.</p>
+            
+            <form id="grade-predictor-form">
+                <div class="form-group">
+                    <label for="weekly-study">Weekly Study Hours</label>
+                    <input type="range" id="weekly-study" class="form-control" min="0" max="40" value="15" oninput="updateWeeklyStudy()">
+                    <span id="weekly-study-display">15 hours</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="attendance">Class Attendance (%)</label>
+                    <input type="range" id="attendance" class="form-control" min="0" max="100" value="85" oninput="updateAttendance()">
+                    <span id="attendance-display">85%</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="assignment-completion">Assignment Completion (%)</label>
+                    <input type="range" id="assignment-completion" class="form-control" min="0" max="100" value="90" oninput="updateAssignmentCompletion()">
+                    <span id="assignment-completion-display">90%</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="current-grade">Current Grade (%)</label>
+                    <input type="number" id="current-grade" class="form-control" min="0" max="100" value="82">
+                </div>
+                
+                <button type="button" class="btn" onclick="predictGrade()">Predict My Grade</button>
+            </form>
+            
+            <div class="prediction-result" id="prediction-result" style="display: none;">
+                <h4>Predicted Performance</h4>
+                <p>Predicted Final Grade: <span id="predicted-grade">0</span>%</p>
+                <p>Letter Grade: <span id="letter-grade">-</span></p>
+                <div class="progress-container">
+                    <div class="progress-bar" id="grade-progress-bar" style="width: 0%"></div>
+                </div>
+                <p id="performance-feedback">Keep up the good work!</p>
+            </div>
+        </section>
+
+        <!-- Note Summarizer -->
+        <section class="note-summarizer">
+            <h2><i class="fas fa-file-alt"></i> Note Summarizer</h2>
+            <p>Paste your notes below to get a concise summary:</p>
+            
+            <div class="form-group">
+                <textarea id="note-input" class="form-control" rows="5" placeholder="Paste your notes here...">The Industrial Revolution was a period of major industrialization and innovation that took place during the late 1700s and early 1800s. The Industrial Revolution began in Great Britain and quickly spread throughout the world. The American Industrial Revolution commonly referred to as the Second Industrial Revolution, began sometime between 1820 and 1870. This period saw the mechanization of agriculture and textile manufacturing and a revolution in power, including steamships and railroads, that affected social, cultural and economic conditions.</textarea>
+            </div>
+            
+            <button class="btn" onclick="summarizeNotes()">
+                <i class="fas fa-magic"></i> Summarize Notes
+            </button>
+            
+            <div class="summary-result" id="summary-result">
+                <h4>Summary:</h4>
+                <div class="note-display" id="note-summary"></div>
+            </div>
+        </section>
+
+        <!-- Study Tips -->
+        <section>
+            <div class="card mt-4">
+                <div class="card-header" style="background-color: var(--success);">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Study Tips & Strategies</h3>
+                </div>
+                <div class="card-body">
+                    <div class="feature-item">
+                        <h4><i class="fas fa-clock"></i> Pomodoro Technique</h4>
+                        <p>Study for 25 minutes, then take a 5-minute break. Repeat 4 times, then take a longer break.</p>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <h4><i class="fas fa-brain"></i> Active Recall</h4>
+                        <p>Test yourself frequently instead of just re-reading notes. This strengthens memory.</p>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <h4><i class="fas fa-layer-group"></i> Spaced Repetition</h4>
+                        <p>Review material at increasing intervals to optimize long-term retention.</p>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <h4><i class="fas fa-book"></i> Teach What You Learn</h4>
+                        <p>Explain concepts to someone else to deepen your understanding.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Campus Compass</h3>
+                    <p>Excel in your academics with smart tools.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Academic Tools</h3>
+                    <ul class="footer-links">
+                        <li><a href="#note-summarizer">Note Summarizer</a></li>
+                        <li><a href="#grade-predictor">Grade Predictor</a></li>
+                        <li><a href="#study-planner">Study Planner</a></li>
+                        <li><a href="#flashcards">Flashcards</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Campus Compass. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="data-manager.js"></script>
+    <script>
+        // Global variables
+        let currentUser = null;
+        let studyTimer = null;
+        let timerSeconds = 1500; // 25 minutes in seconds
+        let isTimerRunning = false;
+        
+        // Sample courses
+        const sampleCourses = [
+            { id: 1, name: 'Biology 101', code: 'BIO101', credits: 3, grade: 85, color: '#4CAF50' },
+            { id: 2, name: 'Calculus I', code: 'MATH101', credits: 4, grade: 78, color: '#2196F3' },
+            { id: 3, name: 'English Composition', code: 'ENG101', credits: 3, grade: 92, color: '#FF9800' },
+            { id: 4, name: 'Computer Science', code: 'CS101', credits: 4, grade: 88, color: '#9C27B0' }
+        ];
+        
+        // Sample assignments
+        const sampleAssignments = [
+            { id: 1, course: 'Biology 101', title: 'Lab Report #3', dueDate: '2023-11-20', priority: 'high', completed: false },
+            { id: 2, course: 'Calculus I', title: 'Chapter 5 Homework', dueDate: '2023-11-22', priority: 'medium', completed: false },
+            { id: 3, course: 'English Composition', title: 'Research Paper', dueDate: '2023-11-25', priority: 'high', completed: false },
+            { id: 4, course: 'Computer Science', title: 'Programming Project', dueDate: '2023-11-28', priority: 'medium', completed: false },
+            { id: 5, course: 'Biology 101', title: 'Midterm Exam', dueDate: '2023-11-30', priority: 'high', completed: false }
+        ];
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            await initializePage();
+            setupNavigation();
+            loadCourses();
+            loadAssignments();
+            updateStudyProgress();
+        });
+        
+        // Initialize page
+        async function initializePage() {
+            // Check authentication
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (session && session.user) {
+                currentUser = session.user;
+                await loadUserData();
+                updateHeaderUI();
+            } else {
+                // Redirect to login if not authenticated
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // Load user data
+        async function loadUserData() {
+            if (!currentUser) return;
+            
+            try {
+                const { data, error } = await supabase
+                    .from('user_data')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                if (data && data.data) {
+                    // Merge with existing studentData
+                    Object.assign(studentData, data.data);
+                    studentData.user_id = currentUser.id;
+                    
+                    // Initialize academic data if not present
+                    if (!studentData.academic) {
+                        studentData.academic = {
+                            studyHours: 0,
+                            predictedGPA: 3.6,
+                            nextExam: "Biology in 5 days",
+                            courses: sampleCourses,
+                            assignments: sampleAssignments,
+                            notes: []
+                        };
+                    }
+                    
+                    // Update UI with loaded data
+                    updateStudyProgress();
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        // Update header UI
+        function updateHeaderUI() {
+            const userProfileDiv = document.getElementById('user-profile');
+            const loginButton = document.getElementById('login-button');
+            
+            if (userProfileDiv) userProfileDiv.classList.remove('hidden');
+            if (loginButton) loginButton.style.display = 'none';
+        }
+        
+        // Setup navigation
+        function setupNavigation() {
+            // Mobile menu toggle
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (mobileToggle && navLinks) {
+                mobileToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        }
+        
+        // Load courses
+        function loadCourses() {
+            const container = document.getElementById('course-list');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const courses = studentData.academic?.courses || sampleCourses;
+            
+            courses.forEach(course => {
+                const courseDiv = document.createElement('div');
+                courseDiv.className = 'course-item';
+                courseDiv.innerHTML = `
+                    <h4>${course.name}</h4>
+                    <p><small>${course.code} • ${course.credits} credits</small></p>
+                    <div class="progress-container mt-2">
+                        <div class="progress-bar" style="width: ${course.grade}%; background-color: ${course.color}"></div>
+                    </div>
+                    <div class="mt-2" style="display: flex; justify-content: space-between;">
+                        <span>Grade:</span>
+                        <span class="course-grade">${course.grade}%</span>
+                    </div>
+                `;
+                container.appendChild(courseDiv);
+            });
+        }
+        
+        // Load assignments
+        function loadAssignments() {
+            const container = document.getElementById('assignment-list');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const assignments = studentData.academic?.assignments || sampleAssignments;
+            
+            // Filter to show only incomplete assignments
+            const incompleteAssignments = assignments.filter(a => !a.completed);
+            
+            if (incompleteAssignments.length === 0) {
+                container.innerHTML = '<p class="text-center">No upcoming assignments!</p>';
+                return;
+            }
+            
+            // Sort by due date (earliest first)
+            const sortedAssignments = [...incompleteAssignments].sort((a, b) => 
+                new Date(a.dueDate) - new Date(b.dueDate)
+            ).slice(0, 5); // Show only 5 most urgent
+            
+            sortedAssignments.forEach(assignment => {
+                const assignmentDiv = document.createElement('div');
+                assignmentDiv.className = 'assignment-item';
+                assignmentDiv.innerHTML = `
+                    <div>
+                        <strong>${assignment.title}</strong>
+                        <div class="assignment-due">${assignment.course} • Due: ${formatDate(assignment.dueDate)}</div>
+                    </div>
+                    <div>
+                        <span class="assignment-priority priority-${assignment.priority}">
+                            ${assignment.priority.toUpperCase()}
+                        </span>
+                        <button class="btn" style="padding: 0.3rem 0.8rem; margin-left: 0.5rem;" onclick="completeAssignment(${assignment.id})">
+                            ✓
+                        </button>
+                    </div>
+                `;
+                container.appendChild(assignmentDiv);
+            });
+        }
+        
+        // Update study hours display
+        function updateStudyHours() {
+            const value = document.getElementById('study-hours').value;
+            document.getElementById('hours-display').textContent = `${value} hours`;
+        }
+        
+        // Update weekly study display
+        function updateWeeklyStudy() {
+            const value = document.getElementById('weekly-study').value;
+            document.getElementById('weekly-study-display').textContent = `${value} hours`;
+        }
+        
+        // Update attendance display
+        function updateAttendance() {
+            const value = document.getElementById('attendance').value;
+            document.getElementById('attendance-display').textContent = `${value}%`;
+        }
+        
+        // Update assignment completion display
+        function updateAssignmentCompletion() {
+            const value = document.getElementById('assignment-completion').value;
+            document.getElementById('assignment-completion-display').textContent = `${value}%`;
+        }
+        
+        // Log study session
+        async function logStudySession() {
+            const topic = document.getElementById('study-topic').value.trim();
+            const hours = parseFloat(document.getElementById('study-hours').value);
+            
+            if (!topic) {
+                alert('Please enter a study topic.');
+                return;
+            }
+            
+            if (hours <= 0) {
+                alert('Please enter valid study hours.');
+                return;
+            }
+            
+            // Update weekly study hours
+            const currentHours = parseFloat(document.getElementById('weekly-study-hours').textContent) || 0;
+            const newTotal = currentHours + hours;
+            document.getElementById('weekly-study-hours').textContent = newTotal.toFixed(1);
+            
+            // Update progress bar
+            const progressPercent = Math.min(100, (newTotal / 15) * 100);
+            document.getElementById('study-progress').style.width = `${progressPercent}%`;
+            
+            // Save to studentData
+            if (!studentData.academic) studentData.academic = {};
+            studentData.academic.studyHours = newTotal;
+            
+            // Save data
+            await saveAcademicData();
+            
+            alert(`Study session logged: ${hours} hours on "${topic}"`);
+            
+            // Reset form
+            document.getElementById('study-topic').value = '';
+            document.getElementById('study-hours').value = '2';
+            document.getElementById('hours-display').textContent = '2 hours';
+        }
+        
+        // Update study progress
+        function updateStudyProgress() {
+            const studyHours = studentData.academic?.studyHours || 0;
+            document.getElementById('weekly-study-hours').textContent = studyHours.toFixed(1);
+            
+            const progressPercent = Math.min(100, (studyHours / 15) * 100);
+            document.getElementById('study-progress').style.width = `${progressPercent}%`;
+        }
+        
+        // Predict grade
+        function predictGrade() {
+            const weeklyStudy = parseFloat(document.getElementById('weekly-study').value);
+            const attendance = parseFloat(document.getElementById('attendance').value);
+            const assignmentCompletion = parseFloat(document.getElementById('assignment-completion').value);
+            const currentGrade = parseFloat(document.getElementById('current-grade').value);
+            
+            // Calculate predicted grade
+            let predictedGrade = currentGrade;
+            predictedGrade += (weeklyStudy - 15) * 0.2; // +0.2% per hour above 15
+            predictedGrade += (attendance - 85) * 0.1; // +0.1% per % above 85
+            predictedGrade += (assignmentCompletion - 90) * 0.15; // +0.15% per % above 90
+            
+            // Cap between 0 and 100
+            predictedGrade = Math.max(0, Math.min(100, predictedGrade));
+            
+            // Determine letter grade
+            let letterGrade, feedback;
+            if (predictedGrade >= 90) {
+                letterGrade = 'A';
+                feedback = 'Excellent! Keep up the great work.';
+            } else if (predictedGrade >= 80) {
+                letterGrade = 'B';
+                feedback = 'Good job! You\'re on track for solid performance.';
+            } else if (predictedGrade >= 70) {
+                letterGrade = 'C';
+                feedback = 'You\'re passing, but consider increasing study time.';
+            } else if (predictedGrade >= 60) {
+                letterGrade = 'D';
+                feedback = 'Consider seeking tutoring or academic support.';
+            } else {
+                letterGrade = 'F';
+                feedback = 'Immediate action needed. Reach out to your professor.';
+            }
+            
+            // Update UI
+            const resultDiv = document.getElementById('prediction-result');
+            document.getElementById('predicted-grade').textContent = predictedGrade.toFixed(1);
+            document.getElementById('letter-grade').textContent = letterGrade;
+            document.getElementById('grade-progress-bar').style.width = `${predictedGrade}%`;
+            document.getElementById('performance-feedback').textContent = feedback;
+            
+            resultDiv.style.display = 'block';
+            
+            // Scroll to result
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Summarize notes
+        function summarizeNotes() {
+            const noteInput = document.getElementById('note-input').value.trim();
+            const summaryDiv = document.getElementById('note-summary');
+            const resultDiv = document.getElementById('summary-result');
+            
+            if (!noteInput) {
+                alert('Please enter some notes to summarize.');
+                return;
+            }
+            
+            // Show loading
+            summaryDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating summary...';
+            resultDiv.style.display = 'block';
+            
+            // Simulate API call with timeout
+            setTimeout(() => {
+                // Simple summarization logic
+                const sentences = noteInput.split(/[.!?]+/).filter(s => s.trim().length > 0);
+                const summary = sentences.length > 2 
+                    ? `${sentences[0].trim()}. ${sentences[Math.floor(sentences.length/2)].trim()}. ${sentences[sentences.length-1].trim()}.`
+                    : noteInput;
+                
+                summaryDiv.textContent = summary;
+            }, 1000);
+        }
+        
+        // Complete assignment
+        async function completeAssignment(assignmentId) {
+            if (!studentData.academic?.assignments) return;
+            
+            const assignmentIndex = studentData.academic.assignments.findIndex(a => a.id === assignmentId);
+            if (assignmentIndex !== -1) {
+                studentData.academic.assignments[assignmentIndex].completed = true;
+                
+                // Save data
+                await saveAcademicData();
+                
+                // Reload assignments
+                loadAssignments();
+                
+                alert('Assignment marked as complete!');
+            }
+        }
+        
+        // Show add course form
+        function showAddCourseForm() {
+            const name = prompt('Enter course name:');
+            if (!name) return;
+            
+            const code = prompt('Enter course code:') || '';
+            const credits = parseFloat(prompt('Enter number of credits:') || '3');
+            const grade = parseFloat(prompt('Enter current grade (%):') || '0');
+            
+            const newCourse = {
+                id: Date.now(),
+                name,
+                code,
+                credits,
+                grade,
+                color: getRandomColor()
+            };
+            
+            // Add to courses
+            if (!studentData.academic) studentData.academic = {};
+            if (!studentData.academic.courses) studentData.academic.courses = [];
+            studentData.academic.courses.push(newCourse);
+            
+            // Update UI
+            loadCourses();
+            
+            // Save data
+            saveAcademicData();
+            
+            alert('Course added successfully!');
+        }
+        
+        // Show add assignment form
+        function showAddAssignmentForm() {
+            const title = prompt('Enter assignment title:');
+            if (!title) return;
+            
+            const course = prompt('Enter course name:') || '';
+            const dueDate = prompt('Enter due date (YYYY-MM-DD):') || new Date().toISOString().split('T')[0];
+            const priority = prompt('Enter priority (high/medium/low):') || 'medium';
+            
+            const newAssignment = {
+                id: Date.now(),
+                title,
+                course,
+                dueDate,
+                priority: priority.toLowerCase(),
+                completed: false
+            };
+            
+            // Add to assignments
+            if (!studentData.academic) studentData.academic = {};
+            if (!studentData.academic.assignments) studentData.academic.assignments = [];
+            studentData.academic.assignments.push(newAssignment);
+            
+            // Update UI
+            loadAssignments();
+            
+            // Save data
+            saveAcademicData();
+            
+            alert('Assignment added successfully!');
+        }
+        
+        // Open note summarizer
+        function openNoteSummarizer() {
+            document.getElementById('note-input').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('note-input').focus();
+        }
+        
+        // Open quiz generator
+        function openQuizGenerator() {
+            alert('Quiz generator feature coming soon!');
+        }
+        
+        // Open flashcards
+        function openFlashcards() {
+            alert('Flashcards feature coming soon!');
+        }
+        
+        // Open study timer
+        function openStudyTimer() {
+            alert('Study timer feature coming soon!');
+        }
+        
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric'
+            });
+        }
+        
+        // Get random color
+        function getRandomColor() {
+            const colors = ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0', '#F44336', '#00BCD4'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        // Save academic data
+        async function saveAcademicData() {
+            if (!currentUser) return;
+            
+            try {
+                const dataToSave = {
+                    user_id: currentUser.id,
+                    data: studentData,
+                    updated_at: new Date().toISOString()
+                };
+                
+                // Check if data exists
+                const { data: existing } = await supabase
+                    .from('user_data')
+                    .select('id')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                if (existing) {
+                    // Update existing
+                    await supabase
+                        .from('user_data')
+                        .update(dataToSave)
+                        .eq('user_id', currentUser.id);
+                } else {
+                    // Insert new
+                    await supabase
+                        .from('user_data')
+                        .insert([dataToSave]);
+                }
+                
+                // Also save to localStorage as backup
+                const key = `studentData_${currentUser.id}`;
+                localStorage.setItem(key, JSON.stringify(studentData));
+            } catch (error) {
+                console.error('Error saving academic data:', error);
+            }
+        }
+        
+        // Profile settings modal
+        function showProfileSettings() {
+            alert('Profile settings feature coming soon!');
+        }
+        
+        // My data modal
+        function showMyData() {
+            alert('Data management feature coming soon!');
+        }
+        
+        // Sign out
+        async function signOut() {
+            try {
+                await supabase.auth.signOut();
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+            }
+        }
+        
+        // Expose functions to global scope
+        window.updateStudyHours = updateStudyHours;
+        window.updateWeeklyStudy = updateWeeklyStudy;
+        window.updateAttendance = updateAttendance;
+        window.updateAssignmentCompletion = updateAssignmentCompletion;
+        window.logStudySession = logStudySession;
+        window.predictGrade = predictGrade;
+        window.summarizeNotes = summarizeNotes;
+        window.completeAssignment = completeAssignment;
+        window.showAddCourseForm = showAddCourseForm;
+        window.showAddAssignmentForm = showAddAssignmentForm;
+        window.openNoteSummarizer = openNoteSummarizer;
+        window.openQuizGenerator = openQuizGenerator;
+        window.openFlashcards = openFlashcards;
+        window.openStudyTimer = openStudyTimer;
+        window.showProfileSettings = showProfileSettings;
+        window.showMyData = showMyData;
+        window.signOut = signOut;
+    </script>
+</body>
+</html>

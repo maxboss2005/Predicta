@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Compass | All-in-One Student Support</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Campus Compass</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="financial.html">Financial</a></li>
+                    <li><a href="academic.html">Academic</a></li>
+                    <li><a href="emotional.html">Emotional</a></li>
+                    <li><a href="spiritual.html">Spiritual</a></li>
+                    <li><a href="health.html">Health</a></li>
+                    <li><a href="career.html">Career</a></li>
+                </ul>
+                
+                <div class="auth-controls">
+                    <div id="user-profile" class="profile-dropdown hidden">
+                        <div class="user-profile">
+                            <div class="user-avatar" id="header-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="user-info">
+                                <span class="user-name" id="header-username">User</span>
+                                <span class="user-email" id="header-useremail">user@example.com</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item" onclick="showProfileSettings()">
+                                <i class="fas fa-user-cog"></i> Profile Settings
+                            </a>
+                            <a href="#" class="dropdown-item" onclick="showMyData()">
+                                <i class="fas fa-database"></i> My Data
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" onclick="signOut()">
+                                <i class="fas fa-sign-out-alt"></i> Sign Out
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <button id="login-button" class="login-btn" onclick="window.location.href='login.html'">Sign In</button>
+                    
+                    <div class="mobile-toggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Your All-in-One Student Success Platform</h1>
+                <p>Master your finances, academics, health, career, and personal growth with our comprehensive suite of tools designed specifically for students.</p>
+                <a href="dashboard.html" class="cta-button">Explore Dashboard</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Overview Section -->
+        <section id="overview">
+            <div class="section-title">
+                <h2>Why Choose Campus Compass?</h2>
+            </div>
+            
+            <div class="dashboard">
+                <!-- Feature Cards -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-wallet"></i>
+                        <h3>Financial Management</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Track expenses, create budgets, and set savings goals to manage your finances effectively.</p>
+                        <a href="financial.html" class="btn mt-2">Get Started</a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-book-open"></i>
+                        <h3>Academic Tools</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Study planners, note summarizers, and grade predictors to excel in your academics.</p>
+                        <a href="academic.html" class="btn mt-2">Explore Tools</a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-heartbeat"></i>
+                        <h3>Health & Wellness</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Track your fitness, nutrition, sleep, and mental wellbeing with our health tools.</p>
+                        <a href="health.html" class="btn mt-2">Start Tracking</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional Features -->
+            <div class="features">
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <h3>Emotional Support</h3>
+                        <p>Get guidance for relationships, decisions, and emotional wellbeing.</p>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-pray"></i>
+                        </div>
+                        <h3>Spiritual Growth</h3>
+                        <p>Daily Bible verses, study plans, and spiritual tracking tools.</p>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h3>Career Guidance</h3>
+                        <p>Career assessments, learning paths, and job preparation tools.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Campus Compass</h3>
+                    <p>A comprehensive platform designed to support students in all aspects of their academic and personal journey.</p>
+                    <p>Empowering students to achieve balance and success.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="financial.html">Financial Tools</a></li>
+                        <li><a href="academic.html">Academic Resources</a></li>
+                        <li><a href="health.html">Health & Wellness</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="alert('Help Center coming soon!')">Help Center</a></li>
+                        <li><a href="mailto:support@campuscompass.edu">Contact Us</a></li>
+                        <li><a href="#" onclick="alert('Privacy policy loaded')">Privacy Policy</a></li>
+                        <li><a href="#" onclick="alert('Terms of service loaded')">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Campus Compass. All rights reserved. Designed for student success.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // Initialize navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            document.querySelector('.mobile-toggle').addEventListener('click', function() {
+                document.querySelector('.nav-links').classList.toggle('active');
+            });
+            
+            // Check auth status
+            checkAuthStatus();
+        });
+        
+        async function checkAuthStatus() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                updateUserUI(session.user);
+            }
+        }
+    </script>
+</body>
+</html>

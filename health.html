@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health & Wellness | Campus Compass</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .health-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .health-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+        }
+        
+        .health-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .fitness-tracker {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .workout-log {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .nutrition-tracker {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .food-log {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+        
+        .water-tracker {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .water-glasses {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .water-glass {
+            width: 50px;
+            height: 50px;
+            background: #4fc3f7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .water-glass.filled {
+            background: #0288d1;
+        }
+        
+        .sleep-tracker {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .sleep-log {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .mental-health {
+            background: linear-gradient(135deg, #ffecb3 0%, #ffd54f 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .stress-level {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .stress-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .stress-dot.low { background: #4CAF50; }
+        .stress-dot.medium { background: #FFC107; }
+        .stress-dot.high { background: #F44336; }
+        
+        .health-tips {
+            background: #f5f5f5;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .tip-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .health-goals {
+            background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .goal-item {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .health-charts {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Campus Compass</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="financial.html">Financial</a></li>
+                    <li><a href="academic.html">Academic</a></li>
+                    <li><a href="emotional.html">Emotional</a></li>
+                    <li><a href="spiritual.html">Spiritual</a></li>
+                    <li><a href="health.html" class="active">Health</a></li>
+                    <li><a href="career.html">Career</a></li>
+                </ul>
+                
+                <div class="auth-controls">
+                    <div id="user-profile" class="profile-dropdown hidden">
+                        <div class="user-profile">
+                            <div class="user-avatar" id="header-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="user-info">
+                                <span class="user-name" id="header-username">User</span>
+                                <span class="user-email" id="header-useremail">user@example.com</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item" onclick="showProfileSettings()">
+                                <i class="fas fa-user-cog"></i> Profile Settings
+                            </a>
+                            <a href="#" class="dropdown-item" onclick="showMyData()">
+                                <i class="fas fa-database"></i> My Data
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" onclick="signOut()">
+                                <i class="fas fa-sign-out-alt"></i> Sign Out
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <button id="login-button" class="login-btn" onclick="window.location.href='login.html'">Sign In</button>
+                    
+                    <div class="mobile-toggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Page Header -->
+        <section class="hero" style="background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); margin-bottom: 2rem;">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Health & Wellness</h1>
+                    <p>Track your fitness, nutrition, sleep, and mental wellbeing for optimal academic performance.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Health Overview -->
+        <section>
+            <h2>Your Health Dashboard</h2>
+            <div class="health-overview">
+                <div class="health-card">
+                    <div class="health-icon" style="color: #4CAF50;">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <h3>Weekly Exercise</h3>
+                    <p class="stat-value" id="exercise-minutes">0</p>
+                    <p class="stat-label">Minutes this week</p>
+                </div>
+                
+                <div class="health-card">
+                    <div class="health-icon" style="color: #2196F3;">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <h3>Water Intake</h3>
+                    <p class="stat-value" id="water-today">0</p>
+                    <p class="stat-label">Glasses today</p>
+                </div>
+                
+                <div class="health-card">
+                    <div class="health-icon" style="color: #9C27B0;">
+                        <i class="fas fa-bed"></i>
+                    </div>
+                    <h3>Sleep Average</h3>
+                    <p class="stat-value" id="sleep-average">0</p>
+                    <p class="stat-label">Hours per night</p>
+                </div>
+                
+                <div class="health-card">
+                    <div class="health-icon" style="color: #FF9800;">
+                        <i class="fas fa-apple-alt"></i>
+                    </div>
+                    <h3>Nutrition Score</h3>
+                    <p class="stat-value" id="nutrition-score">0</p>
+                    <p class="stat-label">Out of 10</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fitness Tracker -->
+        <section class="fitness-tracker">
+            <h2><i class="fas fa-dumbbell"></i> Fitness Tracker</h2>
+            <p>Log your workouts and track your fitness progress.</p>
+            
+            <div class="form-group">
+                <label for="workout-type">Workout Type</label>
+                <select id="workout-type" class="form-control">
+                    <option value="cardio">Cardio</option>
+                    <option value="strength">Strength Training</option>
+                    <option value="yoga">Yoga/Pilates</option>
+                    <option value="sports">Sports</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="workout-duration">Duration (minutes)</label>
+                <input type="number" id="workout-duration" class="form-control" min="1" max="300" value="30">
+            </div>
+            
+            <div class="form-group">
+                <label for="workout-intensity">Intensity Level</label>
+                <select id="workout-intensity" class="form-control">
+                    <option value="light">Light</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="vigorous">Vigorous</option>
+                </select>
+            </div>
+            
+            <button class="btn" onclick="logWorkout()">
+                <i class="fas fa-plus"></i> Log Workout
+            </button>
+            
+            <div class="mt-3">
+                <h4>Today's Workouts</h4>
+                <div id="todays-workouts">
+                    <!-- Today's workouts will be listed here -->
+                </div>
+            </div>
+            
+            <div class="mt-3">
+                <h4>Weekly Goal Progress</h4>
+                <p>Goal: 150 minutes of moderate exercise</p>
+                <div class="progress-container">
+                    <div class="progress-bar" id="exercise-progress" style="width: 0%"></div>
+                </div>
+                <p class="text-center"><span id="weekly-exercise">0</span>/150 minutes</p>
+            </div>
+        </section>
+
+        <!-- Nutrition Tracker -->
+        <section class="nutrition-tracker">
+            <h2><i class="fas fa-utensils"></i> Nutrition Tracker</h2>
+            <p>Track your meals and maintain healthy eating habits.</p>
+            
+            <div class="form-group">
+                <label for="meal-type">Meal Type</label>
+                <select id="meal-type" class="form-control">
+                    <option value="breakfast">Breakfast</option>
+                    <option value="lunch">Lunch</option>
+                    <option value="dinner">Dinner</option>
+                    <option value="snack">Snack</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="meal-description">What did you eat?</label>
+                <textarea id="meal-description" class="form-control" rows="2" placeholder="Describe your meal..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="meal-rating">How healthy was this meal?</label>
+                <select id="meal-rating" class="form-control">
+                    <option value="1">Not healthy</option>
+                    <option value="2">Somewhat healthy</option>
+                    <option value="3" selected>Moderately healthy</option>
+                    <option value="4">Very healthy</option>
+                    <option value="5">Extremely healthy</option>
+                </select>
+            </div>
+            
+            <button class="btn" onclick="logMeal()">
+                <i class="fas fa-plus"></i> Log Meal
+            </button>
+            
+            <div class="mt-3">
+                <h4>Today's Meals</h4>
+                <div id="todays-meals">
+                    <!-- Today's meals will be listed here -->
+                </div>
+            </div>
+            
+            <div class="mt-3">
+                <h4>Daily Nutrition Score</h4>
+                <div class="progress-container">
+                    <div class="progress-bar" id="nutrition-progress" style="width: 0%"></div>
+                </div>
+                <p class="text-center"><span id="nutrition-display">0</span>/10</p>
+            </div>
+        </section>
+
+        <!-- Water Tracker -->
+        <section class="water-tracker">
+            <h2><i class="fas fa-tint"></i> Water Intake Tracker</h2>
+            <p>Stay hydrated for better focus and energy.</p>
+            
+            <div class="water-glasses" id="water-glasses-container">
+                <!-- Water glasses will be generated here -->
+            </div>
+            
+            <p>Goal: 8 glasses per day</p>
+            
+            <div class="mt-3">
+                <button class="btn" onclick="addWaterGlass()">
+                    <i class="fas fa-plus"></i> Add Glass of Water
+                </button>
+                <button class="btn btn-outline" onclick="resetWaterTracker()">
+                    <i class="fas fa-redo"></i> Reset Day
+                </button>
+            </div>
+            
+            <div class="mt-3">
+                <div class="progress-container">
+                    <div class="progress-bar" id="water-progress" style="width: 0%"></div>
+                </div>
+                <p class="text-center"><span id="water-count">0</span>/8 glasses</p>
+            </div>
+        </section>
+
+        <!-- Sleep Tracker -->
+        <section class="sleep-tracker">
+            <h2><i class="fas fa-bed"></i> Sleep Tracker</h2>
+            <p>Track your sleep patterns for better academic performance.</p>
+            
+            <div class="form-group">
+                <label for="sleep-hours">How many hours did you sleep last night?</label>
+                <input type="number" id="sleep-hours" class="form-control" min="0" max="12" step="0.5" value="7.5" onchange="updateSleepDisplay()">
+                <span id="sleep-hours-display">7.5 hours</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="sleep-quality">Sleep Quality</label>
+                <select id="sleep-quality" class="form-control">
+                    <option value="1">Very Poor</option>
+                    <option value="2">Poor</option>
+                    <option value="3" selected>Fair</option>
+                    <option value="4">Good</option>
+                    <option value="5">Excellent</option>
+                </select>
+            </div>
+            
+            <button class="btn" onclick="logSleep()">
+                <i class="fas fa-save"></i> Log Sleep
+            </button>
+            
+            <div class="mt-3">
+                <h4>Weekly Sleep Average</h4>
+                <p>Average: <span id="weekly-sleep-average">0</span> hours per night</p>
+                <div class="progress-container">
+                    <div class="progress-bar" id="sleep-progress-bar" style="width: 0%"></div>
+                </div>
+                <p id="sleep-feedback">Recommended: 7-9 hours for optimal learning</p>
+            </div>
+        </section>
+
+        <!-- Mental Health -->
+        <section class="mental-health">
+            <h2><i class="fas fa-brain"></i> Mental Wellbeing</h2>
+            <p>Monitor your stress levels and practice mindfulness.</p>
+            
+            <div class="form-group">
+                <label>Today's Stress Level</label>
+                <div class="stress-level">
+                    <div class="stress-dot low" title="Low Stress" onclick="setStressLevel('low')"></div>
+                    <span>Low</span>
+                    
+                    <div class="stress-dot medium" title="Medium Stress" onclick="setStressLevel('medium')"></div>
+                    <span>Medium</span>
+                    
+                    <div class="stress-dot high" title="High Stress" onclick="setStressLevel('high')"></div>
+                    <span>High</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="stress-notes">Notes (Optional)</label>
+                <textarea id="stress-notes" class="form-control" rows="2" placeholder="What's causing stress? How are you coping?"></textarea>
+            </div>
+            
+            <button class="btn" onclick="logStressLevel()">
+                <i class="fas fa-save"></i> Log Stress Level
+            </button>
+            
+            <div class="mt-3">
+                <h4>Mindfulness Exercise</h4>
+                <p>Take 5 deep breaths: Inhale for 4 seconds, hold for 4, exhale for 6.</p>
+                <button class="btn btn-outline" onclick="startMindfulnessExercise()">
+                    <i class="fas fa-wind"></i> Start Breathing Exercise
+                </button>
+            </div>
+        </section>
+
+        <!-- Health Charts -->
+        <section class="health-charts">
+            <h2><i class="fas fa-chart-bar"></i> Health Trends</h2>
+            <p>Your health patterns over the last 7 days</p>
+            
+            <div class="chart-container">
+                <canvas id="healthChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Health Goals -->
+        <section class="health-goals">
+            <h2><i class="fas fa-bullseye"></i> Health Goals</h2>
+            <p>Set and track your health objectives.</p>
+            
+            <div class="form-group">
+                <label for="new-goal">New Health Goal</label>
+                <input type="text" id="new-goal" class="form-control" placeholder="e.g., Walk 10,000 steps daily">
+            </div>
+            
+            <button class="btn" onclick="addHealthGoal()">
+                <i class="fas fa-plus"></i> Add Goal
+            </button>
+            
+            <div class="mt-3" id="health-goals-list">
+                <!-- Health goals will be listed here -->
+            </div>
+        </section>
+
+        <!-- Health Tips -->
+        <section class="health-tips">
+            <h2><i class="fas fa-lightbulb"></i> Student Health Tips</h2>
+            <p>Practical advice for staying healthy in college.</p>
+            
+            <div class="tip-card">
+                <h4><i class="fas fa-apple-alt"></i> Healthy Snacking</h4>
+                <p>Keep healthy snacks like nuts, fruits, and yogurt in your dorm to avoid vending machine temptations.</p>
+            </div>
+            
+            <div class="tip-card">
+                <h4><i class="fas fa-walking"></i> Active Studying</h4>
+                <p>Try walking while reviewing flashcards or standing while reading to reduce sedentary time.</p>
+            </div>
+            
+            <div class="tip-card">
+                <h4><i class="fas fa-clock"></i> Sleep Schedule</h4>
+                <p>Try to maintain a consistent sleep schedule, even on weekends, for better sleep quality.</p>
+            </div>
+            
+            <div class="tip-card">
+                <h4><i class="fas fa-users"></i> Social Wellness</h4>
+                <p>Join a sports team or fitness class to combine social connection with physical activity.</p>
+            </div>
+            
+            <button class="btn btn-outline mt-3" onclick="showMoreTips()">
+                <i class="fas fa-random"></i> Show Another Tip
+            </button>
+        </section>
+
+        <!-- Campus Resources -->
+        <section>
+            <div class="card mt-4">
+                <div class="card-header" style="background-color: var(--primary);">
+                    <i class="fas fa-university"></i>
+                    <h3>Campus Health Resources</h3>
+                </div>
+                <div class="card-body">
+                    <div class="feature-item">
+                        <h4><i class="fas fa-clinic-medical"></i> Health Center</h4>
+                        <p>Visit your campus health center for medical consultations, vaccinations, and wellness checks.</p>
+                        <a href="#" class="btn btn-outline btn-sm" onclick="alert('Contact your campus health center for appointments.')">Learn More</a>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <h4><i class="fas fa-user-md"></i> Counseling Services</h4>
+                        <p>Most campuses offer free or low-cost mental health counseling for students.</p>
+                        <a href="#" class="btn btn-outline btn-sm" onclick="alert('Check your university website for counseling services.')">Find Support</a>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <h4><i class="fas fa-dumbbell"></i> Campus Recreation</h4>
+                        <p>Use campus gyms, pools, and fitness classes often included in student fees.</p>
+                        <a href="#" class="btn btn-outline btn-sm" onclick="alert('Visit your campus recreation center website.')">Explore Facilities</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Campus Compass</h3>
+                    <p>Healthy students are successful students.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Health Tools</h3>
+                    <ul class="footer-links">
+                        <li><a href="#fitness-tracker">Fitness Tracker</a></li>
+                        <li><a href="#nutrition-tracker">Nutrition Tracker</a></li>
+                        <li><a href="#sleep-tracker">Sleep Tracker</a></li>
+                        <li><a href="#mental-health">Mental Wellbeing</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Campus Compass. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="data-manager.js"></script>
+    <script >
+        // Global variables
+        let currentUser = null;
+        let healthChart = null;
+        let selectedStressLevel = null;
+        
+        // Health data structure
+        const defaultHealthData = {
+            exerciseLog: [],
+            nutritionLog: [],
+            waterIntake: { today: 0, date: null },
+            sleepLog: [],
+            stressLog: [],
+            healthGoals: [],
+            weeklyExercise: 0
+        };
+        
+        // Health tips
+        const healthTips = window.healthTips || [
+            "Stay Hydrated: Drinking enough water improves concentration and prevents fatigue. Aim for 8 glasses a day, especially during study sessions.",
+            "Take regular breaks during study sessions. Try the 50/10 rule: 50 minutes of study, 10 minutes of movement.",
+            "Eat brain-boosting foods like nuts, berries, and fatty fish to improve concentration.",
+            "Practice deep breathing for 5 minutes when stressed. It lowers cortisol and improves focus.",
+            "Maintain good posture while studying to prevent back and neck pain.",
+            "Get sunlight exposure daily to regulate your circadian rhythm and improve mood.",
+            "Limit caffeine intake after 2 PM to ensure better sleep quality.",
+            "Incorporate strength training 2-3 times per week to boost energy and reduce stress.",
+            "Practice mindful eating by paying attention to your food without distractions.",
+            "Aim for 7-9 hours of sleep each night for optimal cognitive function."
+        ];
+        
+        // Sample health goals
+        const sampleHealthGoals = [
+            { id: 1, text: "Exercise 30 minutes daily", completed: false },
+            { id: 2, text: "Drink 8 glasses of water daily", completed: false },
+            { id: 3, text: "Get 7+ hours of sleep nightly", completed: false },
+            { id: 4, text: "Eat 5 servings of fruits/vegetables daily", completed: false }
+        ];
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            await initializePage();
+            setupNavigation();
+            initializeWaterTracker();
+            loadTodaysWorkouts();
+            loadTodaysMeals();
+            loadHealthGoals();
+            updateHealthOverview();
+            initializeHealthChart();
+        });
+        
+        // Initialize page
+        async function initializePage() {
+            // Check authentication
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (session && session.user) {
+                currentUser = session.user;
+                await loadUserData();
+                updateHeaderUI();
+            } else {
+                // Redirect to login if not authenticated
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // Load user data
+        async function loadUserData() {
+            if (!currentUser) return;
+            
+            try {
+                const { data, error } = await supabase
+                    .from('user_data')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                if (data && data.data) {
+                    // Merge with existing studentData
+                    Object.assign(studentData, data.data);
+                    studentData.user_id = currentUser.id;
+                    
+                    // Initialize health data if not present
+                    if (!studentData.health) {
+                        studentData.health = defaultHealthData;
+                    }
+                    
+                    // Update UI with loaded data
+                    updateHealthOverview();
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        // Update header UI
+        function updateHeaderUI() {
+            const userProfileDiv = document.getElementById('user-profile');
+            const loginButton = document.getElementById('login-button');
+            
+            if (userProfileDiv) userProfileDiv.classList.remove('hidden');
+            if (loginButton) loginButton.style.display = 'none';
+        }
+        
+        // Setup navigation
+        function setupNavigation() {
+            // Mobile menu toggle
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (mobileToggle && navLinks) {
+                mobileToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        }
+        
+        // Update health overview
+        function updateHealthOverview() {
+            // Exercise minutes
+            const weeklyExercise = calculateWeeklyExercise();
+            document.getElementById('exercise-minutes').textContent = weeklyExercise;
+            document.getElementById('weekly-exercise').textContent = weeklyExercise;
+            
+            const exerciseProgress = Math.min(100, (weeklyExercise / 150) * 100);
+            document.getElementById('exercise-progress').style.width = `${exerciseProgress}%`;
+            
+            // Water intake
+            const waterToday = studentData.health?.waterIntake?.today || 0;
+            document.getElementById('water-today').textContent = waterToday;
+            document.getElementById('water-count').textContent = waterToday;
+            
+            const waterProgress = (waterToday / 8) * 100;
+            document.getElementById('water-progress').style.width = `${waterProgress}%`;
+            
+            // Sleep average
+            const sleepAverage = calculateSleepAverage();
+            document.getElementById('sleep-average').textContent = sleepAverage.toFixed(1);
+            document.getElementById('weekly-sleep-average').textContent = sleepAverage.toFixed(1);
+            
+            const sleepProgress = Math.min(100, (sleepAverage / 9) * 100);
+            document.getElementById('sleep-progress-bar').style.width = `${sleepProgress}%`;
+            
+            // Nutrition score
+            const nutritionScore = calculateNutritionScore();
+            document.getElementById('nutrition-score').textContent = nutritionScore;
+            document.getElementById('nutrition-display').textContent = nutritionScore;
+            
+            const nutritionProgress = (nutritionScore / 10) * 100;
+            document.getElementById('nutrition-progress').style.width = `${nutritionProgress}%`;
+            
+            // Update sleep feedback
+            const sleepFeedback = document.getElementById('sleep-feedback');
+            if (sleepAverage >= 7 && sleepAverage <= 9) {
+                sleepFeedback.textContent = "Good job! You're getting adequate sleep for optimal academic performance.";
+                sleepFeedback.style.color = "#4CAF50";
+            } else if (sleepAverage >= 6) {
+                sleepFeedback.textContent = "You're getting enough sleep, but could benefit from an extra hour.";
+                sleepFeedback.style.color = "#FF9800";
+            } else {
+                sleepFeedback.textContent = "You're not getting enough sleep. Try to improve your sleep habits.";
+                sleepFeedback.style.color = "#F44336";
+            }
+        }
+        
+        // Calculate weekly exercise
+        function calculateWeeklyExercise() {
+            const exerciseLog = studentData.health?.exerciseLog || [];
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            
+            const weeklyExercises = exerciseLog.filter(workout => 
+                new Date(workout.date) >= oneWeekAgo
+            );
+            
+            return weeklyExercises.reduce((total, workout) => total + workout.duration, 0);
+        }
+        
+        // Calculate sleep average
+        function calculateSleepAverage() {
+            const sleepLog = studentData.health?.sleepLog || [];
+            if (sleepLog.length === 0) return 7.5;
+            
+            const last7Entries = sleepLog.slice(-7);
+            const totalHours = last7Entries.reduce((total, entry) => total + entry.hours, 0);
+            return totalHours / last7Entries.length;
+        }
+        
+        // Calculate nutrition score
+        function calculateNutritionScore() {
+            const nutritionLog = studentData.health?.nutritionLog || [];
+            const today = new Date().toISOString().split('T')[0];
+            const todaysMeals = nutritionLog.filter(meal => meal.date === today);
+            
+            if (todaysMeals.length === 0) return 0;
+            
+            const totalRating = todaysMeals.reduce((total, meal) => total + meal.rating, 0);
+            const averageRating = totalRating / todaysMeals.length;
+            
+            // Convert 1-5 scale to 0-10 scale
+            return Math.round((averageRating / 5) * 10);
+        }
+        
+        // Initialize water tracker
+        function initializeWaterTracker() {
+            const container = document.getElementById('water-glasses-container');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const waterToday = studentData.health?.waterIntake?.today || 0;
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Check if water tracker needs reset (new day)
+            if (studentData.health?.waterIntake?.date !== today) {
+                studentData.health.waterIntake = { today: 0, date: today };
+                saveHealthData();
+            }
+            
+            for (let i = 1; i <= 8; i++) {
+                const glass = document.createElement('div');
+                glass.className = `water-glass ${i <= waterToday ? 'filled' : ''}`;
+                glass.textContent = i;
+                glass.onclick = () => toggleWaterGlass(i);
+                container.appendChild(glass);
+            }
+        }
+        
+        // Toggle water glass
+        function toggleWaterGlass(glassNumber) {
+            const waterToday = studentData.health?.waterIntake?.today || 0;
+            
+            if (glassNumber <= waterToday) {
+                // Remove this glass and all glasses after it
+                studentData.health.waterIntake.today = glassNumber - 1;
+            } else {
+                // Add up to this glass
+                studentData.health.waterIntake.today = glassNumber;
+            }
+            
+            saveHealthData();
+            initializeWaterTracker();
+            updateHealthOverview();
+        }
+        
+        // Add water glass
+        function addWaterGlass() {
+            const waterToday = studentData.health?.waterIntake?.today || 0;
+            
+            if (waterToday < 8) {
+                studentData.health.waterIntake.today = waterToday + 1;
+                saveHealthData();
+                initializeWaterTracker();
+                updateHealthOverview();
+                
+                if (waterToday + 1 === 8) {
+                    alert('Congratulations! You reached your daily water goal!');
+                }
+            } else {
+                alert('You\'ve already reached your daily water goal!');
+            }
+        }
+        
+        // Reset water tracker
+        function resetWaterTracker() {
+            if (confirm('Reset water tracker for today?')) {
+                studentData.health.waterIntake.today = 0;
+                saveHealthData();
+                initializeWaterTracker();
+                updateHealthOverview();
+                alert('Water tracker reset for today.');
+            }
+        }
+        
+        // Update sleep display
+        function updateSleepDisplay() {
+            const hours = document.getElementById('sleep-hours').value;
+            document.getElementById('sleep-hours-display').textContent = `${hours} hours`;
+        }
+        
+        // Log workout
+        async function logWorkout() {
+            const type = document.getElementById('workout-type').value;
+            const duration = parseInt(document.getElementById('workout-duration').value);
+            const intensity = document.getElementById('workout-intensity').value;
+            
+            if (!duration || duration <= 0) {
+                alert('Please enter a valid duration.');
+                return;
+            }
+            
+            const workout = {
+                id: Date.now(),
+                date: new Date().toISOString().split('T')[0],
+                type,
+                duration,
+                intensity,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Add to exercise log
+            if (!studentData.health.exerciseLog) {
+                studentData.health.exerciseLog = [];
+            }
+            studentData.health.exerciseLog.push(workout);
+            
+            // Update weekly exercise total
+            studentData.health.weeklyExercise = calculateWeeklyExercise();
+            
+            // Save data
+            await saveHealthData();
+            
+            // Update UI
+            loadTodaysWorkouts();
+            updateHealthOverview();
+            updateHealthChart();
+            
+            // Reset form
+            document.getElementById('workout-duration').value = '30';
+            
+            alert(`Workout logged: ${duration} minutes of ${type}`);
+        }
+        
+        // Load today's workouts
+        function loadTodaysWorkouts() {
+            const container = document.getElementById('todays-workouts');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const exerciseLog = studentData.health?.exerciseLog || [];
+            const today = new Date().toISOString().split('T')[0];
+            const todaysWorkouts = exerciseLog.filter(workout => workout.date === today);
+            
+            if (todaysWorkouts.length === 0) {
+                container.innerHTML = '<p>No workouts logged today yet.</p>';
+                return;
+            }
+            
+            todaysWorkouts.forEach(workout => {
+                const workoutDiv = document.createElement('div');
+                workoutDiv.className = 'workout-log';
+                workoutDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between;">
+                        <div>
+                            <strong>${workout.type.charAt(0).toUpperCase() + workout.type.slice(1)}</strong>
+                            <div><small>${workout.intensity.charAt(0).toUpperCase() + workout.intensity.slice(1)} intensity</small></div>
+                        </div>
+                        <div>
+                            <strong>${workout.duration} min</strong>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(workoutDiv);
+            });
+        }
+        
+        // Log meal
+        async function logMeal() {
+            const type = document.getElementById('meal-type').value;
+            const description = document.getElementById('meal-description').value.trim();
+            const rating = parseInt(document.getElementById('meal-rating').value);
+            
+            if (!description) {
+                alert('Please describe your meal.');
+                return;
+            }
+            
+            const meal = {
+                id: Date.now(),
+                date: new Date().toISOString().split('T')[0],
+                type,
+                description,
+                rating,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Add to nutrition log
+            if (!studentData.health.nutritionLog) {
+                studentData.health.nutritionLog = [];
+            }
+            studentData.health.nutritionLog.push(meal);
+            
+            // Save data
+            await saveHealthData();
+            
+            // Update UI
+            loadTodaysMeals();
+            updateHealthOverview();
+            updateHealthChart();
+            
+            // Reset form
+            document.getElementById('meal-description').value = '';
+            document.getElementById('meal-rating').value = '3';
+            
+            alert('Meal logged successfully!');
+        }
+        
+        // Load today's meals
+        function loadTodaysMeals() {
+            const container = document.getElementById('todays-meals');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const nutritionLog = studentData.health?.nutritionLog || [];
+            const today = new Date().toISOString().split('T')[0];
+            const todaysMeals = nutritionLog.filter(meal => meal.date === today);
+            
+            if (todaysMeals.length === 0) {
+                container.innerHTML = '<p>No meals logged today yet.</p>';
+                return;
+            }
+            
+            todaysMeals.forEach(meal => {
+                const mealDiv = document.createElement('div');
+                mealDiv.className = 'food-log';
+                mealDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between;">
+                        <div>
+                            <strong>${meal.type.charAt(0).toUpperCase() + meal.type.slice(1)}</strong>
+                            <div><small>${meal.description}</small></div>
+                        </div>
+                        <div>
+                            <span style="color: ${getRatingColor(meal.rating)}; font-weight: 600;">
+                                ${'★'.repeat(meal.rating)}${'☆'.repeat(5-meal.rating)}
+                            </span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(mealDiv);
+            });
+        }
+        
+        // Get rating color
+        function getRatingColor(rating) {
+            switch(rating) {
+                case 1: return '#F44336';
+                case 2: return '#FF9800';
+                case 3: return '#FFC107';
+                case 4: return '#4CAF50';
+                case 5: return '#2E7D32';
+                default: return '#9E9E9E';
+            }
+        }
+        
+        // Log sleep
+        async function logSleep() {
+            const hours = parseFloat(document.getElementById('sleep-hours').value);
+            const quality = parseInt(document.getElementById('sleep-quality').value);
+            
+            if (!hours || hours <= 0) {
+                alert('Please enter valid sleep hours.');
+                return;
+            }
+            
+            const sleepEntry = {
+                id: Date.now(),
+                date: new Date().toISOString().split('T')[0],
+                hours,
+                quality,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Add to sleep log
+            if (!studentData.health.sleepLog) {
+                studentData.health.sleepLog = [];
+            }
+            
+            // Remove existing entry for today if it exists
+            studentData.health.sleepLog = studentData.health.sleepLog.filter(
+                entry => entry.date !== sleepEntry.date
+            );
+            
+            studentData.health.sleepLog.push(sleepEntry);
+            
+            // Save data
+            await saveHealthData();
+            
+            // Update UI
+            updateHealthOverview();
+            updateHealthChart();
+            
+            alert(`Sleep logged: ${hours} hours, quality: ${quality}/5`);
+        }
+        
+        // Set stress level
+        function setStressLevel(level) {
+            selectedStressLevel = level;
+            
+            // Highlight selected dot
+            document.querySelectorAll('.stress-dot').forEach(dot => {
+                dot.style.transform = 'scale(1)';
+                dot.style.boxShadow = 'none';
+            });
+            
+            event.target.style.transform = 'scale(1.2)';
+            event.target.style.boxShadow = '0 0 10px rgba(0,0,0,0.3)';
+        }
+        
+        // Log stress level
+        async function logStressLevel() {
+            if (!selectedStressLevel) {
+                alert('Please select a stress level first.');
+                return;
+            }
+            
+            const notes = document.getElementById('stress-notes').value.trim();
+            
+            const stressEntry = {
+                id: Date.now(),
+                date: new Date().toISOString().split('T')[0],
+                level: selectedStressLevel,
+                notes,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Add to stress log
+            if (!studentData.health.stressLog) {
+                studentData.health.stressLog = [];
+            }
+            studentData.health.stressLog.push(stressEntry);
+            
+            // Save data
+            await saveHealthData();
+            
+            // Reset form
+            selectedStressLevel = null;
+            document.getElementById('stress-notes').value = '';
+            document.querySelectorAll('.stress-dot').forEach(dot => {
+                dot.style.transform = 'scale(1)';
+                dot.style.boxShadow = 'none';
+            });
+            
+            alert('Stress level logged. Remember to practice self-care!');
+        }
+        
+        // Start mindfulness exercise
+        function startMindfulnessExercise() {
+            alert('Find a comfortable position. Close your eyes. Breathe in slowly for 4 seconds... Hold for 4 seconds... Exhale slowly for 6 seconds... Repeat 5 times. Notice how you feel afterwards.');
+        }
+        
+        // Load health goals
+        function loadHealthGoals() {
+            const container = document.getElementById('health-goals-list');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const goals = studentData.health?.healthGoals || sampleHealthGoals;
+            
+            if (goals.length === 0) {
+                container.innerHTML = '<p>No health goals set yet.</p>';
+                return;
+            }
+            
+            goals.forEach(goal => {
+                const goalDiv = document.createElement('div');
+                goalDiv.className = 'goal-item';
+                goalDiv.innerHTML = `
+                    <div>
+                        <h4 style="margin: 0; ${goal.completed ? 'text-decoration: line-through; color: #9E9E9E;' : ''}">
+                            ${goal.text}
+                        </h4>
+                    </div>
+                    <div>
+                        <button class="btn ${goal.completed ? 'btn-outline' : ''}" style="padding: 0.3rem 0.8rem;" onclick="toggleGoal(${goal.id})">
+                            ${goal.completed ? '↻' : '✓'}
+                        </button>
+                        <button class="btn" style="padding: 0.3rem 0.8rem; background-color: var(--danger);" onclick="deleteGoal(${goal.id})">
+                            ✗
+                        </button>
+                    </div>
+                `;
+                container.appendChild(goalDiv);
+            });
+        }
+        
+        // Add health goal
+        async function addHealthGoal() {
+            const goalText = document.getElementById('new-goal').value.trim();
+            
+            if (!goalText) {
+                alert('Please enter a goal.');
+                return;
+            }
+            
+            const newGoal = {
+                id: Date.now(),
+                text: goalText,
+                completed: false
+            };
+            
+            // Add to health goals
+            if (!studentData.health.healthGoals) {
+                studentData.health.healthGoals = [];
+            }
+            studentData.health.healthGoals.push(newGoal);
+            
+            // Save data
+            await saveHealthData();
+            
+            // Update UI
+            loadHealthGoals();
+            
+            // Reset form
+            document.getElementById('new-goal').value = '';
+            
+            alert('Health goal added!');
+        }
+        
+        // Toggle goal completion
+        async function toggleGoal(goalId) {
+            if (!studentData.health?.healthGoals) return;
+            
+            const goalIndex = studentData.health.healthGoals.findIndex(goal => goal.id === goalId);
+            if (goalIndex !== -1) {
+                studentData.health.healthGoals[goalIndex].completed = !studentData.health.healthGoals[goalIndex].completed;
+                
+                // Save data
+                await saveHealthData();
+                
+                // Update UI
+                loadHealthGoals();
+            }
+        }
+        
+        // Delete goal
+        async function deleteGoal(goalId) {
+            if (!confirm('Are you sure you want to delete this goal?')) {
+                return;
+            }
+            
+            if (!studentData.health?.healthGoals) return;
+            
+            studentData.health.healthGoals = studentData.health.healthGoals.filter(
+                goal => goal.id !== goalId
+            );
+            
+            // Save data
+            await saveHealthData();
+            
+            // Update UI
+            loadHealthGoals();
+            
+            alert('Goal deleted.');
+        }
+        
+        // Initialize health chart
+        function initializeHealthChart() {
+            const ctx = document.getElementById('healthChart').getContext('2d');
+            
+            // Get last 7 days of data
+            const last7Days = getLast7Days();
+            
+            // Prepare data
+            const labels = last7Days.map(day => day.label);
+            const exerciseData = last7Days.map(day => {
+                const workouts = studentData.health?.exerciseLog?.filter(workout => workout.date === day.date) || [];
+                return workouts.reduce((total, workout) => total + workout.duration, 0);
+            });
+            
+            const sleepData = last7Days.map(day => {
+                const sleep = studentData.health?.sleepLog?.find(entry => entry.date === day.date);
+                return sleep ? sleep.hours : null;
+            });
+            
+            const waterData = last7Days.map(day => {
+                // For water, we'd need to store historical data
+                return null;
+            });
+            
+            healthChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Exercise (min)',
+                            data: exerciseData,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Sleep (hours)',
+                            data: sleepData,
+                            borderColor: '#9C27B0',
+                            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update health chart
+        function updateHealthChart() {
+            if (!healthChart) return;
+            
+            const last7Days = getLast7Days();
+            
+            // Update labels
+            healthChart.data.labels = last7Days.map(day => day.label);
+            
+            // Update exercise data
+            healthChart.data.datasets[0].data = last7Days.map(day => {
+                const workouts = studentData.health?.exerciseLog?.filter(workout => workout.date === day.date) || [];
+                return workouts.reduce((total, workout) => total + workout.duration, 0);
+            });
+            
+            // Update sleep data
+            healthChart.data.datasets[1].data = last7Days.map(day => {
+                const sleep = studentData.health?.sleepLog?.find(entry => entry.date === day.date);
+                return sleep ? sleep.hours : null;
+            });
+            
+            healthChart.update();
+        }
+        
+        // Get last 7 days
+        function getLast7Days() {
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateString = date.toISOString().split('T')[0];
+                const label = date.toLocaleDateString('en-US', { weekday: 'short' });
+                days.push({ date: dateString, label });
+            }
+            return days;
+        }
+        
+        // Show more tips
+        function showMoreTips() {
+            const randomIndex = Math.floor(Math.random() * healthTips.length);
+            const tip = healthTips[randomIndex];
+            alert(tip);
+        }
+        
+        // Save health data
+        async function saveHealthData() {
+            if (!currentUser) return;
+            
+            try {
+                const dataToSave = {
+                    user_id: currentUser.id,
+                    data: studentData,
+                    updated_at: new Date().toISOString()
+                };
+                
+                // Check if data exists
+                const { data: existing } = await supabase
+                    .from('user_data')
+                    .select('id')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                if (existing) {
+                    // Update existing
+                    await supabase
+                        .from('user_data')
+                        .update(dataToSave)
+                        .eq('user_id', currentUser.id);
+                } else {
+                    // Insert new
+                    await supabase
+                        .from('user_data')
+                        .insert([dataToSave]);
+                }
+                
+                // Also save to localStorage as backup
+                const key = `studentData_${currentUser.id}`;
+                localStorage.setItem(key, JSON.stringify(studentData));
+            } catch (error) {
+                console.error('Error saving health data:', error);
+            }
+        }
+        
+        // Profile settings modal
+        function showProfileSettings() {
+            alert('Profile settings feature coming soon!');
+        }
+        
+        // My data modal
+        function showMyData() {
+            alert('Data management feature coming soon!');
+        }
+        
+        // Sign out
+        async function signOut() {
+            try {
+                await supabase.auth.signOut();
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+            }
+        }
+        
+        // Expose functions to global scope
+        window.toggleWaterGlass = toggleWaterGlass;
+        window.addWaterGlass = addWaterGlass;
+        window.resetWaterTracker = resetWaterTracker;
+        window.updateSleepDisplay = updateSleepDisplay;
+        window.logWorkout = logWorkout;
+        window.logMeal = logMeal;
+        window.logSleep = logSleep;
+        window.setStressLevel = setStressLevel;
+        window.logStressLevel = logStressLevel;
+        window.startMindfulnessExercise = startMindfulnessExercise;
+        window.addHealthGoal = addHealthGoal;
+        window.toggleGoal = toggleGoal;
+        window.deleteGoal = deleteGoal;
+        window.showMoreTips = showMoreTips;
+        window.showProfileSettings = showProfileSettings;
+        window.showMyData = showMyData;
+        window.signOut = signOut;
+    </script>
+</body>
+</html>

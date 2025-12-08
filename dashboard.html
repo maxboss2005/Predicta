@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Campus Compass</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .welcome-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-section h2 {
+            color: white;
+        }
+        
+        .recent-activities {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .activity-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: var(--primary);
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .module-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        
+        .module-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .goals-section {
+            background: #f0f7ff;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .goal-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: white;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+        }
+        
+        .goal-progress {
+            flex: 1;
+            margin: 0 1rem;
+        }
+        
+        .motivational-quote {
+            font-style: italic;
+            text-align: center;
+            color: var(--gray);
+            margin-top: 2rem;
+            padding: 1rem;
+            border-left: 3px solid var(--accent);
+            background: var(--light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Campus Compass</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                    <li><a href="financial.html">Financial</a></li>
+                    <li><a href="academic.html">Academic</a></li>
+                    <li><a href="emotional.html">Emotional</a></li>
+                    <li><a href="spiritual.html">Spiritual</a></li>
+                    <li><a href="health.html">Health</a></li>
+                    <li><a href="career.html">Career</a></li>
+                </ul>
+                
+                <div class="auth-controls">
+                    <div id="user-profile" class="profile-dropdown hidden">
+                        <div class="user-profile">
+                            <div class="user-avatar" id="header-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="user-info">
+                                <span class="user-name" id="header-username">User</span>
+                                <span class="user-email" id="header-useremail">user@example.com</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item" onclick="showProfileSettings()">
+                                <i class="fas fa-user-cog"></i> Profile Settings
+                            </a>
+                            <a href="#" class="dropdown-item" onclick="showMyData()">
+                                <i class="fas fa-database"></i> My Data
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" onclick="signOut()">
+                                <i class="fas fa-sign-out-alt"></i> Sign Out
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <button id="login-button" class="login-btn" onclick="window.location.href='login.html'">Sign In</button>
+                    
+                    <div class="mobile-toggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <h2 id="welcome-message">Welcome back!</h2>
+            <p>Here's your overview for today. You're making great progress!</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-study-hours">0</div>
+                    <div class="stat-label">Study Hours</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-budget">0%</div>
+                    <div class="stat-label">Budget Used</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-health">0%</div>
+                    <div class="stat-label">Health Goals</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-streak">0</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Stats -->
+        <section>
+            <h3>Quick Overview</h3>
+            <div class="quick-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h4>Financial Status</h4>
+                    <p>Budget Used: <span id="budget-used">0</span>%</p>
+                    <p>Remaining: $<span id="remaining-budget">0</span></p>
+                    <a href="financial.html" class="btn btn-outline mt-2">View Details</a>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h4>Academic Progress</h4>
+                    <p>Study Hours: <span id="study-hours">0</span></p>
+                    <p>Predicted GPA: <span id="predicted-gpa">0.0</span></p>
+                    <a href="academic.html" class="btn btn-outline mt-2">View Details</a>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h4>Health & Wellness</h4>
+                    <p>Exercise Days: <span id="exercise-days">0</span>/7</p>
+                    <p>Water Intake: <span id="water-glasses">0</span>/8 glasses</p>
+                    <a href="health.html" class="btn btn-outline mt-2">View Details</a>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-pray"></i>
+                    </div>
+                    <h4>Spiritual Growth</h4>
+                    <p>Current Streak: <span id="spiritual-streak">0</span> days</p>
+                    <p>Total Days: <span id="spiritual-total">0</span></p>
+                    <a href="spiritual.html" class="btn btn-outline mt-2">View Details</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Today's Tasks -->
+        <section>
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-tasks"></i>
+                    <h3>Today's Tasks</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <input type="text" id="new-task" class="form-control" placeholder="Add a new task...">
+                    </div>
+                    <button class="btn" onclick="addTask()">Add Task</button>
+                    
+                    <ul class="task-list" id="task-list">
+                        <!-- Tasks will be loaded here -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Access Modules -->
+        <section>
+            <h3>Quick Access</h3>
+            <div class="module-grid">
+                <div class="module-card" onclick="window.location.href='financial.html'">
+                    <div class="module-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h4>Budget Planner</h4>
+                    <p>Track expenses and manage your budget</p>
+                </div>
+                
+                <div class="module-card" onclick="window.location.href='academic.html'">
+                    <div class="module-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h4>Note Summarizer</h4>
+                    <p>Summarize your notes for quick review</p>
+                </div>
+                
+                <div class="module-card" onclick="window.location.href='emotional.html'">
+                    <div class="module-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h4>Mood Tracker</h4>
+                    <p>Track your daily emotions</p>
+                </div>
+                
+                <div class="module-card" onclick="window.location.href='career.html'">
+                    <div class="module-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h4>Career Assessment</h4>
+                    <p>Discover your career path</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Activities -->
+        <section class="recent-activities">
+            <h3>Recent Activities</h3>
+            <ul class="activity-list" id="activity-list">
+                <li class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="activity-content">
+                        <strong>Studied for Biology exam</strong>
+                        <p>Completed 2 hours of focused study</p>
+                    </div>
+                    <div class="activity-time">2 hours ago</div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="activity-content">
+                        <strong>Updated budget</strong>
+                        <p>Added grocery expenses</p>
+                    </div>
+                    <div class="activity-time">5 hours ago</div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="activity-content">
+                        <strong>Completed workout</strong>
+                        <p>30 minutes of cardio</p>
+                    </div>
+                    <div class="activity-time">Yesterday</div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Badges -->
+        <section>
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-award"></i>
+                    <h3>Your Badges</h3>
+                </div>
+                <div class="card-body">
+                    <div class="badges-container" id="badges-container">
+                        <!-- Badges will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Motivational Quote -->
+        <div class="motivational-quote">
+            <p id="daily-quote">"Education is the most powerful weapon which you can use to change the world." - Nelson Mandela</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Campus Compass</h3>
+                    <p>Your all-in-one student success platform.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="financial.html">Financial Tools</a></li>
+                        <li><a href="academic.html">Academic Resources</a></li>
+                        <li><a href="health.html">Health & Wellness</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Campus Compass. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="data-manager.js"></script>
+    <script>
+        // Global variables
+        let currentUser = null;
+        let userProfile = null;
+        
+        // Motivational quotes
+        const motivationalQuotes = [
+            "Education is the most powerful weapon which you can use to change the world. - Nelson Mandela",
+            "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
+            "Success is not final, failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
+            "Don't watch the clock; do what it does. Keep going. - Sam Levenson",
+            "The only way to do great work is to love what you do. - Steve Jobs",
+            "Believe you can and you're halfway there. - Theodore Roosevelt",
+            "Your time is limited, don't waste it living someone else's life. - Steve Jobs",
+            "The harder I work, the more luck I seem to have. - Thomas Jefferson",
+            "Dream big and dare to fail. - Norman Vaughan",
+            "Education is not preparation for life; education is life itself. - John Dewey"
+        ];
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', async function() {
+            await initializeDashboard();
+            
+            // Setup navigation
+            setupNavigation();
+            
+            // Load tasks
+            loadTasks();
+            
+            // Load badges
+            updateBadgesDisplay();
+            
+            // Set random quote
+            setRandomQuote();
+        });
+        
+        // Initialize dashboard
+        async function initializeDashboard() {
+            // Check authentication
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (session && session.user) {
+                currentUser = session.user;
+                await loadUserProfile();
+                await loadUserData();
+                updateDashboardUI();
+            } else {
+                // Redirect to login if not authenticated
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // Load user profile
+        async function loadUserProfile() {
+            if (!currentUser) return;
+            
+            try {
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+                
+                if (data) {
+                    userProfile = data;
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        }
+        
+        // Load user data
+        async function loadUserData() {
+            if (!currentUser) return;
+            
+            try {
+                const { data, error } = await supabase
+                    .from('user_data')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                if (data && data.data) {
+                    // Merge with existing studentData
+                    Object.assign(studentData, data.data);
+                    studentData.user_id = currentUser.id;
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        // Update dashboard UI
+        function updateDashboardUI() {
+            // Update welcome message
+            const welcomeMessage = document.getElementById('welcome-message');
+            if (welcomeMessage && userProfile) {
+                const name = userProfile.full_name || currentUser.email?.split('@')[0] || 'Student';
+                welcomeMessage.textContent = `Welcome back, ${name}!`;
+            }
+            
+            // Update stats
+            updateStats();
+            
+            // Update user UI in header
+            updateHeaderUI();
+        }
+        
+        // Update stats
+        function updateStats() {
+            // Study hours
+            document.getElementById('stat-study-hours').textContent = studentData.academic.studyHours || 0;
+            document.getElementById('study-hours').textContent = studentData.academic.studyHours || 0;
+            
+            // Budget
+            const budgetPercent = studentData.budget.monthly > 0 
+                ? Math.round((studentData.budget.spent / studentData.budget.monthly) * 100)
+                : 0;
+            document.getElementById('stat-budget').textContent = `${budgetPercent}%`;
+            document.getElementById('budget-used').textContent = budgetPercent;
+            document.getElementById('remaining-budget').textContent = studentData.budget.remaining || 0;
+            
+            // Health
+            const healthPercent = Math.round((studentData.health.exerciseDays / 7) * 100);
+            document.getElementById('stat-health').textContent = `${healthPercent}%`;
+            document.getElementById('exercise-days').textContent = studentData.health.exerciseDays || 0;
+            document.getElementById('water-glasses').textContent = studentData.health.waterGlasses || 0;
+            
+            // Spiritual streak
+            document.getElementById('stat-streak').textContent = studentData.spiritual.currentStreak || 0;
+            document.getElementById('spiritual-streak').textContent = studentData.spiritual.currentStreak || 0;
+            document.getElementById('spiritual-total').textContent = studentData.spiritual.totalDays || 0;
+            
+            // GPA
+            document.getElementById('predicted-gpa').textContent = studentData.academic.predictedGPA || '0.0';
+        }
+        
+        // Update header UI
+        function updateHeaderUI() {
+            const headerAvatar = document.getElementById('header-avatar');
+            const headerUsername = document.getElementById('header-username');
+            const headerUseremail = document.getElementById('header-useremail');
+            const userProfileDiv = document.getElementById('user-profile');
+            const loginButton = document.getElementById('login-button');
+            
+            if (headerUsername && headerUseremail) {
+                headerUsername.textContent = userProfile?.full_name || currentUser?.email?.split('@')[0] || 'User';
+                headerUseremail.textContent = currentUser?.email || '';
+                
+                if (headerAvatar) {
+                    if (userProfile?.avatar_url) {
+                        headerAvatar.innerHTML = `<img src="${userProfile.avatar_url}" alt="${userProfile.full_name}">`;
+                    } else {
+                        const initials = (userProfile?.full_name || 'U').charAt(0).toUpperCase();
+                        headerAvatar.innerHTML = `<span>${initials}</span>`;
+                    }
+                }
+            }
+            
+            if (userProfileDiv) userProfileDiv.classList.remove('hidden');
+            if (loginButton) loginButton.style.display = 'none';
+        }
+        
+        // Setup navigation
+        function setupNavigation() {
+            // Mobile menu toggle
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (mobileToggle && navLinks) {
+                mobileToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+            
+            // Close mobile menu when clicking a link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (navLinks) navLinks.classList.remove('active');
+                });
+            });
+        }
+        
+        // Task management
+        async function addTask() {
+            const taskInput = document.getElementById('new-task');
+            const taskText = taskInput.value.trim();
+            
+            if (!taskText) return;
+            
+            if (!studentData.tasks) {
+                studentData.tasks = [];
+            }
+            
+            const task = {
+                id: Date.now(),
+                text: taskText,
+                completed: false,
+                createdAt: new Date().toISOString()
+            };
+            
+            studentData.tasks.push(task);
+            taskInput.value = '';
+            
+            await saveUserData();
+            loadTasks();
+        }
+        
+        async function completeTask(taskId) {
+            if (!studentData.tasks) return;
+            
+            const taskIndex = studentData.tasks.findIndex(task => task.id === taskId);
+            if (taskIndex !== -1) {
+                studentData.tasks[taskIndex].completed = !studentData.tasks[taskIndex].completed;
+                await saveUserData();
+                loadTasks();
+            }
+        }
+        
+        async function deleteTask(taskId) {
+            if (!studentData.tasks) return;
+            
+            studentData.tasks = studentData.tasks.filter(task => task.id !== taskId);
+            await saveUserData();
+            loadTasks();
+        }
+        
+        function loadTasks() {
+            const taskList = document.getElementById('task-list');
+            if (!taskList) return;
+            
+            taskList.innerHTML = '';
+            
+            if (!studentData.tasks || studentData.tasks.length === 0) {
+                taskList.innerHTML = '<li class="task-item">No tasks yet. Add your first task!</li>';
+                return;
+            }
+            
+            // Show only today's tasks (or recent if no today's tasks)
+            const today = new Date().toISOString().split('T')[0];
+            const todayTasks = studentData.tasks.filter(task => 
+                task.createdAt && task.createdAt.startsWith(today)
+            ).slice(0, 5);
+            
+            if (todayTasks.length === 0) {
+                // Show recent tasks if no today's tasks
+                const recentTasks = studentData.tasks.slice(0, 5);
+                recentTasks.forEach(task => {
+                    addTaskToList(task);
+                });
+            } else {
+                todayTasks.forEach(task => {
+                    addTaskToList(task);
+                });
+            }
+        }
+        
+        function addTaskToList(task) {
+            const taskList = document.getElementById('task-list');
+            const taskItem = document.createElement('li');
+            taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
+            taskItem.innerHTML = `
+                <span>${task.text}</span>
+                <div class="task-actions">
+                    <button class="btn" style="padding: 0.3rem 0.8rem;" onclick="completeTask(${task.id})">
+                        ${task.completed ? '↻' : '✓'}
+                    </button>
+                    <button class="btn" style="padding: 0.3rem 0.8rem; background-color: var(--danger);" onclick="deleteTask(${task.id})">
+                        ✗
+                    </button>
+                </div>
+            `;
+            taskList.appendChild(taskItem);
+        }
+        
+        // Badges display
+        function updateBadgesDisplay() {
+            const container = document.getElementById('badges-container');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            // Get earned badges
+            const earnedBadges = [];
+            
+            // Check spiritual badges
+            if (studentData.spiritual?.totalDays >= 7) {
+                earnedBadges.push({
+                    name: "7 Days",
+                    icon: "fas fa-star",
+                    description: "7 days of Bible study"
+                });
+            }
+            
+            if (studentData.spiritual?.currentStreak >= 7) {
+                earnedBadges.push({
+                    name: "7 Days (Consecutive)",
+                    icon: "fas fa-star",
+                    description: "7 consecutive days of Bible study"
+                });
+            }
+            
+            // Check career badges
+            if (studentData.career?.learningProgress?.week1?.completed) {
+                earnedBadges.push({
+                    name: "Week 1 Complete",
+                    icon: "fas fa-code",
+                    description: "Completed Week 1 of career learning"
+                });
+            }
+            
+            // Add more badge checks as needed
+            
+            // Display badges
+            if (earnedBadges.length === 0) {
+                container.innerHTML = '<p>No badges yet. Complete activities to earn badges!</p>';
+                return;
+            }
+            
+            earnedBadges.forEach(badge => {
+                const badgeDiv = document.createElement('div');
+                badgeDiv.className = 'badge earned badge-regular';
+                badgeDiv.innerHTML = `
+                    <div class="badge-icon">
+                        <i class="${badge.icon}"></i>
+                    </div>
+                    <div class="badge-title">${badge.name}</div>
+                    <div class="badge-desc">${badge.description}</div>
+                `;
+                container.appendChild(badgeDiv);
+            });
+        }
+        
+        // Set random motivational quote
+        function setRandomQuote() {
+            const quoteElement = document.getElementById('daily-quote');
+            if (quoteElement) {
+                const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
+                quoteElement.textContent = motivationalQuotes[randomIndex];
+            }
+        }
+        
+        // Save user data
+        async function saveUserData() {
+            if (!currentUser) return;
+            
+            try {
+                const dataToSave = {
+                    user_id: currentUser.id,
+                    data: studentData,
+                    updated_at: new Date().toISOString()
+                };
+                
+                // Check if data exists
+                const { data: existing } = await supabase
+                    .from('user_data')
+                    .select('id')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                if (existing) {
+                    // Update existing
+                    await supabase
+                        .from('user_data')
+                        .update(dataToSave)
+                        .eq('user_id', currentUser.id);
+                } else {
+                    // Insert new
+                    await supabase
+                        .from('user_data')
+                        .insert([dataToSave]);
+                }
+                
+                // Also save to localStorage as backup
+                const key = `studentData_${currentUser.id}`;
+                localStorage.setItem(key, JSON.stringify(studentData));
+            } catch (error) {
+                console.error('Error saving user data:', error);
+            }
+        }
+        
+        // Profile settings modal
+        function showProfileSettings() {
+            alert('Profile settings feature coming soon!');
+        }
+        
+        // My data modal
+        function showMyData() {
+            alert('Data management feature coming soon!');
+        }
+        
+        // Sign out
+        async function signOut() {
+            try {
+                await supabase.auth.signOut();
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+            }
+        }
+        
+        // Expose functions to global scope
+        window.completeTask = completeTask;
+        window.deleteTask = deleteTask;
+        window.showProfileSettings = showProfileSettings;
+        window.showMyData = showMyData;
+        window.signOut = signOut;
+    </script>
+</body>
+</html>
